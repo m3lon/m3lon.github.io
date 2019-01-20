@@ -293,6 +293,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/01/20/xxe实验踩坑记录/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/20/xxe实验踩坑记录/" itemprop="url">xxe实验踩坑记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-20T18:03:58+08:00">
+                2019-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web/" itemprop="url" rel="index">
+                    <span itemprop="name">Web安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          文章阅读： https://xz.aliyun.com/t/2249  
+苦行僧一般的修炼…  
+实验服务器ubuntu xml.php:1234567&lt;?php    libxml_disable_entity_loader (false);    $xmlfile = file_get_contents('php://input');    $dom = new DOMDocument();    $dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);     $creds = simplexml_import_dom($
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/20/xxe实验踩坑记录/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+	  
+    
+      	   
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/01/20/重装系统后hexo的部署/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -366,9 +518,7 @@
           
           文章针对于重装系统之前对于hexo有备份的情况。
 安装部署hexo详见：https://hexo.io/zh-cn/docs/依赖于node.js和git
-1234567node -vnpm -vnpm install -g hexo-clinpm install hexo-deployer-git --save  # hexo deploy会用到mkdir blog &amp; cd bloghexo init
-blog文件夹下会生成一系列文件，其中重点是：_config.yml、source、themes、package.json(应用程序的信息)  
-文件替换上面的重点文件_config
+123456789node -vnpm -vnpm install -g hexo-clinpm install hexo-deployer-git --save  # hexo deploy会用到npm install hexo-server --save # Hexo 3.0 把服务器独立成了个别模块，您必须先安装 hexo-server 才能使用。输入hexo server默认会在本地4000端口显示mkdir blog &amp; 
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -532,9 +682,10 @@ bin(x) 返回一个整数 int 或者长整数 long int 的二进制表示。
 
 整数转字符串
 16进制转字符串： 
-12import binasciiprint binascii.a2b_hex(hexstr) #参数需要是字符串形式 &apos;323648&apos;
+12import binasciiprint binascii.a2b_hex(hexstr) #参数需要是字符串形式 '323648'
 
-base64转
+base64转字符串
+1234im
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1665,158 +1816,6 @@ swp文件恢复：
 
 	  
     
-      	   
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="m3lon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/UMR.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="m3lon">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/24/复现-思考-DDCTF-web/" itemprop="url">复现&&思考 DDCTF web</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T21:37:52+08:00">
-                2018-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/个人学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">个人学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Web 1 数据库的秘密题目地址：http://116.85.43.88:8080/ZVDHKBUVUZSTJCNX/dfe3ia/index.php
-Henryzhao师傅的解法使用 PHP 编写代理页面的方式，对请求进行了代理并签名。之后使用 sqlmap 等通用工具对该 PHP 页面进行注入。
-123456789101112131415161718192021222324252627282930313233343536&lt;?php@$id = $_REQUEST['id'];@$title = $_REQUEST['title'];@$author = $_REQUEST['auth
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/24/复现-思考-DDCTF-web/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-	  
-    
   </section>
 
   
@@ -1869,7 +1868,7 @@ Henryzhao师傅的解法使用 PHP 编写代理页面的方式，对请求进行
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1879,7 +1878,7 @@ Henryzhao师傅的解法使用 PHP 编写代理页面的方式，对请求进行
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/CTF/index.html">
+                <a href="/代码审计/index.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

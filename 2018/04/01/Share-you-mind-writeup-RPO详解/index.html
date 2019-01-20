@@ -416,7 +416,7 @@
 <p>在自己的VPS的日志中确实可以看到访问记录，但是再利用直接加script脚本的方法无法获取到document.cookie</p>
 <p>所以这道题的关键在于寻找XSS注入点。今天的猪脚就要登场啦……</p>
 <h4 id="0x02-寻找XSS注入点-RPO"><a href="#0x02-寻找XSS注入点-RPO" class="headerlink" title="0x02 寻找XSS注入点_RPO"></a>0x02 寻找XSS注入点_RPO</h4><p>观察到url的形式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2704</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="regexp">//</span><span class="number">39.107</span>.<span class="number">33.96</span>:<span class="number">20000</span><span class="regexp">/index.php/</span>view<span class="regexp">/article/</span><span class="number">2704</span></span><br></pre></td></tr></table></figure>
 <p>说明网站使用了<a href="https://www.kancloud.cn/manual/thinkphp/1697" target="_blank" rel="noopener">PATHINFO模式</a>，后面的参数依次为：<code>模块/控制器/操作</code></p>
 <p>再看html源码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"static/js/jquery.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"/static/js/bootstrap.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
@@ -425,7 +425,7 @@
 <p>先新建一篇文章，title为空，内容如下：</p>
 <p><img src="Share-you-mind-writeup-RPO详解/r2.png" alt=""></p>
 <p>接着进入新建的文章内容页，url输入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2715/..%2f..%2f..%2f..%2findex.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">http</span>://39.107.33.96:20000/index.php/view/article/2715/..<span class="number">%2</span>f..<span class="number">%2</span>f..<span class="number">%2</span>f..<span class="number">%2</span>findex.php</span><br></pre></td></tr></table></figure>
 <p><img src="Share-you-mind-writeup-RPO详解/r3.png" alt=""></p>
 <p>接下来分析漏洞成因：服务端和客户端对url的解析不一致</p>
 <p>经过了一番折腾，大致形成了自己的思路，若有问题还请各位大佬指正……</p>
@@ -627,7 +627,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -637,7 +637,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/CTF/index.html">
+                <a href="/代码审计/index.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

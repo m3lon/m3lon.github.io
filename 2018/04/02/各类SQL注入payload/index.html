@@ -388,7 +388,7 @@
 
       
         <p><strong>数据库注释</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">--</span><br><span class="line">-- -</span><br><span class="line">--+</span><br><span class="line">//</span><br><span class="line">/**/</span><br><span class="line">/*letmetest*/</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">--</span><br><span class="line"><span class="bullet">-- </span>-</span><br><span class="line">--+</span><br><span class="line"><span class="comment">//</span></span><br><span class="line">/*<span class="strong">*/</span></span><br><span class="line"><span class="strong">/*</span>letmetest*/</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
 <p>##select 注入</p>
 <h3 id="报错和有回显类"><a href="#报错和有回显类" class="headerlink" title="报错和有回显类"></a>报错和有回显类</h3><h3 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h3><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h4><h4 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h4><p>##insert注入</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    form = PostForm()</span><br><span class="line">    <span class="keyword">if</span> form.validate_on_submit():</span><br><span class="line">        res = mysql.Add(<span class="string">"post"</span>, [<span class="string">'NULL'</span>, <span class="string">"'%s'"</span> % form.post.data,</span><br><span class="line">                                 <span class="string">"'%s'"</span> % current_user.id, <span class="string">"'%s'"</span> % now()])</span><br><span class="line"><span class="comment">#省略部分</span></span><br></pre></td></tr></table></figure>
@@ -545,7 +545,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -555,7 +555,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/CTF/index.html">
+                <a href="/代码审计/index.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

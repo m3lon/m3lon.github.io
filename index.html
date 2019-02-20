@@ -312,7 +312,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/02/20/how-to-connect-openVPn-lab-pentestit-ru/" itemprop="url">how to connect OpenVPn lab.pentestit.ru</a></h1>
+                <a class="post-title-link" href="/2019/02/20/how-to-connect-openVPn-lab-pentestit-ru/" itemprop="url">Kali how to connect OpenVPn lab.pentestit.ru</a></h1>
         
 
         <div class="post-meta">
@@ -364,9 +364,9 @@
       
         
           
-          0x01 Install1apt-get install openvpn
-0x02  Setup123456789cd /opt &amp;&amp; mkdir pentestit# Copy files "lab.ovpn"(pentestit下载的配置文件), "pass.txt" and "ovpn.sh" to "/opt/pentestit/.# pass.txt 格式为：# username# password# ovpn.sh #!/bin/bashopenvpn --config /opt/pentestit/lab.ovpn &amp;
-0x03 run OpenVPNSt
+          前言首先确定终端可以翻墙，测试curl或者wget www.google.com，建议通过proxychains转发终端流量，时间原因我先不写了，网上可以找到很多资料
+0x01 Install1apt-get install openvpn
+0x02  Setuplab.ovpn（从pentestit下载config然后稍加修改）1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950# lab.ovpnclientdev tunproto tcpremote vpn.
           ...
           <!--noindex-->
           <div class="post-button text-center">

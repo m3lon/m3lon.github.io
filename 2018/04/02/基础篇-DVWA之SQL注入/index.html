@@ -87,31 +87,38 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="SQL Injection:SQL注入是指攻击者通过注入恶意的SQL语句，破坏SQL语句的结构，进而达到执行恶意SQL语句的目的。 本次学习通过两种方式：手工注入、Sqlmap工具注入 手工注入抽象来讲，分为两步：  找注入点(在哪里注入) 构造注入内容(如何注入)  下面对四种级别的代码进行分析： Low12345678910111213141516171819202122&amp;lt;?phpif(">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/15.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/15.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/16.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/17.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/18.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/19.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/20.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/21.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/22.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/23.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/24.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/25.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/26.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/10.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/11.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/12.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/13.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/14.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/15.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/4.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/5.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/6.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/7.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/8.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/15.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/16.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/17.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/18.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/19.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/20.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/21.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/22.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/23.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/24.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/25.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/26.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/10.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/11.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/12.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/13.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/14.png">
 <meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/101.png">
 <meta property="og:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/100.png">
-<meta property="og:updated_time" content="2018-04-02T13:08:02.904Z">
+<meta property="og:updated_time" content="2019-02-21T12:00:55.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基础篇_DVWA之SQL注入">
 <meta name="twitter:description" content="SQL Injection:SQL注入是指攻击者通过注入恶意的SQL语句，破坏SQL语句的结构，进而达到执行恶意SQL语句的目的。 本次学习通过两种方式：手工注入、Sqlmap工具注入 手工注入抽象来讲，分为两步：  找注入点(在哪里注入) 构造注入内容(如何注入)  下面对四种级别的代码进行分析： Low12345678910111213141516171819202122&amp;lt;?phpif(">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/基础篇-DVWA之SQL注入/15.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/02/基础篇-DVWA之SQL注入/15.png">
 
 
 
@@ -423,7 +430,7 @@
 <li>判断是否存在注入，注入是字符型还是数字型</li>
 </ul>
 <p>字符型和数字型的区别在于是否存在引号，因此通过输入1’进行注入，如下图：</p>
-<p><img src="基础篇-DVWA之SQL注入/15.png" alt=""></p>
+<p><img src="15.png" alt=""></p>
 <p>由上图可以判定id为注入点，且属于字符型注入，因此可以通过添加引号结束之前的SQL语句并在后面加上payload，最后在结尾通过#(或者’- - ‘ 注意后面有个空格 )注释掉代码中原有的引号(判断SQL注入类型的目的就是为了有针对性的结束原有语句)。</p>
 <ul>
 <li>猜解SQL查询语句中的字段数</li>
@@ -450,25 +457,25 @@
 <p>  如此类推就可以了，但是当不存在那个字段的时候，就会产生这样的错误。<br>  unknown column name xx</p>
 </blockquote>
 <p>所以尝试通过order by 判断前一个select语句的字段数，当输入<code>1&#39; order by 3 --</code> 时，如下图：</p>
-<p>![]基础篇-DVWA之SQL注入/(2.png)</p>
+<p><img src="2.png" alt=""></p>
 <p>由此判断前一个select语句的查询字段数为2，但是这种方法只适用于字段数少的情况，如果字段数目很大，这样一次次的去猜显然是不受用的，<strong>因此这部分内容还有续集……</strong>（加粗一下~~，免得我以后忘了 ;-) ）</p>
 <p>当输入<code>1&#39; union select 1,2--</code>时，显示效果:</p>
-<p>![]基础篇-DVWA之SQL注入/(3.png)</p>
+<p><img src="3.png" alt=""></p>
 <p>第二个select语句是可控且结果是可显示的，因此可以利用一些mysql函数获取数据库的相关信息，如version(),database()等。</p>
 <p>(3) 确定显示的字段顺序（实在看不出在这次攻击中字段顺序有什么用，所以略过）</p>
 <p>(4)  获取当前数据库<br>输入<code>1&#39; union select database(),2 #</code>，显示结果为:</p>
-<p>![]基础篇-DVWA之SQL注入/(4.png)</p>
+<p><img src="4.png" alt=""></p>
 <p>可知数据库名称为dvwa，同理获取当前的数据库版本，显示为：5.7.18-0ubuntu0.16.04.1，可知为mysql5.7，这个版本信息也是有用的，因为有些新函数只能用于高版本的mysql查询中。</p>
 <p>(5)  获取数据库中的表<br>如何根据数据库得知其中的数据表呢，这就需要了解mysql的一个小知识点了，每一个mysql都存在一个系统库information_schema，里面有mysql的“骨架”即所有的数据库，数据表，相应的字段名(当然字段内容不在里面哈)，比如：</p>
-<p>![]基础篇-DVWA之SQL注入/(5.png)</p>
+<p><img src="5.png" alt=""></p>
 <p>因此可以构造payload:1’ union select TABLE_NAME,2 from information_schema.TABLES where table_schema=’dvwa’#:</p>
-<p>![]基础篇-DVWA之SQL注入/(6.png)</p>
+<p><img src="6.png" alt=""></p>
 <p>可知dvwa中有两张数据表，users和guestbook。很明显，users的内容更令人好奇，那就继续一探究竟吧……</p>
 <p>(6)   获取表中的字段名<br>继续在mysql的”骨架”(information_schema)中寻找数据表对应的字段，输入<code>1&#39; union select column_name,2 from information_schema.columns where table_name=7573657273 #</code>：</p>
-<p>![]基础篇-DVWA之SQL注入/(7.png)</p>
+<p><img src="7.png" alt=""></p>
 <p>哇~~字段还挺多的，不过我们可是很有原则的，有user和password就够了……</p>
 <p>(7) 下载(显示)数据<br>有了数据表名和字段名，接下来就可以一探究竟了，输入<code>1&#39; union select user,password from users #</code>:</p>
-<p>![]基础篇-DVWA之SQL注入/(8.png)</p>
+<p><img src="8.png" alt=""></p>
 <p>附上额外福利：<a href="https://www.somd5.com/" target="_blank" rel="noopener">md5免费解码</a></p>
 <h3 id="Medium"><a href="#Medium" class="headerlink" title="Medium"></a>Medium</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_POST[ <span class="string">'Submit'</span> ] ) ) &#123;</span><br><span class="line">	<span class="comment">// Get input</span></span><br><span class="line">	$id = $_POST[ <span class="string">'id'</span> ];</span><br><span class="line"></span><br><span class="line">	$id = mysqli_real_escape_string($GLOBALS[<span class="string">"___mysqli_ston"</span>], $id);</span><br><span class="line"></span><br><span class="line">	$query  = <span class="string">"SELECT first_name, last_name FROM users WHERE user_id = $id;"</span>;</span><br><span class="line">	$result = mysqli_query($GLOBALS[<span class="string">"___mysqli_ston"</span>], $query) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">'&lt;pre&gt;'</span> . mysqli_error($GLOBALS[<span class="string">"___mysqli_ston"</span>]) . <span class="string">'&lt;/pre&gt;'</span> );</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Get results</span></span><br><span class="line">	<span class="keyword">while</span>( $row = mysqli_fetch_assoc( $result ) ) &#123;</span><br><span class="line">		<span class="comment">// Display values</span></span><br><span class="line">		$first = $row[<span class="string">"first_name"</span>];</span><br><span class="line">		$last  = $row[<span class="string">"last_name"</span>];</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Feedback for end user</span></span><br><span class="line">		$html .= <span class="string">"&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This is used later on in the index.php page</span></span><br><span class="line"><span class="comment">// Setting it here so we can close the database connection in here like in the rest of the source scripts</span></span><br><span class="line">$query  = <span class="string">"SELECT COUNT(*) FROM users;"</span>;</span><br><span class="line">$result = mysqli_query($GLOBALS[<span class="string">"___mysqli_ston"</span>],  $query ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">'&lt;pre&gt;'</span> . ((is_object($GLOBALS[<span class="string">"___mysqli_ston"</span>])) ? mysqli_error($GLOBALS[<span class="string">"___mysqli_ston"</span>]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : <span class="keyword">false</span>)) . <span class="string">'&lt;/pre&gt;'</span> );</span><br><span class="line">$number_of_rows = mysqli_fetch_row( $result )[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">mysqli_close($GLOBALS[<span class="string">"___mysqli_ston"</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>代码分析:</strong></p>
@@ -480,31 +487,31 @@
 <p>(3) 使用下拉列表选择id值</p>
 <p>结合medium.php,查看index.php发现：medium等级了为了防止用户直接输入使用了下拉表单，然而这个措施，真心感觉没有什么卵用，毕竟GET、POST方式提交的数据总有办法间接修改的。</p>
 <p><strong>漏洞利用：</strong><br>(1) 首先依然是判断注入类型为数字型or字符型：<br>先通过单引号试一下：</p>
-<p><img src="基础篇-DVWA之SQL注入/15.png" alt=""></p>
+<p><img src="15.png" alt=""></p>
 <p>发现单引号被转义了，看了代码的我们自然知道具体是mysqli_real_escape_string搞的鬼，不过现在先抛弃代码，按照正常的攻击思路来思考：大概就是addslashes等类似函数的转义作用，继续测试一下，看看自己的猜测是否准确，由于addslashes转义的字符有（单引号（’） 双引号（”） 反斜杠（\） NULL）,分别测试双引号、&amp;、-等其他字符，发现双引号被转义，但是&amp;等其他字符不会。</p>
-<p><img src="基础篇-DVWA之SQL注入/16.png" alt=""></p>
+<p><img src="16.png" alt=""></p>
 <p>注意注意！前方高能……<br>既然只是对id进行了转义处理，如果是字符型注入，是不应该报错的，可以在数据库单独测试一下：</p>
-<p><img src="基础篇-DVWA之SQL注入/17.png" alt=""></p>
+<p><img src="17.png" alt=""></p>
 <p>由此我们可以判断肯定不是字符型注入，（id两端并无引号包围，因为有引号的会查询成功，不会出现上述的报错），But，有一个小疑问，为什么不是1还会查询成功呢？这涉及到的是MySQL的<strong>强制类型转换</strong>，查看users表结构：</p>
-<p><img src="基础篇-DVWA之SQL注入/18.png" alt=""></p>
+<p><img src="18.png" alt=""></p>
 <p>user_id为int类型，所以在查询过程中mysql将1\’强制类型转换为了int类型，（可以在mysql中测试输入id=’1abdc’进行验证，,如果id=’a1dc’这种，mysql的强制类型将转换为0）。</p>
 <p>== 膜拜上述的细节推敲（可见大神功力之深厚），~~ 尴尬 ~~，并不是我自己思考出来的，（对于我，猜测为转义之后，就会去进行数字型字符的确认加加减减了）……</p>
 <p>进一步确认是否为数字型注入：</p>
 <p>若为数字型，是可以进行这样的算法运算的：</p>
-<p><img src="基础篇-DVWA之SQL注入/19.png" alt=""><br>尝试一下吧……<br>（PS：但是这里需要注意的是，在URL中“+”是有特别含义，它表示的是空格。所以在URL中我们需要使用“%2B”来代替“+”。）</p>
-<p><img src="基础篇-DVWA之SQL注入/20.png" alt=""><br><img src="基础篇-DVWA之SQL注入/21.png" alt=""></p>
+<p><img src="19.png" alt=""><br>尝试一下吧……<br>（PS：但是这里需要注意的是，在URL中“+”是有特别含义，它表示的是空格。所以在URL中我们需要使用“%2B”来代替“+”。）</p>
+<p><img src="20.png" alt=""><br><img src="21.png" alt=""></p>
 <p>binggo…… 成功啦，确定为数字型注入。</p>
 <p>构造payload的思路同字符型注入，但是要绕过单引号的转义，比如：<code>1 union select column_name,2 from information_schema.columns where table_name=&#39;users&#39;</code><br>用十六进制可以绕过引号（<a href="http://www.92to.com/bangong/2016/09-06/9945268.html" target="_blank" rel="noopener">详见</a>）</p>
 <blockquote>
 <p>hex：可以用HEX()函数将一个字符串或数字转换为十六进制格式的字符串<br>unhex：把十六进制格式的字符串转化为原来的格式</p>
 </blockquote>
-<p><img src="基础篇-DVWA之SQL注入/22.png" alt=""></p>
+<p><img src="22.png" alt=""></p>
 <p>除了使用编码方式绕过单引号，还可以通过使用MySQL函数，如：’dvwa’数据库名用database()代替。<br>其余思路同字符型注入，不再赘述。</p>
 <h3 id="High"><a href="#High" class="headerlink" title="High"></a>High</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_SESSION [ <span class="string">'id'</span> ] ) ) &#123;</span><br><span class="line">	<span class="comment">// Get input</span></span><br><span class="line">	$id = $_SESSION[ <span class="string">'id'</span> ];</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Check database</span></span><br><span class="line">	$query  = <span class="string">"SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;"</span>;</span><br><span class="line">	$result = mysqli_query($GLOBALS[<span class="string">"___mysqli_ston"</span>], $query ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">'&lt;pre&gt;Something went wrong.&lt;/pre&gt;'</span> );</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Get results</span></span><br><span class="line">	<span class="keyword">while</span>( $row = mysqli_fetch_assoc( $result ) ) &#123;</span><br><span class="line">		<span class="comment">// Get values</span></span><br><span class="line">		$first = $row[<span class="string">"first_name"</span>];</span><br><span class="line">		$last  = $row[<span class="string">"last_name"</span>];</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Feedback for end user</span></span><br><span class="line">		$html .= <span class="string">"&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	((is_null($___mysqli_res = mysqli_close($GLOBALS[<span class="string">"___mysqli_ston"</span>]))) ? <span class="keyword">false</span> : $___mysqli_res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>代码分析：</strong><br>突然感觉我好像之前学习的思路错了，不应该先分析代码的，看完代码自己就知道该怎么攻击了，却锻炼不了什么能力，所以应该不看代码，黑盒测试，一步步尝试思考才对……，不过既然已经看了，就先写一下high.php关于避免SQL注入所做的努力吧。</p>
 <p>(1) 查询提交页面和显示结果页面不是同一个。（所以id值需要存入SESSION中）<br>(2) 修改$query语句，增加limit 1限制输出条目。黑盒注入的话确实可以忽悠一下子…… 然而真是只是一下下~~</p>
 <p>看完代码，通过burpsuite修改session-input.php提交的id值：（这就是白盒测试吧）</p>
-<p><img src="基础篇-DVWA之SQL注入/23.png" alt=""></p>
+<p><img src="23.png" alt=""></p>
 <blockquote>
 <p>This is very similar to the low level, however this time the attacker is inputting the value in a different manner. The input values are being transferred to the vulnerable query via session variables using another page, rather than a direct GET request.</p>
 </blockquote>
@@ -514,7 +521,7 @@
 </blockquote>
 <p><strong>漏洞利用：</strong></p>
 <p>输入1’报错，输入1’ #(或者1’ or 1=1)却返回id为1的结果，说明是字符型注入，且单引号后面还有其他的限制条件，其余思路同low.php</p>
-<p><img src="基础篇-DVWA之SQL注入/24.png" alt=""></p>
+<p><img src="24.png" alt=""></p>
 <p>最后注入结果同上代码分析；-）</p>
 <h3 id="Impossible"><a href="#Impossible" class="headerlink" title="Impossible"></a>Impossible</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_GET[ <span class="string">'Submit'</span> ] ) ) &#123;</span><br><span class="line">    <span class="comment">// Check Anti-CSRF token</span></span><br><span class="line">    checkToken( $_REQUEST[ <span class="string">'user_token'</span> ], $_SESSION[ <span class="string">'session_token'</span> ], <span class="string">'index.php'</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    $id = $_GET[ <span class="string">'id'</span> ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Was a number entered?</span></span><br><span class="line">    <span class="keyword">if</span>(is_numeric( $id )) &#123;</span><br><span class="line">        <span class="comment">// Check the database</span></span><br><span class="line">        $data = $db-&gt;prepare( <span class="string">'SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;'</span> );</span><br><span class="line">        $data-&gt;bindParam( <span class="string">':id'</span>, $id, PDO::PARAM_INT );</span><br><span class="line">        $data-&gt;execute();</span><br><span class="line">        $row = $data-&gt;fetch();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Make sure only 1 result is returned</span></span><br><span class="line">        <span class="keyword">if</span>( $data-&gt;rowCount() == <span class="number">1</span> ) &#123;</span><br><span class="line">            <span class="comment">// Get values</span></span><br><span class="line">            $first = $row[ <span class="string">'first_name'</span> ];</span><br><span class="line">            $last  = $row[ <span class="string">'last_name'</span> ];</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Feedback for end user</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name: &#123;$first&#125;&lt;br /&gt;Surname: &#123;$last&#125;&lt;/pre&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate Anti-CSRF token</span></span><br><span class="line">generateSessionToken();</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>代码分析：</strong><br>可以看到，一方面：Impossible级别的代码采用了PDO技术，<strong>划清了代码与数据的界限</strong>(bindParam)，有效防御SQL注入；另一方面：只有返回的查询结果数量为1时，才会成功输出，这样就有效预防了“脱裤”（偷偷查了一下，谐音：脱库），Anti-CSRFtoken机制的加入了进一步提高了安全性。</p>
@@ -525,9 +532,9 @@
 <li>执行数据库查询操作的函数，如mysqli_query()。</li>
 </ul>
 <p>我们可以在代码中对这些变量和函数进行搜索跟踪，从而分析是否存在漏洞。<br>这里可以使用一款名叫闪电文件搜索的软件来进行查找分析。</p>
-<p><img src="基础篇-DVWA之SQL注入/25.png" alt=""></p>
+<p><img src="25.png" alt=""></p>
 <p>从中选取DVWA的登录文件login.php进行分析，如下图：可以发现这里的参数类型是字符型，主要从两个方面采取了防御措施：一是使用mysql_real_escape_string()函数进行过滤，二是在mysql_query()函数之前加了@符号，抑制报错信息。因而这个页面就是相对安全的。</p>
-<p><img src="基础篇-DVWA之SQL注入/26.png" alt=""></p>
+<p><img src="26.png" alt=""></p>
 <p>(2) 我们如何在代码层面来防御SQL注入漏洞呢？</p>
 <p>这个问题主要从两个方面回答(以后会继续补充……)：</p>
 <ul>
@@ -536,11 +543,11 @@
 <li><p>附： 两者都可以通过限制返回的查询结果、抑制报错信息@等方法进行防御。</p>
 <h2 id="Sqlmap工具注入"><a href="#Sqlmap工具注入" class="headerlink" title="Sqlmap工具注入"></a>Sqlmap工具注入</h2></li>
 </ul>
-<h3 id="Low-amp-amp-Medium"><a href="#Low-amp-amp-Medium" class="headerlink" title="Low&amp;&amp;Medium"></a>Low&amp;&amp;Medium</h3><p>(1) 检测是否存在SQL注入漏洞<br>需要注意的点：dvwa需要登录才能访问漏洞测试页面，所以使用sqlmap时需要提交登录后的cookie，cookie中有关于dvwa的security level设置属性，确保属性值是low，如下图:<br><img src="基础篇-DVWA之SQL注入/10.png" alt=""><br>检测存在SQL注入点id(GET),数据库类型为mysql。</p>
-<p>(2) 爆数据库<br>输入:pyhon sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” –dbs，返回结果：<br><img src="基础篇-DVWA之SQL注入/11.png" alt=""></p>
-<p>(3) 爆数据表<br>选择dvwa数据库，输入python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa –tables<br><img src="基础篇-DVWA之SQL注入/12.png" alt=""></p>
-<p>(4) 爆字段<br>选择users数据表，输入python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa -T users –columns<br><img src="基础篇-DVWA之SQL注入/13.png" alt=""></p>
-<p>(5) 爆字段内容<br>选择users表中的字段,（突然觉得前面写的都太正经了，画风应该改变一下），哇~~,还可以选择在显示的时候选择是否解密(好吧，其实没什么好大惊小怪的，这个我早就知道 ~~)，输入：python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa -T users -C “user ,password” –dump<br><img src="基础篇-DVWA之SQL注入/14.png" alt=""><br>相比手动注入确实是高效很多啦；-）</p>
+<h3 id="Low-amp-amp-Medium"><a href="#Low-amp-amp-Medium" class="headerlink" title="Low&amp;&amp;Medium"></a>Low&amp;&amp;Medium</h3><p>(1) 检测是否存在SQL注入漏洞<br>需要注意的点：dvwa需要登录才能访问漏洞测试页面，所以使用sqlmap时需要提交登录后的cookie，cookie中有关于dvwa的security level设置属性，确保属性值是low，如下图:<br><img src="10.png" alt=""><br>检测存在SQL注入点id(GET),数据库类型为mysql。</p>
+<p>(2) 爆数据库<br>输入:pyhon sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” –dbs，返回结果：<br><img src="11.png" alt=""></p>
+<p>(3) 爆数据表<br>选择dvwa数据库，输入python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa –tables<br><img src="12.png" alt=""></p>
+<p>(4) 爆字段<br>选择users数据表，输入python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa -T users –columns<br><img src="13.png" alt=""></p>
+<p>(5) 爆字段内容<br>选择users表中的字段,（突然觉得前面写的都太正经了，画风应该改变一下），哇~~,还可以选择在显示的时候选择是否解密(好吧，其实没什么好大惊小怪的，这个我早就知道 ~~)，输入：python sqlmap.py -u “<a href="http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;" target="_blank" rel="noopener">http://123.206.28.249/dvwa-khl/vulnerabilities/sqli/?id=1&amp;Submit=Submit#&quot;</a> –cookie=”security=low; PHPSESSID=u378a2cubgvdl8hp5ehare72o6” -D dvwa -T users -C “user ,password” –dump<br><img src="14.png" alt=""><br>相比手动注入确实是高效很多啦；-）</p>
 <p>注：Medium只需要修改cookie即可</p>
 <h3 id="High-1"><a href="#High-1" class="headerlink" title="High"></a>High</h3><p><strong>代码分析</strong></p>
 <p>session-input.php:</p>
@@ -705,7 +712,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

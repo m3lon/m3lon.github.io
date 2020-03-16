@@ -353,7 +353,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br><span class="line">npm install -g hexo-cli</span><br><span class="line">npm install hexo-deployer-git --save  # hexo deploy会用到</span><br><span class="line">npm install hexo-server --save # Hexo 3.0 把服务器独立成了个别模块，您必须先安装 hexo-server 才能使用。输入hexo server默认会在本地4000端口显示</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mkdir blog &amp; cd blog</span><br><span class="line">hexo init</span><br></pre></td></tr></table></figure>
 <p>blog文件夹下会生成一系列文件，其中重点是：_config.yml、source、themes、package.json(应用程序的信息)  </p>
 <h4 id="文件替换"><a href="#文件替换" class="headerlink" title="文件替换"></a>文件替换</h4><p>上面的重点文件_config.yml、source、themes、package.json，将自己备份好的拷贝过来替换</p>
-<h4 id="ssh配置"><a href="#ssh配置" class="headerlink" title="ssh配置"></a>ssh配置</h4><p>如果之前有备份～/.ssh，就直接将.ssh文件拷贝到～文件夹下就OK了。如果没有备份，就重新生成一对rsa密钥吧<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssh-keygen -t rsa</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="ssh配置"><a href="#ssh配置" class="headerlink" title="ssh配置"></a>ssh配置</h4><p>如果之前有备份～/.ssh，就直接将.ssh文件拷贝到～文件夹下就OK了。如果没有备份，就重新生成一对rsa密钥吧<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure></p>
 <p>按提示输入密码，不想加密就直接回车两次，然后在<code>~/.ssh</code>文件夹下可以看到<code>id_rsa  id_rsa.pub</code>，复制id_rsa.pub内容<br>登陆自己的github，在ssh配置部分<code>new SSH key</code>，粘贴<br>回到终端，输入<code>ssh -T git@github.com</code>，测试是否通过认证</p>
 <h4 id="hexo测试"><a href="#hexo测试" class="headerlink" title="hexo测试"></a>hexo测试</h4><p>回到blog文件夹下，输入<code>hexo g -d</code>测试</p>
 
@@ -500,7 +500,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

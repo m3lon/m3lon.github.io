@@ -89,7 +89,8 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://mdpicture.oss-cn-beijing.aliyuncs.com/20190226215142.png">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2020-03-16T12:22:37.557Z">
+<meta property="og:image" content="http://m3lon.github.io/Users/m3lon/Desktop/面经/ssrf.jpg">
+<meta property="og:updated_time" content="2020-03-16T12:33:16.031Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web安全面试准备一">
 <meta name="twitter:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
@@ -858,7 +859,82 @@
 <li>master value：php.ini中的内容</li>
 <li>local value：当前目录的设置，可能由于服务器apache的配置（apache的配置会覆盖php.ini的配置）、.htaccess或者代码中ini_set有设置，相当于自定义，自定义的会覆盖默认值（php.ini）SSRF漏洞原理</li>
 </ul>
-<p>### </p>
+<h3 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a>CSRF漏洞</h3><p>CSRF本质：重要操作的所有参数都可以被攻击者猜到（攻击者可以构造出重要操作的url）</p>
+<ol>
+<li>浏览器的Cookie策略，本地cookie的发送及P3P头的推波助澜</li>
+<li>如何CSRF需要POST请求才能触发：<ul>
+<li>构造form表单，自动提交表单</li>
+<li>隐藏页面在一个不可见的iframe中，iframe地址指向CSRF构造页面</li>
+<li>CSRF蠕虫</li>
+</ul>
+</li>
+<li>CSRF防御：<ol>
+<li>验证码：强制用户必须与应用交互，但是不能网站的所有操作都加上验证码，所以只是辅助手段，不能作为主要的手段</li>
+<li>token：防止攻击者可以猜到重要操作的所有参数，就是将参数加密或使用随机数（不可预测性原则的应用），这样攻击者就无法构造出一个完整的URL实施CSRF攻击</li>
+<li>referer校验</li>
+</ol>
+</li>
+<li>Token的使用原则：<ul>
+<li>随机性</li>
+<li>保密性：为<strong>防止通过referer泄漏</strong>，尽量将token放在表单中，将GET请求—&gt;POST以form表单形式提交</li>
+<li>多个token解决多页面共存问题</li>
+<li>XSS可以模拟客户端浏览器执行任何操作，所以在XSS攻击下，攻击者完全可以在请求页面后读出页面内容的Token，然后再构造一个合法的请求（XSRF)</li>
+</ul>
+</li>
+<li>Set-cookie: samesite=”Strict/Lax”</li>
+</ol>
+<h3 id="jsonp绕过及防御"><a href="#jsonp绕过及防御" class="headerlink" title="jsonp绕过及防御"></a>jsonp绕过及防御</h3><ul>
+<li>其实这个问题属于 CSRF（ Cross-site request forgery 跨站请求伪造）攻击范畴。当某网站通过 JSONP 的方式来跨域（一般为子域）传递用户认证后的敏感信息时，攻击者可以构造恶意的 JSONP 调用页面，诱导被攻击者访问来达到截取用户敏感信息的目的。</li>
+<li>场景：攻击者通过诱导某用户访问自己的恶意链接，链接本身会调用用户的敏感信息，回调函数会将请求返回的信息发送至自己的vps，造成敏感信息泄漏</li>
+<li>很多情况下回调函数会将响应数据处理为html节点添加到页面中，如果没有做合适的编码，就会产生基于DOM的XSS— 解决方法过滤或者<strong>严格定义content-type:application/json</strong>(直接访问提示文件下载)</li>
+<li>测试：加入&amp;callback=hehehe，这应该是一个开发习惯，通常开发设计api的时候都会有json和jsonp两种格式，而通常取jsonp的函数名的变量名就是callback。然后变POST为GET</li>
+<li>防御与绕过：<ol>
+<li><strong>验证referer是否在白名单中</strong>— 绕过姿势：<ul>
+<li>过滤（正则）不严谨：通过url的格式绕过 <a href="http://www.attack.com/attack.htm?qq.com、qq.com.sh1yan.top等" target="_blank" rel="noopener">http://www.attack.com/attack.htm?qq.com、qq.com.sh1yan.top等</a></li>
+<li>空referer的绕过，比如利用iframe，访问某地址的时候是不带referer的</li>
+</ul>
+</li>
+<li><strong>添加随机token</strong>，如果存在规律性，可爆破性就很容易绕过</li>
+<li>referer+随机部署token结合，但只要站点出现一个XSS，防御体系就瞬间崩溃</li>
+</ol>
+</li>
+<li>与CSRF组合，比如jsonp劫持获取token（获取token需要一个跨域的过程），然后利用CSRF，或者造成CSRF蠕虫</li>
+</ul>
+<h3 id="SSRF原理及绕过"><a href="#SSRF原理及绕过" class="headerlink" title="SSRF原理及绕过"></a><a href="https://www.freebuf.com/articles/web/135342.html" target="_blank" rel="noopener">SSRF原理及绕过</a></h3><ol>
+<li><p>SSRF：服务器端请求伪造，是一种由攻击者构造由服务器端发起请求的一个漏洞，一般来说，SSRF攻击的目标是外网无法访问的内网系统</p>
+</li>
+<li><p>漏洞成因：服务器提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制</p>
+</li>
+<li><p>漏洞利用：</p>
+<ul>
+<li>对服务器所在内网进行端口扫描、获取服务器的一些banner信息</li>
+<li>攻击运行在内网或本地的应用程序</li>
+<li>对内网web进行指纹识别</li>
+</ul>
+</li>
+<li><p>漏洞场景</p>
+<ul>
+<li><p>能够对外发起网络请求的地方，就可能存在SSRF</p>
+</li>
+<li><p>ssrf的各种绕过姿势</p>
+<ol>
+<li><p>IP地址进制转换</p>
+</li>
+<li><p>url解析问题 如@</p>
+</li>
+<li><p>利用302条转，很神奇的一个域名</p>
+</li>
+<li><p>使用各种非http的协议如gopher file</p>
+</li>
+<li><p>DNS重绑定</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/Users/m3lon/Desktop/面经/ssrf.jpg" alt=""></p>
+<p>Gopher 协议可以做很多事情，特别是在 SSRF 中可以发挥很多重要的作用。利用此协议可以攻击内网的 FTP、Telnet、Redis、Memcache，也可以进行 GET、POST 请求。这无疑极大拓宽了 SSRF 的攻击面。</p>
 
       
     </div>
@@ -1104,7 +1180,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OWASP-TOP-10"><span class="nav-number">1.</span> <span class="nav-text">OWASP TOP 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-number">2.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击技巧"><span class="nav-number">2.1.</span> <span class="nav-text">攻击技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL盲注"><span class="nav-number">2.2.</span> <span class="nav-text">SQL盲注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.3.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次注入"><span class="nav-number">2.4.</span> <span class="nav-text">二次注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过方式"><span class="nav-number">2.5.</span> <span class="nav-text">绕过方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL提权"><span class="nav-number">2.6.</span> <span class="nav-text">SQL提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.7.</span> <span class="nav-text">防御方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql-7-2中的改进"><span class="nav-number">2.8.</span> <span class="nav-text">Mysql 7.2中的改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlmap"><span class="nav-number">2.9.</span> <span class="nav-text">sqlmap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器安全"><span class="nav-number">3.</span> <span class="nav-text">浏览器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">3.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">3.2.</span> <span class="nav-text">跨域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS"><span class="nav-number">4.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS危害"><span class="nav-number">4.1.</span> <span class="nav-text">XSS危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS构造技巧"><span class="nav-number">4.2.</span> <span class="nav-text">XSS构造技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS防御"><span class="nav-number">4.3.</span> <span class="nav-text">XSS防御</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器解码"><span class="nav-number">4.4.</span> <span class="nav-text">浏览器解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#富文本XSS防御"><span class="nav-number">4.5.</span> <span class="nav-text">富文本XSS防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java反序列化"><span class="nav-number">5.</span> <span class="nav-text">Java反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POP利用链"><span class="nav-number">5.1.</span> <span class="nav-text">POP利用链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞挖掘"><span class="nav-number">5.2.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化"><span class="nav-number">6.</span> <span class="nav-text">PHP反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PHP反序列化对象注入"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">PHP反序列化对象注入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Session反序列化对象"><span class="nav-number">6.0.0.2.</span> <span class="nav-text">Session反序列化对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#漏洞挖掘-1"><span class="nav-number">6.0.0.3.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OWASP-TOP-10"><span class="nav-number">1.</span> <span class="nav-text">OWASP TOP 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-number">2.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击技巧"><span class="nav-number">2.1.</span> <span class="nav-text">攻击技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL盲注"><span class="nav-number">2.2.</span> <span class="nav-text">SQL盲注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.3.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次注入"><span class="nav-number">2.4.</span> <span class="nav-text">二次注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过方式"><span class="nav-number">2.5.</span> <span class="nav-text">绕过方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL提权"><span class="nav-number">2.6.</span> <span class="nav-text">SQL提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.7.</span> <span class="nav-text">防御方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql-7-2中的改进"><span class="nav-number">2.8.</span> <span class="nav-text">Mysql 7.2中的改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlmap"><span class="nav-number">2.9.</span> <span class="nav-text">sqlmap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器安全"><span class="nav-number">3.</span> <span class="nav-text">浏览器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">3.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">3.2.</span> <span class="nav-text">跨域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS"><span class="nav-number">4.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS危害"><span class="nav-number">4.1.</span> <span class="nav-text">XSS危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS构造技巧"><span class="nav-number">4.2.</span> <span class="nav-text">XSS构造技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS防御"><span class="nav-number">4.3.</span> <span class="nav-text">XSS防御</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器解码"><span class="nav-number">4.4.</span> <span class="nav-text">浏览器解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#富文本XSS防御"><span class="nav-number">4.5.</span> <span class="nav-text">富文本XSS防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java反序列化"><span class="nav-number">5.</span> <span class="nav-text">Java反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POP利用链"><span class="nav-number">5.1.</span> <span class="nav-text">POP利用链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞挖掘"><span class="nav-number">5.2.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化"><span class="nav-number">6.</span> <span class="nav-text">PHP反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PHP反序列化对象注入"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">PHP反序列化对象注入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Session反序列化对象"><span class="nav-number">6.0.0.2.</span> <span class="nav-text">Session反序列化对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#漏洞挖掘-1"><span class="nav-number">6.0.0.3.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF漏洞"><span class="nav-number">7.</span> <span class="nav-text">CSRF漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsonp绕过及防御"><span class="nav-number">8.</span> <span class="nav-text">jsonp绕过及防御</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF原理及绕过"><span class="nav-number">9.</span> <span class="nav-text">SSRF原理及绕过</span></a></li></div>
             
 
           </div>

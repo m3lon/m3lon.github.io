@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/5.png">
 <meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/6.png">
 <meta property="og:image" content="http://m3lon.github.io/2020/03/16/Web安全面试准备二/7.png">
-<meta property="og:updated_time" content="2020-03-16T12:15:54.060Z">
+<meta property="og:updated_time" content="2020-03-16T12:17:50.237Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web安全面试准备二">
 <meta name="twitter:description" content="0x01 API接口测试👇Here 干货满满 1. 接口定义本质：数据的传输与接收 2. 接口类型2.1 RPC（Remote Procedure Call远程过程调用）如Java RMI 2.2 RESTful API REST，全称是 Resource Representational State Transfer，通俗来讲就是，资源在网络中以某种表现形式进行状态转移。分解开来：  Reso">
@@ -512,7 +512,7 @@
 <h3 id="0x04-业务逻辑漏洞"><a href="#0x04-业务逻辑漏洞" class="headerlink" title="0x04 业务逻辑漏洞"></a>0x04 业务逻辑漏洞</h3><p><a href="https://github.com/PyxYuYu/MyBlog/issues/102" target="_blank" rel="noopener">https://github.com/PyxYuYu/MyBlog/issues/102</a></p>
 <h3 id="0x05-WAF绕过"><a href="#0x05-WAF绕过" class="headerlink" title="0x05 WAF绕过"></a>0x05 WAF绕过</h3><p><a href="https://www.cnblogs.com/hookjoy/p/5778418.html" target="_blank" rel="noopener">👇这里</a></p>
 <h4 id="1-架构层绕过WAF"><a href="#1-架构层绕过WAF" class="headerlink" title="1. 架构层绕过WAF"></a>1. 架构层绕过WAF</h4><h5 id="1-1-寻找源站"><a href="#1-1-寻找源站" class="headerlink" title="1.1 寻找源站"></a>1.1 寻找源站</h5><p>例如百度云加速、360安全卫士等，通过更改DNS解析，把流量引入WAF集群，流量经过检测后转发请求到源站。如图，liusscs.com接入接入WAF后，liusscs.comd的DNS解析结果指向WAF集群，用户的请求将发送给WAF集群，WAF集群经过检测认为非攻击请求再转发给源站。</p>
-<p><img src="2.png" alt="image-20190828144040058"></p>
+<p><img src="2.png" alt=""></p>
 <p>针对云WAF架构，通过ip地址：没有dns解析就没有waf集群，直接到达源站：CTF中一种套路</p>
 <p>—&gt; 寻找真实ip</p>
 <ul>
@@ -535,9 +535,9 @@
 <li>​    Content-Type: multipart/form-data;</li>
 </ul>
 <p>Waf未能覆盖Content-Type: multipart/form-data从而导致被绕过。或者WAF会认为它是文件上传请求，从而只检测文件上传，导致被绕过。如图，加速乐的WAF就存在被绕过的情况，是典型的协议未覆盖。</p>
-<p><img src="3.png" alt="image-20190828155740209"></p>
+<p><img src="3.png" alt=""></p>
 <h5 id="3-2-利用协议解析不一致绕过"><a href="#3-2-利用协议解析不一致绕过" class="headerlink" title="3.2 利用协议解析不一致绕过"></a>3.2 利用协议解析不一致绕过</h5><p><a href="https://weibo.com/ttarticle/p/show?id=2309404002575157473609" target="_blank" rel="noopener">参考</a></p>
-<p><img src="4.png" alt="image-20190828160429017"></p>
+<p><img src="4.png" alt=""></p>
 <h5 id="3-3-协议解析不正确"><a href="#3-3-协议解析不正确" class="headerlink" title="3.3 协议解析不正确"></a>3.3 协议解析不正确</h5><ul>
 <li><p><strong>文件名被覆盖一</strong>：在multipart协议中，一个文件上传块存在多个Content-Disposition，将以最后一个Content-Disposition的filename值作为上传的文件名，许多WAF解析到第一个Content-Disposition就认为协议解析完毕，获得上传的文件名，从而导致被绕过。</p>
 </li>
